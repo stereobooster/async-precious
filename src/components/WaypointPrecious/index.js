@@ -11,7 +11,7 @@ export default class WaypointPrecious extends Component {
   render() {
     return (
       <Waypoint onEnter={this.onEnter}>
-        <Precious {...this.props} load={this.state.inViewport} key={this.props.src + this.state.inViewport}/>
+        <Precious {...this.props} load={this.state.inViewport}/>
       </Waypoint>
     );
   }

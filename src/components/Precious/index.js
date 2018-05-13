@@ -10,13 +10,13 @@ export default class Precious extends Component {
     super(props);
     this.state = {
       onLine: true,
-      mediaState: "initial" // loading, loaded, error
+      mediaState: props.load ? "loading" : "initial" // loading, loaded, error
     };
     this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine });
   }
 
   componentDidMount() {
-    if (this.props.load) this.load();
+    if (this.props.load) this.load(true);
     this.updateOnlineStatus();
     window.addEventListener("online", this.updateOnlineStatus);
     window.addEventListener("offline", this.updateOnlineStatus);
@@ -27,10 +27,13 @@ export default class Precious extends Component {
     window.removeEventListener("offline", this.updateOnlineStatus);
   }
 
+  // TODO: fix this
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.load === true) this.load();
+  }
+
   renderProp({ props, mediaState, onLine }) {
     const state = `${mediaState}-${onLine ? "on" : "off"}`;
-    console.log(state)
-
     switch (state) {
       case "initial-off":
       case "error-off":
@@ -59,11 +62,14 @@ export default class Precious extends Component {
     }
   }
 
-  load() {
+  load(force) {
     const { mediaState, onLine } = this.state;
     if (!onLine) return;
     const { src } = this.props;
     switch (mediaState) {
+      case "loading":
+        // nothing, but can be cancel
+        if (!force) return;
       case "initial":
       case "error":
         // load
@@ -77,9 +83,6 @@ export default class Precious extends Component {
       case "loaded":
         // nothing
         return;
-      case "loading":
-        // nothing, but can be cancel
-        return;
       default:
         throw new Error(`Wrong state: ${mediaState}`);
     }
@@ -91,7 +94,7 @@ export default class Precious extends Component {
     return (
       <div
         className={styles.adaptive}
-        style={{ backgroundImage: `url(${props.preview}` }}
+        style={{ backgroundImage: `url(${props.lqip}` }}
         title={props.alt}
         onClick={() => this.load()}
         ref={this.props.innerRef}
