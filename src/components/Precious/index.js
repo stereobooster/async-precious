@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styles from "./index.module.css";
 import CloudDownload from "./CloudDownload";
+import CloudOff from "./CloudOff";
 import Warning from "./Warning";
 // import Progress from "./Progress";
 
@@ -8,15 +9,33 @@ export default class Precious extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      onLine: true,
       mediaState: "initial" // loading, loaded, error
     };
+    this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine });
   }
 
-  renderProp({ props, mediaState }) {
-    switch (mediaState) {
-      case "initial":
+  componentDidMount() {
+    this.updateOnlineStatus();
+    window.addEventListener("online", this.updateOnlineStatus);
+    window.addEventListener("offline", this.updateOnlineStatus);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("online", this.updateOnlineStatus);
+    window.removeEventListener("offline", this.updateOnlineStatus);
+  }
+
+  renderProp({ props, mediaState, onLine }) {
+    const state = `${mediaState}-${onLine ? "on" : "off"}`;
+    switch (state) {
+      case "initial-off":
+      case "error-off":
+        return <CloudOff className={styles.icon} fill="#fff" size="64" />;
+      case "initial-on":
         return <CloudDownload className={styles.icon} fill="#fff" size="64" />;
-      case "loaded":
+      case "loaded-on":
+      case "loaded-off":
         return (
           <img
             src={props.src}
@@ -25,19 +44,21 @@ export default class Precious extends Component {
             height={props.height}
           />
         );
-      case "loading":
+      case "loading-on":
+      case "loading-off":
         // return <Progress className={styles.icon} fill="#fff" size="64" />;
         // todo show spinner if loading takes more than 200ms
         return null;
-      case "error":
+      case "error-on":
         return <Warning className={styles.icon} fill="#fff" size="64" />;
       default:
-        throw new Error(`Wrong state: ${mediaState}`);
+        throw new Error(`Wrong state: ${state}`);
     }
   }
 
   onClick() {
-    const { mediaState } = this.state;
+    const { mediaState, onLine } = this.state;
+    if (!onLine) return;
     const { src } = this.props;
     switch (mediaState) {
       case "initial":
@@ -64,7 +85,6 @@ export default class Precious extends Component {
   render() {
     const props = this.props;
     const { mediaState } = this.state;
-
     return (
       <div
         className={styles.adaptive}
@@ -75,7 +95,7 @@ export default class Precious extends Component {
         {mediaState !== "loaded" && (
           <svg width={props.width} height={props.height} />
         )}
-        {this.renderProp({ props, mediaState })}
+        {this.renderProp({ props, ...this.state })}
       </div>
     );
   }
