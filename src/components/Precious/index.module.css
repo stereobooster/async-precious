@@ -1,0 +1,10 @@
+.adaptive {
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.adaptive img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+}

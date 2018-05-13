@@ -1,21 +1,18 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+import Precious from "./components/Precious";
+import coverImage from "./andre-spieker-238-unsplash.jpg";
+import lqip from "lqip.macro";
+const preview = lqip("./andre-spieker-238-unsplash.jpg");
+
+const App = () => (
+  <Precious
+    preview={preview}
+    src={coverImage}
+    alt="doggo"
+    width="3500"
+    height="2095"
+  />
+);
 
 export default App;
