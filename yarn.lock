@@ -1672,7 +1672,7 @@ babel-plugin-macros@2.0.0:
   dependencies:
     cosmiconfig "3.1.0"
 
-babel-plugin-macros@^2.1.0:
+babel-plugin-macros@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-macros/-/babel-plugin-macros-2.2.1.tgz#7cc0f84735aa86f776b51860793a98928f43a7fa"
   dependencies:
@@ -5729,11 +5729,11 @@ lowercase-keys@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/lowercase-keys/-/lowercase-keys-1.0.1.tgz#6f9e30b47084d971a7c820ff15a6c5167b74c26f"
 
-lqip.macro@0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/lqip.macro/-/lqip.macro-0.1.4.tgz#93cda1e832dcb724b70d6ebb71a7e5b7f94565b6"
+lqip.macro@0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/lqip.macro/-/lqip.macro-0.1.5.tgz#4d2eac4078cfee604ac4f0044283b1db02adc6d1"
   dependencies:
-    babel-plugin-macros "^2.1.0"
+    babel-plugin-macros "^2.2.1"
     lqip "^2.0.2"
 
 lqip@^2.0.2:
