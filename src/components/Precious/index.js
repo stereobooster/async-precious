@@ -16,6 +16,7 @@ export default class Precious extends Component {
   }
 
   componentDidMount() {
+    if (this.props.load) this.load();
     this.updateOnlineStatus();
     window.addEventListener("online", this.updateOnlineStatus);
     window.addEventListener("offline", this.updateOnlineStatus);
@@ -28,6 +29,8 @@ export default class Precious extends Component {
 
   renderProp({ props, mediaState, onLine }) {
     const state = `${mediaState}-${onLine ? "on" : "off"}`;
+    console.log(state)
+
     switch (state) {
       case "initial-off":
       case "error-off":
@@ -56,7 +59,7 @@ export default class Precious extends Component {
     }
   }
 
-  onClick() {
+  load() {
     const { mediaState, onLine } = this.state;
     if (!onLine) return;
     const { src } = this.props;
@@ -90,7 +93,8 @@ export default class Precious extends Component {
         className={styles.adaptive}
         style={{ backgroundImage: `url(${props.preview}` }}
         title={props.alt}
-        onClick={() => this.onClick()}
+        onClick={() => this.load()}
+        ref={this.props.innerRef}
       >
         {mediaState !== "loaded" && (
           <svg width={props.width} height={props.height} />
