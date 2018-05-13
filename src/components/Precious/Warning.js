@@ -1,7 +1,7 @@
 import React from "react";
 
 // source https://material.io/tools/icons/?search=error&icon=error&style=baseline
-const Error = ({ size = 24, fill = "#000", className }) => (
+const Warning = ({ size = 24, fill = "#000", className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -16,4 +16,4 @@ const Error = ({ size = 24, fill = "#000", className }) => (
   </svg>
 );
 
-export default Error;
+export default Warning;

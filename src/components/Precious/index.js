@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styles from "./index.module.css";
 import CloudDownload from "./CloudDownload";
-import Error from "./Error";
+import Warning from "./Warning";
 import Progress from "./Progress";
 
 export default class Precious extends Component {
@@ -30,7 +30,7 @@ export default class Precious extends Component {
         // todo show spinner if loading takes more than 200ms
         return null;
       case "error":
-        return <Error className={styles.icon} fill="#fff" size="64" />;
+        return <Warning className={styles.icon} fill="#fff" size="64" />;
       default:
         throw new Error(`Wrong state: ${mediaState}`);
     }
