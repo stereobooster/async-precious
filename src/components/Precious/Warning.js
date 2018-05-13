@@ -1,6 +1,6 @@
 import React from "react";
 
-// source https://material.io/tools/icons/?search=error&icon=error&style=baseline
+// source https://material.io/tools/icons/?icon=error&style=baseline
 const Warning = ({ size = 24, fill = "#000", className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

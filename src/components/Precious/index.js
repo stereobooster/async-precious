@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styles from "./index.module.css";
 import CloudDownload from "./CloudDownload";
 import Warning from "./Warning";
-import Progress from "./Progress";
+// import Progress from "./Progress";
 
 export default class Precious extends Component {
   constructor(props) {

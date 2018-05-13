@@ -1,6 +1,6 @@
 import React from "react";
 
-// source https://material.io/tools/icons/?search=down&icon=cloud_download&style=baseline
+// source https://material.io/tools/icons/?icon=cloud_download&style=baseline
 const CloudDownload = ({ size = 24, fill = "#000", className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,6 @@
 import React from "react";
 
-// source https://material.io/tools/icons/?search=rot&icon=rotate_left&style=baseline
+// source https://material.io/tools/icons/?icon=rotate_left&style=baseline
 const Progress = ({ size = 24, fill = "#000", className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
