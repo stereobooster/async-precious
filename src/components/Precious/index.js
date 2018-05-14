@@ -46,21 +46,15 @@ export default class Precious extends Component {
   }
 
   renderProp({ props, mediaState, onLine, controledLoad }) {
+    const fill = props.iconColor || "#fff";
+    const size = props.iconSize || "64";
     switch (mediaState) {
       case initial:
         if (controledLoad) return null;
         return onLine ? (
-          <CloudDownload
-            className={styles.icon}
-            fill={props.iconColor || "#fff"}
-            size={props.iconSize || "64"}
-          />
+          <CloudDownload className={styles.icon} fill={fill} size={size} />
         ) : (
-          <CloudOff
-            className={styles.icon}
-            fill={props.iconColor || "#fff"}
-            size={props.iconSize || "64"}
-          />
+          <CloudOff className={styles.icon} fill={fill} size={size} />
         );
       case loaded:
         return null;
@@ -70,17 +64,9 @@ export default class Precious extends Component {
         return null;
       case error:
         return onLine ? (
-          <Warning
-            className={styles.icon}
-            fill={props.iconColor || "#fff"}
-            size={props.iconSize || "64"}
-          />
+          <Warning className={styles.icon} fill={fill} size={size} />
         ) : (
-          <CloudOff
-            className={styles.icon}
-            fill={props.iconColor || "#fff"}
-            size={props.iconSize || "64"}
-          />
+          <CloudOff className={styles.icon} fill={fill} size={size} />
         );
       default:
         throw new Error(`Wrong state: ${mediaState}`);
