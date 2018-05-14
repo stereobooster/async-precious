@@ -11,13 +11,13 @@ export default class Precious extends Component {
     this.state = {
       onLine: true,
       controledLoad: props.load !== undefined,
-      mediaState: props.load ? "loading" : "initial" // loading, loaded, error
+      mediaState: "initial" // loading, loaded, error
     };
     this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine });
   }
 
   componentDidMount() {
-    if (this.props.load) this.load(true);
+    if (this.props.load) this.load();
     this.updateOnlineStatus();
     window.addEventListener("online", this.updateOnlineStatus);
     window.addEventListener("offline", this.updateOnlineStatus);
@@ -36,7 +36,7 @@ export default class Precious extends Component {
     if (nextProps.load === true) this.load();
   }
 
-  renderProp({ props, mediaState, onLine, controledLoad }) {
+  renderProp({ mediaState, onLine, controledLoad }) {
     const state = `${mediaState}-${onLine ? "on" : "off"}`;
     switch (state) {
       case "initial-off":
@@ -47,14 +47,7 @@ export default class Precious extends Component {
         return <CloudDownload className={styles.icon} fill="#fff" size="64" />;
       case "loaded-on":
       case "loaded-off":
-        return (
-          <img
-            src={props.src}
-            alt={props.alt}
-            width={props.width}
-            height={props.height}
-          />
-        );
+        return null;
       case "loading-on":
       case "loading-off":
         // return <Progress className={styles.icon} fill="#fff" size="64" />;
@@ -67,14 +60,14 @@ export default class Precious extends Component {
     }
   }
 
-  load(force) {
+  load() {
     const { mediaState, onLine } = this.state;
     if (!onLine) return;
     const { src } = this.props;
     switch (mediaState) {
       case "loading":
         // nothing, but can be cancel
-        if (!force) return;
+        return;
       case "initial":
       case "error":
         // load
@@ -113,7 +106,14 @@ export default class Precious extends Component {
         onClick={() => this.load()}
         ref={this.props.innerRef}
       >
-        {mediaState !== "loaded" && (
+        {mediaState === "loaded" ? (
+          <img
+            src={props.src}
+            alt={props.alt}
+            width={props.width}
+            height={props.height}
+          />
+        ) : (
           <svg width={props.width} height={props.height} />
         )}
         {this.renderProp({ props, ...this.state })}
