@@ -80,9 +80,18 @@ export default class Precious extends Component {
         // load
         this.setState({ mediaState: "loading" });
         const image = new Image();
-        image.onload = () => this.setState({ mediaState: "loaded" });
-        image.onerror = () => this.setState({ mediaState: "error" });
-        image.onabort = () => this.setState({ mediaState: "error" });
+        image.onload = () => {
+          image.onload = image.onerror = image.onabort = undefined;
+          this.setState({ mediaState: "loaded" });
+        };
+        image.onerror = () => {
+          image.onload = image.onerror = image.onabort = undefined;
+          this.setState({ mediaState: "error" });
+        };
+        image.onabort = () => {
+          image.onload = image.onerror = image.onabort = undefined;
+          this.setState({ mediaState: "error" });
+        };
         image.src = src;
         return;
       case "loaded":
