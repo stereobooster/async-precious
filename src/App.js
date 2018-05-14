@@ -11,7 +11,7 @@ import coverImage5 from "./images/nidhin-mundackal-281287-unsplash.jpg";
 
 const lqip1 = lqip("./images/andre-spieker-238-unsplash.jpg");
 const lqip2 = lqip("./images/jairo-alzate-45522-unsplash.jpg");
-const lqip3= lqip("./images/vincent-van-zalinge-408523-unsplash.jpg");
+const lqip3 = lqip("./images/vincent-van-zalinge-408523-unsplash.jpg");
 const lqip4 = lqip("./images/marvin-meyer-188676-unsplash.jpg");
 const lqip5 = lqip("./images/nidhin-mundackal-281287-unsplash.jpg");
 

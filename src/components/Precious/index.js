@@ -10,6 +10,7 @@ export default class Precious extends Component {
     super(props);
     this.state = {
       onLine: true,
+      controledLoad: props.load !== undefined,
       mediaState: props.load ? "loading" : "initial" // loading, loaded, error
     };
     this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine });
@@ -29,16 +30,20 @@ export default class Precious extends Component {
 
   // TODO: fix this
   UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props.controledLoad && typeof nextProps.load !== "boolean") {
+      throw new Error("You should pass load value to controlled component");
+    }
     if (nextProps.load === true) this.load();
   }
 
-  renderProp({ props, mediaState, onLine }) {
+  renderProp({ props, mediaState, onLine, controledLoad }) {
     const state = `${mediaState}-${onLine ? "on" : "off"}`;
     switch (state) {
       case "initial-off":
       case "error-off":
         return <CloudOff className={styles.icon} fill="#fff" size="64" />;
       case "initial-on":
+        if (controledLoad) return null;
         return <CloudDownload className={styles.icon} fill="#fff" size="64" />;
       case "loaded-on":
       case "loaded-off":
