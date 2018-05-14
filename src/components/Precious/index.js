@@ -13,8 +13,7 @@ const loading = "loading";
 const loaded = "loaded";
 const error = "error";
 
-// class which will hide elements if JS is disabled
-const noscript = "noscript";
+// props.noscript - class which will hide elements if JS is disabled
 
 export default class Precious extends Component {
   constructor(props) {
@@ -24,11 +23,11 @@ export default class Precious extends Component {
       controledLoad: props.load !== undefined,
       mediaState: initial
     };
-    this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine });
   }
 
   componentDidMount() {
     if (this.props.load) this.load();
+    this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine });
     this.updateOnlineStatus();
     window.addEventListener("online", this.updateOnlineStatus);
     window.addEventListener("offline", this.updateOnlineStatus);
@@ -45,12 +44,14 @@ export default class Precious extends Component {
       throw new Error("You should pass load value to controlled component");
     }
     if (nextProps.load === true) this.load();
+    if (nextProps.src !== this.props.src)
+      this.setState({ mediaState: initial });
   }
 
   renderProp({ props, mediaState, onLine, controledLoad }) {
     const fill = props.iconColor || "#fff";
     const size = props.iconSize || "64";
-    const className = `${styles.icon} ${noscript}`;
+    const className = `${styles.icon} ${props.noscript}`;
     switch (mediaState) {
       case initial:
         if (controledLoad) return null;
@@ -148,16 +149,22 @@ export default class Precious extends Component {
             height={props.height}
           />
         ) : (
-          <svg width={props.width} height={props.height} className={noscript} />
-        )}
-        <noscript>
-          <img
-            src={props.src}
-            alt={props.alt}
+          <svg
             width={props.width}
             height={props.height}
+            className={props.noscript}
           />
-        </noscript>
+        )}
+        {props.noscript && (
+          <noscript>
+            <img
+              src={props.src}
+              alt={props.alt}
+              width={props.width}
+              height={props.height}
+            />
+          </noscript>
+        )}
         {this.renderProp({ props, ...this.state })}
       </div>
     );
