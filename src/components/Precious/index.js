@@ -98,36 +98,27 @@ export default class Precious extends Component {
 
   load() {
     if (this.mediaState === loading) return;
-    const { src } = this.props;
     this.setState({ mediaState: loading });
     const image = new Image();
-    image.src = src;
+    const onload = () => {
+      image.onload = image.onerror = image.onabort = undefined;
+      this.setState({ mediaState: loaded });
+    };
+    const onerror = () => {
+      image.onload = image.onerror = image.onabort = undefined;
+      this.setState({ mediaState: error });
+    };
+    image.src = this.props.src;
     if (image.decode) {
       image
         .decode()
-        .then(() => {
-          image.onload = image.onerror = image.onabort = undefined;
-          this.setState({ mediaState: loaded });
-        })
-        .catch(() => {
-          // TODO: retry
-          image.onload = image.onerror = image.onabort = undefined;
-          this.setState({ mediaState: error }, () => this.load());
-        });
+        .then(onload)
+        .catch(onerror);
     } else {
-      image.onload = () => {
-        image.onload = image.onerror = image.onabort = undefined;
-        this.setState({ mediaState: loaded });
-      };
+      image.onload = onload;
     }
-    image.onerror = () => {
-      image.onload = image.onerror = image.onabort = undefined;
-      this.setState({ mediaState: error });
-    };
-    image.onabort = () => {
-      image.onload = image.onerror = image.onabort = undefined;
-      this.setState({ mediaState: error });
-    };
+    image.onerror = onerror;
+    image.onabort = onerror;
   }
 
   render() {
