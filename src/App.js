@@ -1,6 +1,6 @@
 import React from "react";
 import lqip from "lqip.macro";
-import Precious from "./components/Precious";
+// import Precious from "./components/Precious";
 import WaypointPrecious from "./components/WaypointPrecious";
 
 import coverImage1 from "./images/andre-spieker-238-unsplash.jpg";
@@ -17,7 +17,7 @@ const lqip5 = lqip("./images/nidhin-mundackal-281287-unsplash.jpg");
 
 const App = () => (
   <React.Fragment>
-    <Precious
+    <WaypointPrecious
       lqip={lqip1}
       src={coverImage1}
       alt="doggo 1"
@@ -45,7 +45,7 @@ const App = () => (
       width="7952"
       height="5304"
     />
-    <Precious
+    <WaypointPrecious
       lqip={lqip5}
       src={coverImage5}
       alt="doggo 5"

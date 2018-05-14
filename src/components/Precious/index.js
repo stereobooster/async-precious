@@ -73,10 +73,25 @@ export default class Precious extends Component {
         // load
         this.setState({ mediaState: "loading" });
         const image = new Image();
-        image.onload = () => {
-          image.onload = image.onerror = image.onabort = undefined;
-          this.setState({ mediaState: "loaded" });
-        };
+        image.src = src;
+        if (image.decode) {
+          image
+            .decode()
+            .then(() => {
+              image.onload = image.onerror = image.onabort = undefined;
+              this.setState({ mediaState: "loaded" });
+            })
+            .catch(() => {
+              // TODO retry
+              image.onload = image.onerror = image.onabort = undefined;
+              this.setState({ mediaState: "error" }, () => this.load());
+            });
+        } else {
+          image.onload = () => {
+            image.onload = image.onerror = image.onabort = undefined;
+            this.setState({ mediaState: "loaded" });
+          };
+        }
         image.onerror = () => {
           image.onload = image.onerror = image.onabort = undefined;
           this.setState({ mediaState: "error" });
@@ -85,7 +100,6 @@ export default class Precious extends Component {
           image.onload = image.onerror = image.onabort = undefined;
           this.setState({ mediaState: "error" });
         };
-        image.src = src;
         return;
       case "loaded":
         // nothing
@@ -121,3 +135,10 @@ export default class Precious extends Component {
     );
   }
 }
+
+//<img
+//  src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="
+//  alt={props.alt}
+//  width={props.width}
+//  height={props.height}
+///>

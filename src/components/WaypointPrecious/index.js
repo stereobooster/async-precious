@@ -9,9 +9,7 @@ export default class WaypointPrecious extends Component {
     this.onEnter = () => this.setState({ inViewport: true });
   }
   render() {
-    return this.state.inViewport ? (
-      <Precious {...this.props} load={this.state.inViewport} />
-    ) : (
+    return (
       <Waypoint onEnter={this.onEnter}>
         <Precious {...this.props} load={this.state.inViewport} />
       </Waypoint>
