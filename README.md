@@ -6,9 +6,32 @@ Experiment to build async component according to [Guide To Async Components](htt
 
 ## Ideas
 
-- [lazy-image](https://meowni.ca/lazy-image/): `srcset`
-- [Detect WebP](https://gist.github.com/jakearchibald/6c43d5c454bc8f48f83d8471f45698fa)
-- preview: lqip, sqip, color, function
-- `<noscript>`
-- [Webworker](https://aerotwist.com/blog/one-weird-trick/) maybe?
-- contrast
+* [lazy-image](https://meowni.ca/lazy-image/): `srcset`
+* preview: lqip, sqip, color, function
+* [Webworker](https://aerotwist.com/blog/one-weird-trick/) maybe?
+* contrast
+
+No script fallback:
+```html
+<noscript>
+  <style>.noscript{display:none}</style>
+</noscript>
+```
+
+Detect WebP:
+```js
+async function supportsWebp() {
+  if (typeof createImageBitmap === "undefined") return false;
+  return fetch(
+    "data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA="
+  )
+    .then(response => response.blob())
+    .then(blob => createImageBitmap(blob).then(() => true, () => false));
+}
+let webp = false;
+supportsWebp().then(x => (webp = x));
+```
+
+```html
+<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=" />
+```

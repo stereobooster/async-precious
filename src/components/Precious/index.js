@@ -13,6 +13,9 @@ const loading = "loading";
 const loaded = "loaded";
 const error = "error";
 
+// class which will hide elements if JS is disabled
+const noscript = "noscript";
+
 export default class Precious extends Component {
   constructor(props) {
     super(props);
@@ -47,25 +50,26 @@ export default class Precious extends Component {
   renderProp({ props, mediaState, onLine, controledLoad }) {
     const fill = props.iconColor || "#fff";
     const size = props.iconSize || "64";
+    const className = `${styles.icon} ${noscript}`;
     switch (mediaState) {
       case initial:
         if (controledLoad) return null;
         return onLine ? (
-          <CloudDownload className={styles.icon} fill={fill} size={size} />
+          <CloudDownload className={className} fill={fill} size={size} />
         ) : (
-          <CloudOff className={styles.icon} fill={fill} size={size} />
+          <CloudOff className={className} fill={fill} size={size} />
         );
       case loaded:
         return null;
       case loading:
-        // return <Progress className={styles.icon} fill="#fff" size="64" />;
+        // return <Progress className={className} fill={fill} size={size} />
         // todo show spinner if loading takes more than 200ms
         return null;
       case error:
         return onLine ? (
-          <Warning className={styles.icon} fill={fill} size={size} />
+          <Warning className={className} fill={fill} size={size} />
         ) : (
-          <CloudOff className={styles.icon} fill={fill} size={size} />
+          <CloudOff className={className} fill={fill} size={size} />
         );
       default:
         throw new Error(`Wrong state: ${mediaState}`);
@@ -105,7 +109,7 @@ export default class Precious extends Component {
           this.setState({ mediaState: loaded });
         })
         .catch(() => {
-          // TODO retry
+          // TODO: retry
           image.onload = image.onerror = image.onabort = undefined;
           this.setState({ mediaState: error }, () => this.load());
         });
@@ -144,17 +148,18 @@ export default class Precious extends Component {
             height={props.height}
           />
         ) : (
-          <svg width={props.width} height={props.height} />
+          <svg width={props.width} height={props.height} className={noscript} />
         )}
+        <noscript>
+          <img
+            src={props.src}
+            alt={props.alt}
+            width={props.width}
+            height={props.height}
+          />
+        </noscript>
         {this.renderProp({ props, ...this.state })}
       </div>
     );
   }
 }
-
-//<img
-//  src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="
-//  alt={props.alt}
-//  width={props.width}
-//  height={props.height}
-///>
