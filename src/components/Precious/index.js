@@ -1,9 +1,18 @@
+"use strict";
 import React, { Component } from "react";
 import styles from "./index.module.css";
+
+// icons
 import CloudDownload from "./CloudDownload";
 import CloudOff from "./CloudOff";
 import Warning from "./Warning";
 // import Progress from "./Progress";
+
+// states
+const initial = "initial";
+const loading = "loading";
+const loaded = "loaded";
+const error = "error";
 
 export default class Precious extends Component {
   constructor(props) {
@@ -11,7 +20,7 @@ export default class Precious extends Component {
     this.state = {
       onLine: true,
       controledLoad: props.load !== undefined,
-      mediaState: "initial" // loading, loaded, error
+      mediaState: initial
     };
     this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine });
   }
@@ -30,83 +39,105 @@ export default class Precious extends Component {
 
   // TODO: fix this
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.controledLoad && typeof nextProps.load !== "boolean") {
+    if (this.props.controledLoad && nextProps.load === undefined) {
       throw new Error("You should pass load value to controlled component");
     }
     if (nextProps.load === true) this.load();
   }
 
-  renderProp({ mediaState, onLine, controledLoad }) {
-    const state = `${mediaState}-${onLine ? "on" : "off"}`;
-    switch (state) {
-      case "initial-off":
-      case "error-off":
-        return <CloudOff className={styles.icon} fill="#fff" size="64" />;
-      case "initial-on":
+  renderProp({ props, mediaState, onLine, controledLoad }) {
+    switch (mediaState) {
+      case initial:
         if (controledLoad) return null;
-        return <CloudDownload className={styles.icon} fill="#fff" size="64" />;
-      case "loaded-on":
-      case "loaded-off":
+        return onLine ? (
+          <CloudDownload
+            className={styles.icon}
+            fill={props.iconColor || "#fff"}
+            size={props.iconSize || "64"}
+          />
+        ) : (
+          <CloudOff
+            className={styles.icon}
+            fill={props.iconColor || "#fff"}
+            size={props.iconSize || "64"}
+          />
+        );
+      case loaded:
         return null;
-      case "loading-on":
-      case "loading-off":
+      case loading:
         // return <Progress className={styles.icon} fill="#fff" size="64" />;
         // todo show spinner if loading takes more than 200ms
         return null;
-      case "error-on":
-        return <Warning className={styles.icon} fill="#fff" size="64" />;
+      case error:
+        return onLine ? (
+          <Warning
+            className={styles.icon}
+            fill={props.iconColor || "#fff"}
+            size={props.iconSize || "64"}
+          />
+        ) : (
+          <CloudOff
+            className={styles.icon}
+            fill={props.iconColor || "#fff"}
+            size={props.iconSize || "64"}
+          />
+        );
       default:
-        throw new Error(`Wrong state: ${state}`);
+        throw new Error(`Wrong state: ${mediaState}`);
     }
   }
 
-  load() {
+  onClick() {
     const { mediaState, onLine } = this.state;
     if (!onLine) return;
-    const { src } = this.props;
     switch (mediaState) {
-      case "loading":
+      case initial:
+      case error:
+        this.load();
+        return;
+      case loading:
         // nothing, but can be cancel
         return;
-      case "initial":
-      case "error":
-        // load
-        this.setState({ mediaState: "loading" });
-        const image = new Image();
-        image.src = src;
-        if (image.decode) {
-          image
-            .decode()
-            .then(() => {
-              image.onload = image.onerror = image.onabort = undefined;
-              this.setState({ mediaState: "loaded" });
-            })
-            .catch(() => {
-              // TODO retry
-              image.onload = image.onerror = image.onabort = undefined;
-              this.setState({ mediaState: "error" }, () => this.load());
-            });
-        } else {
-          image.onload = () => {
-            image.onload = image.onerror = image.onabort = undefined;
-            this.setState({ mediaState: "loaded" });
-          };
-        }
-        image.onerror = () => {
-          image.onload = image.onerror = image.onabort = undefined;
-          this.setState({ mediaState: "error" });
-        };
-        image.onabort = () => {
-          image.onload = image.onerror = image.onabort = undefined;
-          this.setState({ mediaState: "error" });
-        };
-        return;
-      case "loaded":
+      case loaded:
         // nothing
         return;
       default:
         throw new Error(`Wrong state: ${mediaState}`);
     }
+  }
+
+  load() {
+    if (this.mediaState === loading) return;
+    const { src } = this.props;
+    this.setState({ mediaState: loading });
+    const image = new Image();
+    image.src = src;
+    if (image.decode) {
+      image
+        .decode()
+        .then(() => {
+          image.onload = image.onerror = image.onabort = undefined;
+          this.setState({ mediaState: loaded });
+        })
+        .catch(() => {
+          // TODO retry
+          image.onload = image.onerror = image.onabort = undefined;
+          this.setState({ mediaState: error }, () => this.load());
+        });
+    } else {
+      image.onload = () => {
+        image.onload = image.onerror = image.onabort = undefined;
+        this.setState({ mediaState: loaded });
+      };
+    }
+    image.onerror = () => {
+      image.onload = image.onerror = image.onabort = undefined;
+      this.setState({ mediaState: error });
+    };
+    image.onabort = () => {
+      image.onload = image.onerror = image.onabort = undefined;
+      this.setState({ mediaState: error });
+    };
   }
 
   render() {
@@ -117,10 +148,10 @@ export default class Precious extends Component {
         className={styles.adaptive}
         style={{ backgroundImage: `url(${props.lqip}` }}
         title={props.alt}
-        onClick={() => this.load()}
+        onClick={() => this.onClick()}
         ref={this.props.innerRef}
       >
-        {mediaState === "loaded" ? (
+        {mediaState === loaded ? (
           <img
             src={props.src}
             alt={props.alt}

@@ -1,3 +1,4 @@
+"use strict";
 import React, { Component } from "react";
 import Waypoint from "react-waypoint";
 import Precious from "../Precious";

@@ -11,3 +11,4 @@ Experiment to build async component according to [Guide To Async Components](htt
 - preview: lqip, sqip, color, function
 - `<noscript>`
 - [Webworker](https://aerotwist.com/blog/one-weird-trick/) maybe?
+- contrast
