@@ -8,40 +8,54 @@ import Warning from "./Warning";
 // import Progress from "./Progress";
 
 // states
-const initial = "initial";
-const loading = "loading";
-const loaded = "loaded";
-const error = "error";
+const initial = 1; //"initial";
+const loading = 2; //"loading";
+const loaded = 3; //"loaded";
+const error = 4; //"error";
 
 // props.noscript - class which will hide elements if JS is disabled
 
 export default class Precious extends Component {
   constructor(props) {
     super(props);
+    const controledOnLine = props.onLine !== undefined;
+    const controledLoad = props.load !== undefined;
     this.state = {
-      onLine: true,
-      controledLoad: props.load !== undefined,
-      mediaState: initial
+      onLine: controledOnLine ? props.onLine : true,
+      controledLoad,
+      controledOnLine,
+      mediaState: controledOnLine ? initial : props.load ? loaded : initial
     };
   }
 
   componentDidMount() {
-    if (this.props.load) this.load();
-    this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine });
-    this.updateOnlineStatus();
-    window.addEventListener("online", this.updateOnlineStatus);
-    window.addEventListener("offline", this.updateOnlineStatus);
+    if (!this.state.controledOnLine) {
+      this.updateOnlineStatus = () =>
+        this.setState({ onLine: navigator.onLine });
+      this.updateOnlineStatus();
+      window.addEventListener("online", this.updateOnlineStatus);
+      window.addEventListener("offline", this.updateOnlineStatus);
+    }
   }
 
   componentWillUnmount() {
-    window.removeEventListener("online", this.updateOnlineStatus);
-    window.removeEventListener("offline", this.updateOnlineStatus);
+    if (!this.state.controledOnLine) {
+      window.removeEventListener("online", this.updateOnlineStatus);
+      window.removeEventListener("offline", this.updateOnlineStatus);
+    }
   }
 
   // TODO: fix this
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.controledLoad && nextProps.load === undefined) {
+    if (this.state.controledLoad && nextProps.load === undefined) {
       throw new Error("You should pass load value to controlled component");
+    }
+    if (this.state.controledOnLine) {
+      if (nextProps.onLine === undefined) {
+        throw new Error("You should pass onLine value to controlled component");
+      } else {
+        this.setState({ onLine: nextProps.onLine });
+      }
     }
     if (nextProps.load === true) this.load();
     if (nextProps.src !== this.props.src)
@@ -53,6 +67,12 @@ export default class Precious extends Component {
     const size = props.iconSize || "64";
     const className = `${styles.icon} ${props.noscript}`;
     switch (mediaState) {
+      case loaded:
+        return null;
+      case loading:
+        // return <Progress className={className} fill={fill} size={size} />
+        // todo show spinner if loading takes more than 200ms
+        return null;
       case initial:
         if (controledLoad) return null;
         return onLine ? (
@@ -60,12 +80,6 @@ export default class Precious extends Component {
         ) : (
           <CloudOff className={className} fill={fill} size={size} />
         );
-      case loaded:
-        return null;
-      case loading:
-        // return <Progress className={className} fill={fill} size={size} />
-        // todo show spinner if loading takes more than 200ms
-        return null;
       case error:
         return onLine ? (
           <Warning className={className} fill={fill} size={size} />
@@ -81,15 +95,15 @@ export default class Precious extends Component {
     const { mediaState, onLine } = this.state;
     if (!onLine) return;
     switch (mediaState) {
-      case initial:
-      case error:
-        this.load();
-        return;
       case loading:
         // nothing, but can be cancel
         return;
       case loaded:
         // nothing
+        return;
+      case initial:
+      case error:
+        this.load();
         return;
       default:
         throw new Error(`Wrong state: ${mediaState}`);
@@ -97,7 +111,8 @@ export default class Precious extends Component {
   }
 
   load() {
-    if (this.mediaState === loading) return;
+    const { mediaState } = this.state;
+    if (loaded === mediaState || loading === mediaState) return;
     this.setState({ mediaState: loading });
     const image = new Image();
     const onload = () => {
@@ -108,17 +123,17 @@ export default class Precious extends Component {
       image.onload = image.onerror = image.onabort = undefined;
       this.setState({ mediaState: error });
     };
-    image.src = this.props.src;
-    if (image.decode) {
-      image
-        .decode()
-        .then(onload)
-        .catch(onerror);
-    } else {
-      image.onload = onload;
-    }
+    image.onload = onload;
     image.onerror = onerror;
     image.onabort = onerror;
+    image.src = this.props.src;
+    // decode seems to downgrade performance. Not sure why
+    // if (image.decode) {
+    //   image
+    //     .decode()
+    //     .then(onload)
+    //     .catch(onerror);
+    // }
   }
 
   render() {

@@ -6,7 +6,9 @@ export default class WaypointPrecious extends Component {
   constructor(props) {
     super(props);
     this.state = { inViewport: false };
-    this.onEnter = () => this.setState({ inViewport: true });
+    this.onEnter = () => {
+      if (!this.state.inViewport) this.setState({ inViewport: true });
+    };
   }
   render() {
     return (
