@@ -17,6 +17,7 @@ const lqip =
           height={2095}
           lqip={lqip}
           style={{ maxWidth: 200 }}
+          onLine={true}
           src="andre-spieker-238-unsplash.jpg"
         />
       </td>
@@ -32,13 +33,14 @@ const lqip =
       </td>
     </tr>
     <tr>
-      <th align="left">Initial controlled</th>
+      <th align="left">Initial "semi-controlled"</th>
       <td>
         <Precious
           width={3500}
           height={2095}
           lqip={lqip}
           style={{ maxWidth: 200 }}
+          onLine={true}
           src="andre-spieker-238-unsplash.jpg"
           load={false}
         />
@@ -57,8 +59,8 @@ const lqip =
     </tr>
     <tr>
       <th align="left">Loading</th>
-      <td />
-      <td />
+      <td>❌</td>
+      <td>❌</td>
     </tr>
     <tr>
       <th align="left">Loaded</th>
@@ -68,6 +70,7 @@ const lqip =
           height={2095}
           lqip={lqip}
           style={{ maxWidth: 200 }}
+          onLine={true}
           src="andre-spieker-238-unsplash.jpg"
           load={true}
         />
@@ -92,6 +95,7 @@ const lqip =
           height={2095}
           lqip={lqip}
           style={{ maxWidth: 200 }}
+          onLine={true}
           src="/404.jpg"
           load={true}
         />
