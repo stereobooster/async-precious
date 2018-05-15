@@ -1,32 +1,13 @@
 import React, { Component } from "react";
+// import styles from "./index.module.css";
+import styles from "./index.module.js";
+import { universalStyle } from "../../utils";
 
 // icons
 import CloudDownload from "./CloudDownload";
 import CloudOff from "./CloudOff";
 import Warning from "./Warning";
 // import Progress from "./Progress";
-
-// import styles from "./index.module.css";
-const styles = {
-  adaptive: {
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    position: "relative"
-  },
-  img: {
-    width: "auto",
-    height: "auto",
-    maxWidth: "100%",
-    /* TODO: fix bug in styles */
-    marginBottom: "-4px"
-  },
-  icon: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)"
-  }
-};
 
 // states
 const initial = 1; //"initial";
@@ -35,22 +16,6 @@ const loaded = 3; //"loaded";
 const error = 4; //"error";
 
 // props.noscript - class which will hide elements if JS is disabled
-
-const universalStyle = (...stylesOrClasses) => {
-  const classes = [];
-  let style;
-  for (const obj of stylesOrClasses) {
-    if (typeof obj === "string") {
-      classes.push(obj);
-    } else if (obj instanceof Object) {
-      Object.assign(style || (style = {}), obj);
-    }
-  }
-  return {
-    className: classes.length > 1 ? classes.join(" ") : classes[0],
-    style
-  };
-};
 
 export default class Precious extends Component {
   constructor(props) {
@@ -103,7 +68,11 @@ export default class Precious extends Component {
     const { mediaState, onLine, controledLoad } = state;
     const fill = props.iconColor || "#fff";
     const size = props.iconSize || "64";
-    const styleOrClass = universalStyle(styles.icon, props.noscript);
+    const styleOrClass = universalStyle(
+      { width: size, height: size },
+      styles.icon,
+      props.noscript
+    );
     switch (mediaState) {
       case loaded:
         return null;
@@ -114,21 +83,21 @@ export default class Precious extends Component {
       case initial:
         if (controledLoad) return null;
         return onLine ? (
-          <div {...styleOrClass} width={size} height={size}>
+          <div {...styleOrClass}>
             <CloudDownload fill={fill} size={size} />
           </div>
         ) : (
-          <div {...styleOrClass} width={size} height={size}>
+          <div {...styleOrClass}>
             <CloudOff fill={fill} size={size} />
           </div>
         );
       case error:
         return onLine ? (
-          <div {...styleOrClass} width={size} height={size}>
+          <div {...styleOrClass}>
             <Warning fill={fill} size={size} />
           </div>
         ) : (
-          <div {...styleOrClass} width={size} height={size}>
+          <div {...styleOrClass}>
             <CloudOff fill={fill} size={size} />
           </div>
         );
