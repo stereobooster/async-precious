@@ -6,8 +6,11 @@ Experiment to build async component according to [Guide To Async Components](htt
 
 ## Ideas
 
-* [lazy-image](https://meowni.ca/lazy-image/): `srcset`
+* propTypes
+* StoryBook or styleguidist
 * preview: lqip, sqip, color, function
+* webp
+* [lazy-image](https://meowni.ca/lazy-image/): `srcset`
 * [Webworker](https://aerotwist.com/blog/one-weird-trick/) maybe?
 * contrast
 

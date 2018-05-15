@@ -70,8 +70,8 @@ export default class Precious extends Component {
       case loaded:
         return null;
       case loading:
+        // nothing, but can be spinner
         // return <Progress className={className} fill={fill} size={size} />
-        // todo show spinner if loading takes more than 200ms
         return null;
       case initial:
         if (controledLoad) return null;
