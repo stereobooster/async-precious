@@ -1,11 +1,32 @@
 import React, { Component } from "react";
-import styles from "./index.module.css";
 
 // icons
 import CloudDownload from "./CloudDownload";
 import CloudOff from "./CloudOff";
 import Warning from "./Warning";
 // import Progress from "./Progress";
+
+// import styles from "./index.module.css";
+const styles = {
+  adaptive: {
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    position: "relative"
+  },
+  img: {
+    width: "auto",
+    height: "auto",
+    maxWidth: "100%",
+    /* TODO: fix bug in styles */
+    marginBottom: "-4px"
+  },
+  icon: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)"
+  }
+};
 
 // states
 const initial = 1; //"initial";
@@ -14,6 +35,22 @@ const loaded = 3; //"loaded";
 const error = 4; //"error";
 
 // props.noscript - class which will hide elements if JS is disabled
+
+const universalStyle = (...stylesOrClasses) => {
+  const classes = [];
+  let style;
+  for (const obj of stylesOrClasses) {
+    if (typeof obj === "string") {
+      classes.push(obj);
+    } else if (obj instanceof Object) {
+      Object.assign(style || (style = {}), obj);
+    }
+  }
+  return {
+    className: classes.length > 1 ? classes.join(" ") : classes[0],
+    style
+  };
+};
 
 export default class Precious extends Component {
   constructor(props) {
@@ -62,29 +99,38 @@ export default class Precious extends Component {
       this.setState({ mediaState: initial });
   }
 
-  renderProp({ props, mediaState, onLine, controledLoad }) {
+  renderProp({ props, state }) {
+    const { mediaState, onLine, controledLoad } = state;
     const fill = props.iconColor || "#fff";
     const size = props.iconSize || "64";
-    const className = `${styles.icon} ${props.noscript}`;
+    const styleOrClass = universalStyle(styles.icon, props.noscript);
     switch (mediaState) {
       case loaded:
         return null;
       case loading:
         // nothing, but can be spinner
-        // return <Progress className={className} fill={fill} size={size} />
+        // return <Progress {...styleOrClass} fill={fill} size={size} />
         return null;
       case initial:
         if (controledLoad) return null;
         return onLine ? (
-          <CloudDownload className={className} fill={fill} size={size} />
+          <div {...styleOrClass} width={size} height={size}>
+            <CloudDownload fill={fill} size={size} />
+          </div>
         ) : (
-          <CloudOff className={className} fill={fill} size={size} />
+          <div {...styleOrClass} width={size} height={size}>
+            <CloudOff fill={fill} size={size} />
+          </div>
         );
       case error:
         return onLine ? (
-          <Warning className={className} fill={fill} size={size} />
+          <div {...styleOrClass} width={size} height={size}>
+            <Warning fill={fill} size={size} />
+          </div>
         ) : (
-          <CloudOff className={className} fill={fill} size={size} />
+          <div {...styleOrClass} width={size} height={size}>
+            <CloudOff fill={fill} size={size} />
+          </div>
         );
       default:
         throw new Error(`Wrong state: ${mediaState}`);
@@ -127,28 +173,24 @@ export default class Precious extends Component {
     image.onerror = onerror;
     image.onabort = onerror;
     image.src = this.props.src;
-    // decode seems to downgrade performance. Not sure why
-    // if (image.decode) {
-    //   image
-    //     .decode()
-    //     .then(onload)
-    //     .catch(onerror);
-    // }
   }
 
   render() {
     const props = this.props;
-    const { mediaState } = this.state;
+    const state = this.state;
+    const { mediaState } = state;
     return (
       <div
-        className={styles.adaptive}
-        style={{ backgroundImage: `url(${props.lqip}` }}
+        {...universalStyle(styles.adaptive, {
+          backgroundImage: `url(${props.lqip})`
+        })}
         title={props.alt}
         onClick={() => this.onClick()}
         ref={this.props.innerRef}
       >
         {mediaState === loaded ? (
           <img
+            {...universalStyle(styles.img, props.noscript)}
             src={props.src}
             alt={props.alt}
             width={props.width}
@@ -156,14 +198,15 @@ export default class Precious extends Component {
           />
         ) : (
           <svg
+            {...universalStyle(styles.img, props.noscript)}
             width={props.width}
             height={props.height}
-            className={props.noscript}
           />
         )}
         {props.noscript && (
           <noscript>
             <img
+              {...universalStyle(styles.img)}
               src={props.src}
               alt={props.alt}
               width={props.width}
@@ -171,7 +214,7 @@ export default class Precious extends Component {
             />
           </noscript>
         )}
-        {this.renderProp({ props, ...this.state })}
+        {this.renderProp({ props, state })}
       </div>
     );
   }

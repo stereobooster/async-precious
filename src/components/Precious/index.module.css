@@ -4,8 +4,7 @@
   position: relative;
 }
 
-.adaptive img,
-.adaptive svg {
+.img {
   width: auto;
   height: auto;
   max-width: 100%;
