@@ -12,7 +12,7 @@
   "devDependencies": {
     "gh-pages": "1.1.0",
     "lqip.macro": "0.1.5",
-    "react-styleguidist": "~6"
+    "react-styleguidist": "6.5.3"
   },
   "scripts": {
     "start": "react-scripts start",
