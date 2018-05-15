@@ -6,8 +6,6 @@ Experiment to build async component according to [Guide To Async Components](htt
 
 ## Ideas
 
-* propTypes
-* StoryBook or styleguidist
 * preview: lqip, sqip, color, function
 * webp
 * [lazy-image](https://meowni.ca/lazy-image/): `srcset`
@@ -38,3 +36,6 @@ supportsWebp().then(x => (webp = x));
 ```html
 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=" />
 ```
+
+- https://github.com/styleguidist/react-styleguidist/blob/master/docs/Documenting.md
+- https://reactjs.org/docs/typechecking-with-proptypes.html

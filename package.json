@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://stereobooster.github.io/async-precious",
   "dependencies": {
+    "prop-types": "^15.6.1",
     "react": "16.3.2",
     "react-dom": "16.3.2",
     "react-scripts": "2.0.0-next.b2fd8db8",

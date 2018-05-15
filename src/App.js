@@ -21,36 +21,36 @@ const App = () => (
       lqip={lqip1}
       src={coverImage1}
       alt="doggo 1"
-      width="3500"
-      height="2095"
+      width={3500}
+      height={2095}
     />
     <WaypointPrecious
       lqip={lqip2}
       src={coverImage2}
       alt="doggo 2"
-      width="3534"
-      height="2366"
+      width={3534}
+      height={2366}
     />
     <WaypointPrecious
       lqip={lqip3}
       src={coverImage3}
       alt="doggo 3"
-      width="3204"
-      height="4800"
+      width={3204}
+      height={4800}
     />
     <WaypointPrecious
       lqip={lqip4}
       src={coverImage4}
       alt="doggo 4"
-      width="7952"
-      height="5304"
+      width={7952}
+      height={5304}
     />
     <WaypointPrecious
       lqip={lqip5}
       src={coverImage5}
       alt="doggo 5"
-      width="6016"
-      height="4016"
+      width={6016}
+      height={4016}
     />
   </React.Fragment>
 );

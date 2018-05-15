@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 // import styles from "./index.module.css";
 import styles from "./index.module.js";
 import { universalStyle } from "../../utils";
@@ -9,15 +10,50 @@ import CloudOff from "./CloudOff";
 import Warning from "./Warning";
 // import Progress from "./Progress";
 
-// states
-const initial = 1; //"initial";
-const loading = 2; //"loading";
-const loaded = 3; //"loaded";
-const error = 4; //"error";
+// states - prod
+const initial = 1;
+const loading = 2;
+const loaded = 3;
+const error = 4;
 
-// props.noscript - class which will hide elements if JS is disabled
+// states - dev
+// const initial = "initial";
+// const loading = "loading";
+// const loaded = "loaded";
+// const error = "error";
 
 export default class Precious extends Component {
+  static propTypes = {
+    /** URL of the image */
+    src: PropTypes.string.isRequired,
+    /** Width of the image in px */
+    width: PropTypes.number.isRequired,
+    /** Height of the image in px */
+    height: PropTypes.number.isRequired,
+    /** [Low Quality Image Placeholder](https://github.com/zouhir/lqip) */
+    lqip: PropTypes.string.isRequired,
+    /** Solid color placeholder */
+    // color: PropTypes.string.isRequired,
+    /** Alternative text */
+    alt: PropTypes.string,
+    /** If you will not pass this value, component will detect onLine status based on browser API, otherwise will use passed value */
+    onLine: PropTypes.bool,
+    /** If you will pass true it will immediately load image otherwise load will be controlled by user */
+    load: PropTypes.bool,
+    /** Color of the icon */
+    iconColor: PropTypes.string,
+    /** Size of the icon in px */
+    iconSize: PropTypes.number,
+    /** CSS class which will hide elements if JS is disabled */
+    noscript: PropTypes.string,
+    style: PropTypes.object
+  };
+
+  static defaultProps = {
+    iconColor: "#fff",
+    iconSize: 64
+  };
+
   constructor(props) {
     super(props);
     const controledOnLine = props.onLine !== undefined;
@@ -26,11 +62,12 @@ export default class Precious extends Component {
       onLine: controledOnLine ? props.onLine : true,
       controledLoad,
       controledOnLine,
-      mediaState: controledOnLine ? initial : props.load ? loaded : initial
+      mediaState: initial
     };
   }
 
   componentDidMount() {
+    if (this.props.load) this.load();
     if (!this.state.controledOnLine) {
       this.updateOnlineStatus = () =>
         this.setState({ onLine: navigator.onLine });
@@ -66,8 +103,8 @@ export default class Precious extends Component {
 
   renderProp({ props, state }) {
     const { mediaState, onLine, controledLoad } = state;
-    const fill = props.iconColor || "#fff";
-    const size = props.iconSize || "64";
+    const fill = props.iconColor;
+    const size = props.iconSize;
     const styleOrClass = universalStyle(
       { width: size, height: size },
       styles.icon,
@@ -148,11 +185,24 @@ export default class Precious extends Component {
     const props = this.props;
     const state = this.state;
     const { mediaState } = state;
+    let background;
+    background = {
+      backgroundImage: `url(${props.lqip})`
+    };
+    // if (props.lqip) {
+    // } else {
+    //   background = {
+    //     backgroundColor: props.color
+    //   };
+    // }
     return (
       <div
-        {...universalStyle(styles.adaptive, {
-          backgroundImage: `url(${props.lqip})`
-        })}
+        {...universalStyle(
+          styles.adaptive,
+          background,
+          props.style,
+          props.className
+        )}
         title={props.alt}
         onClick={() => this.onClick()}
         ref={this.props.innerRef}
