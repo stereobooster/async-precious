@@ -15,6 +15,9 @@ const lqip3 = lqip("./images/vincent-van-zalinge-408523-unsplash.jpg");
 const lqip4 = lqip("./images/marvin-meyer-188676-unsplash.jpg");
 const lqip5 = lqip("./images/nidhin-mundackal-281287-unsplash.jpg");
 
+console.log(`const lqip4 = "${lqip4}"`);
+console.log(`const lqip5 = "${lqip5}"`);
+
 const App = () => (
   <React.Fragment>
     <Precious

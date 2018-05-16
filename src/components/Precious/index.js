@@ -46,7 +46,10 @@ export default class Precious extends Component {
     iconSize: PropTypes.number,
     /** CSS class which will hide elements if JS is disabled */
     noscript: PropTypes.string,
-    style: PropTypes.object
+    /** React's style attribute for root element of the component */
+    style: PropTypes.object,
+    /** React's className attribute for root element of the component */
+    className: PropTypes.string,
   };
 
   static defaultProps = {

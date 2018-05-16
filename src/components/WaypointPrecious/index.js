@@ -18,3 +18,5 @@ export default class WaypointPrecious extends Component {
     );
   }
 }
+
+WaypointPrecious.props = Precious.props;
