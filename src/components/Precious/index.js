@@ -1,26 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-// import styles from "./index.module.css";
-import styles from "./index.module.js";
-import { universalStyle } from "../../utils";
-
-// icons
-import CloudDownload from "./CloudDownload";
-import CloudOff from "./CloudOff";
-import Warning from "./Warning";
-// import Progress from "./Progress";
-
-// states - prod
-const initial = 1;
-const loading = 2;
-const loaded = 3;
-const error = 4;
-
-// states - dev
-// const initial = "initial";
-// const loading = "loading";
-// const loaded = "loaded";
-// const error = "error";
+import PreciousStateless, {
+  initial,
+  loading,
+  loaded,
+  error
+} from "../PreciousStateless";
 
 export default class Precious extends Component {
   static propTypes = {
@@ -49,12 +34,7 @@ export default class Precious extends Component {
     /** React's style attribute for root element of the component */
     style: PropTypes.object,
     /** React's className attribute for root element of the component */
-    className: PropTypes.string,
-  };
-
-  static defaultProps = {
-    iconColor: "#fff",
-    iconSize: 64
+    className: PropTypes.string
   };
 
   constructor(props) {
@@ -104,48 +84,6 @@ export default class Precious extends Component {
       this.setState({ mediaState: initial });
   }
 
-  renderProp({ props, state }) {
-    const { mediaState, onLine, controledLoad } = state;
-    const fill = props.iconColor;
-    const size = props.iconSize;
-    const styleOrClass = universalStyle(
-      { width: size, height: size },
-      styles.icon,
-      props.noscript
-    );
-    switch (mediaState) {
-      case loaded:
-        return null;
-      case loading:
-        // nothing, but can be spinner
-        // return <Progress {...styleOrClass} fill={fill} size={size} />
-        return null;
-      case initial:
-        if (controledLoad) return null;
-        return onLine ? (
-          <div {...styleOrClass}>
-            <CloudDownload fill={fill} size={size} />
-          </div>
-        ) : (
-          <div {...styleOrClass}>
-            <CloudOff fill={fill} size={size} />
-          </div>
-        );
-      case error:
-        return onLine ? (
-          <div {...styleOrClass}>
-            <Warning fill={fill} size={size} />
-          </div>
-        ) : (
-          <div {...styleOrClass}>
-            <CloudOff fill={fill} size={size} />
-          </div>
-        );
-      default:
-        throw new Error(`Wrong state: ${mediaState}`);
-    }
-  }
-
   onClick() {
     const { mediaState, onLine } = this.state;
     if (!onLine) return;
@@ -185,59 +123,15 @@ export default class Precious extends Component {
   }
 
   render() {
-    const props = this.props;
-    const state = this.state;
-    const { mediaState } = state;
-    let background;
-    background = {
-      backgroundImage: `url(${props.lqip})`
-    };
-    // if (props.lqip) {
-    // } else {
-    //   background = {
-    //     backgroundColor: props.color
-    //   };
-    // }
+    const { onLine, mediaState } = this.state;
     return (
-      <div
-        {...universalStyle(
-          styles.adaptive,
-          background,
-          props.style,
-          props.className
-        )}
-        title={props.alt}
+      <PreciousStateless
+        {...this.props}
         onClick={() => this.onClick()}
-        ref={this.props.innerRef}
-      >
-        {mediaState === loaded ? (
-          <img
-            {...universalStyle(styles.img, props.noscript)}
-            src={props.src}
-            alt={props.alt}
-            width={props.width}
-            height={props.height}
-          />
-        ) : (
-          <svg
-            {...universalStyle(styles.img, props.noscript)}
-            width={props.width}
-            height={props.height}
-          />
-        )}
-        {props.noscript && (
-          <noscript>
-            <img
-              {...universalStyle(styles.img)}
-              src={props.src}
-              alt={props.alt}
-              width={props.width}
-              height={props.height}
-            />
-          </noscript>
-        )}
-        {this.renderProp({ props, state })}
-      </div>
+        onLine={onLine}
+        mediaState={mediaState}
+        noIcon={this.state.controledLoad && mediaState === initial}
+      />
     );
   }
 }
