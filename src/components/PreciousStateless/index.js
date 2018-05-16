@@ -5,9 +5,9 @@ import styles from "./index.module.js";
 import { universalStyle } from "../../utils";
 
 // icons
-import DownloadIcon from "./DownloadIcon";
-import OfflineIcon from "./OfflineIcon";
-import WarningIcon from "./WarningIcon";
+import DownloadIcon from "../Icon/Download";
+import OfflineIcon from "../Icon/Offline";
+import WarningIcon from "../Icon/Warning";
 
 // states - prod
 // export const initial = 1;

@@ -1,5 +1,5 @@
 import React from "react";
-import Icon from "./Icon";
+import Icon from "./index";
 
 // source https://material.io/tools/icons/?icon=rotate_left&style=baseline
 const Progress = props => (
