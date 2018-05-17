@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 // import styles from "./index.module.css";
 import styles from "./index.module.js";
@@ -9,19 +9,24 @@ import DownloadIcon from "../Icon/Download";
 import OfflineIcon from "../Icon/Offline";
 import WarningIcon from "../Icon/Warning";
 
-// states - prod
-// export const initial = 1;
-// export const loading = 2;
-// export const loaded = 3;
-// export const error = 4;
-
 // states - dev
-export const initial = "initial";
+export const load = "load";
 export const loading = "loading";
 export const loaded = "loaded";
 export const error = "error";
+export const noicon = "noicon";
+export const offline = "offline";
 
-export default class PreciousStateless extends Component {
+export const icons = {
+  load,
+  loading,
+  loaded,
+  error,
+  noicon,
+  offline
+};
+
+export default class PreciousStateless extends PureComponent {
   static propTypes = {
     /** URL of the image */
     src: PropTypes.string.isRequired,
@@ -35,10 +40,6 @@ export default class PreciousStateless extends Component {
     // color: PropTypes.string.isRequired,
     /** Alternative text */
     alt: PropTypes.string,
-    /** If browser is onLine or not */
-    onLine: PropTypes.bool,
-    /** Load state of the component */
-    mediaState: PropTypes.oneOf([initial, loading, loaded, error]),
     /** Color of the icon */
     iconColor: PropTypes.string,
     /** Size of the icon in px */
@@ -49,59 +50,75 @@ export default class PreciousStateless extends Component {
     style: PropTypes.object,
     /** React's className attribute for root element of the component */
     className: PropTypes.string,
-    /** If you want to disable icon */
-    noIcon: PropTypes.bool,
     /** On click handler */
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    /** display icon */
+    icon: PropTypes.oneOf([load, loading, loaded, error, noicon, offline])
   };
 
   static defaultProps = {
     iconColor: "#fff",
-    iconSize: 64
+    iconSize: 64,
+    icons: {
+      [load]: DownloadIcon,
+      [loading]: null,
+      [loaded]: null,
+      [error]: WarningIcon,
+      [noicon]: null,
+      [offline]: OfflineIcon
+    }
   };
 
-  renderProp({ props }) {
-    const { mediaState, onLine, iconColor, iconSize, noIcon } = props;
-    if (noIcon) return null;
+  renderIcon(props) {
+    const { icon, icons, iconColor: fill, iconSize: size } = props;
+    const iconToRender = icons[icon];
+    if (!iconToRender) return;
     const styleOrClass = universalStyle(
-      { width: iconSize, height: iconSize },
+      { width: size, height: size },
       styles.icon,
       props.noscript
     );
-    switch (mediaState) {
-      case loaded:
-        return null;
-      case loading:
-        // nothing, but can be spinner
-        return null;
-      case initial:
-        return onLine ? (
-          <div {...styleOrClass}>
-            <DownloadIcon fill={iconColor} size={iconSize} />
-          </div>
-        ) : (
-          <div {...styleOrClass}>
-            <OfflineIcon fill={iconColor} size={iconSize} />
-          </div>
-        );
-      case error:
-        return onLine ? (
-          <div {...styleOrClass}>
-            <WarningIcon fill={iconColor} size={iconSize} />
-          </div>
-        ) : (
-          <div {...styleOrClass}>
-            <OfflineIcon fill={iconColor} size={iconSize} />
-          </div>
-        );
-      default:
-        throw new Error(`Wrong state: ${mediaState}`);
-    }
+    return React.createElement(
+      "div",
+      styleOrClass,
+      React.createElement(iconToRender, { fill, size })
+    );
+  }
+
+  renderImage(props) {
+    return props.icon === loaded ? (
+      <img
+        {...universalStyle(styles.img, props.noscript)}
+        src={props.src}
+        alt={props.alt}
+        width={props.width}
+        height={props.height}
+      />
+    ) : (
+      <svg
+        {...universalStyle(styles.img, props.noscript)}
+        width={props.width}
+        height={props.height}
+      />
+    );
+  }
+
+  renderNoscript(props) {
+    return props.noscript ? (
+      <noscript>
+        <img
+          {...universalStyle(styles.img)}
+          src={props.src}
+          alt={props.alt}
+          width={props.width}
+          height={props.height}
+        />
+      </noscript>
+    ) : null;
   }
 
   render() {
     const props = this.props;
-    const { mediaState } = props;
     let background;
     background = {
       backgroundImage: `url(${props.lqip})`
@@ -124,33 +141,9 @@ export default class PreciousStateless extends Component {
         onClick={this.props.onClick}
         ref={this.props.innerRef}
       >
-        {mediaState === loaded ? (
-          <img
-            {...universalStyle(styles.img, props.noscript)}
-            src={props.src}
-            alt={props.alt}
-            width={props.width}
-            height={props.height}
-          />
-        ) : (
-          <svg
-            {...universalStyle(styles.img, props.noscript)}
-            width={props.width}
-            height={props.height}
-          />
-        )}
-        {props.noscript && (
-          <noscript>
-            <img
-              {...universalStyle(styles.img)}
-              src={props.src}
-              alt={props.alt}
-              width={props.width}
-              height={props.height}
-            />
-          </noscript>
-        )}
-        {this.renderProp({ props })}
+        {this.renderImage(props)}
+        {this.renderNoscript(props)}
+        {this.renderIcon(props)}
       </div>
     );
   }

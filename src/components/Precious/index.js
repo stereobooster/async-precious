@@ -1,11 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import PreciousStateless, {
+import PreciousStateless, { icons } from "../PreciousStateless";
+
+export const initial = "initial";
+export const loading = "loading";
+export const loaded = "loaded";
+export const error = "error";
+
+export const mediaStates = {
   initial,
   loading,
   loaded,
   error
-} from "../PreciousStateless";
+};
 
 export default class Precious extends Component {
   static propTypes = {
@@ -122,15 +129,34 @@ export default class Precious extends Component {
     image.src = this.props.src;
   }
 
+  stateToIcon({ mediaState, onLine }) {
+    switch (mediaState) {
+      case loaded:
+        return icons.loaded;
+      case loading:
+        return icons.loading;
+      case initial:
+        return onLine ? icons.load : icons.offline;
+      case error:
+        return onLine ? icons.error : icons.offline;
+      default:
+        throw new Error(`Wrong state: ${mediaState}`);
+    }
+  }
+
   render() {
-    const { onLine, mediaState } = this.state;
+    let icon;
+    if (this.props.stateToIcon) {
+      icon = this.props.stateToIcon(this.state);
+    }
+    if (!icon) {
+      icon = this.stateToIcon(this.state);
+    }
     return (
       <PreciousStateless
         {...this.props}
         onClick={() => this.onClick()}
-        onLine={onLine}
-        mediaState={mediaState}
-        noIcon={this.state.controledLoad && mediaState === initial}
+        icon={icon}
       />
     );
   }

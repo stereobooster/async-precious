@@ -7,13 +7,7 @@ const lqip =
 <table>
   <tbody>
     <tr>
-      <th />
-      <th>Online</th>
-      <th>Offline</th>
-      <th>No icon</th>
-    </tr>
-    <tr>
-      <th align="left">Initial</th>
+      <th align="left" width="100">load</th>
       <td>
         <PreciousStateless
           width={3500}
@@ -21,10 +15,10 @@ const lqip =
           lqip={lqip}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          onLine={true}
-          mediaState={"initial"}
+          icon={"load"}
         />
       </td>
+      <th align="left" width="100">noicon</th>
       <td>
         <PreciousStateless
           width={3500}
@@ -32,25 +26,12 @@ const lqip =
           lqip={lqip}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          onLine={false}
-          mediaState={"initial"}
-        />
-      </td>
-      <td>
-        <PreciousStateless
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{ maxWidth: 200 }}
-          onLine={true}
-          mediaState={"initial"}
-          noIcon={true}
+          icon={"noicon"}
         />
       </td>
     </tr>
     <tr>
-      <th align="left">Loading</th>
+      <th align="left">loading</th>
       <td>
         <PreciousStateless
           width={3500}
@@ -58,10 +39,10 @@ const lqip =
           lqip={lqip}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          onLine={true}
-          mediaState={"loading"}
+          icon={"loading"}
         />
       </td>
+      <th align="left">offline</th>
       <td>
         <PreciousStateless
           width={3500}
@@ -69,25 +50,12 @@ const lqip =
           lqip={lqip}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          onLine={false}
-          mediaState={"loading"}
-        />
-      </td>
-      <td>
-        <PreciousStateless
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{ maxWidth: 200 }}
-          onLine={true}
-          mediaState={"loading"}
-          noIcon={true}
+          icon={"offline"}
         />
       </td>
     </tr>
     <tr>
-      <th align="left">Loaded</th>
+      <th align="left">loaded</th>
       <td>
         <PreciousStateless
           width={3500}
@@ -95,10 +63,10 @@ const lqip =
           lqip={lqip}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          onLine={true}
-          mediaState={"loaded"}
+          icon={"loaded"}
         />
       </td>
+      <th align="left">error</th>
       <td>
         <PreciousStateless
           width={3500}
@@ -106,57 +74,7 @@ const lqip =
           lqip={lqip}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          onLine={false}
-          mediaState={"loaded"}
-        />
-      </td>
-      <td>
-        <PreciousStateless
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{ maxWidth: 200 }}
-          onLine={true}
-          mediaState={"loaded"}
-          noIcon={true}
-        />
-      </td>
-    </tr>
-    <tr>
-      <th align="left">Error</th>
-      <td>
-        <PreciousStateless
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{ maxWidth: 200 }}
-          onLine={true}
-          mediaState={"error"}
-        />
-      </td>
-      <td>
-        <PreciousStateless
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{ maxWidth: 200 }}
-          onLine={false}
-          mediaState={"error"}
-        />
-      </td>
-      <td>
-        <PreciousStateless
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{ maxWidth: 200 }}
-          onLine={true}
-          mediaState={"error"}
-          noIcon={true}
+          icon={"error"}
         />
       </td>
     </tr>

@@ -35,31 +35,6 @@ const lqip =
       </td>
     </tr>
     <tr>
-      <th align="left">Initial "semi-controlled"</th>
-      <td>
-        <Precious
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          style={{ maxWidth: 200 }}
-          onLine={true}
-          src="andre-spieker-238-unsplash.jpg"
-          load={false}
-        />
-      </td>
-      <td>
-        <Precious
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          style={{ maxWidth: 200 }}
-          onLine={false}
-          src="andre-spieker-238-unsplash.jpg"
-          load={false}
-        />
-      </td>
-    </tr>
-    <tr>
       <th align="left">Error</th>
       <td>
         <Precious
