@@ -1,4 +1,4 @@
-All possible states of the component
+Click icons to see what happens
 
 ```js
 const lqip =
@@ -7,74 +7,53 @@ const lqip =
 <table>
   <tbody>
     <tr>
-      <th align="left" width="100">load</th>
+      <th />
+      <th>Online</th>
+      <th>Offline</th>
+    </tr>
+    <tr>
+      <th align="left">Initial uncontrolled</th>
       <td>
-        <PreciousStateless
+        <ManualLoad
           width={3500}
           height={2095}
           lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          icon={"load"}
+          onLine={true}
+          src="andre-spieker-238-unsplash.jpg"
         />
       </td>
-      <th align="left" width="100">noicon</th>
       <td>
-        <PreciousStateless
+        <ManualLoad
           width={3500}
           height={2095}
           lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          icon={"noicon"}
+          onLine={false}
+          src="andre-spieker-238-unsplash.jpg"
         />
       </td>
     </tr>
     <tr>
-      <th align="left">loading</th>
+      <th align="left">Error</th>
       <td>
-        <PreciousStateless
+        <ManualLoad
           width={3500}
           height={2095}
           lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          icon={"loading"}
+          onLine={true}
+          src="/404.jpg"
         />
       </td>
-      <th align="left">offline</th>
       <td>
-        <PreciousStateless
+        <ManualLoad
           width={3500}
           height={2095}
           lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          icon={"offline"}
-        />
-      </td>
-    </tr>
-    <tr>
-      <th align="left">loaded</th>
-      <td>
-        <PreciousStateless
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{ maxWidth: 200 }}
-          icon={"loaded"}
-        />
-      </td>
-      <th align="left">error</th>
-      <td>
-        <PreciousStateless
-          width={3500}
-          height={2095}
-          lqip={lqip}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{ maxWidth: 200 }}
-          icon={"error"}
+          onLine={false}
+          src="/404.jpg"
         />
       </td>
     </tr>

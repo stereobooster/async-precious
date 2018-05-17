@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Waypoint from "react-waypoint";
-import Precious, {mediaStates} from "../Precious";
-import { icons } from "../PreciousStateless";
+import ManualLoad from "../ManualLoad";
+import { icons, loadStates } from "../constants";
 
-export default class WaypointPrecious extends Component {
+export default class LazyLoad extends Component {
   constructor(props) {
     super(props);
     this.state = { inViewport: false };
@@ -12,9 +12,9 @@ export default class WaypointPrecious extends Component {
     };
   }
 
-  stateToIcon({ mediaState }) {
-    switch (mediaState) {
-      case mediaStates.initial:
+  stateToIcon({ loadState }) {
+    switch (loadState) {
+      case loadStates.initial:
         return icons.noicon;
       default:
         return undefined;
@@ -24,10 +24,14 @@ export default class WaypointPrecious extends Component {
   render() {
     return (
       <Waypoint onEnter={this.onEnter}>
-        <Precious {...this.props} load={this.state.inViewport} stateToIcon={this.stateToIcon} />
+        <ManualLoad
+          {...this.props}
+          load={this.state.inViewport}
+          stateToIcon={this.stateToIcon}
+        />
       </Waypoint>
     );
   }
 }
 
-WaypointPrecious.props = Precious.props;
+LazyLoad.props = ManualLoad.props;

@@ -1,4 +1,4 @@
-Click icons to see what happens
+All possible states of the component
 
 ```js
 const lqip =
@@ -7,53 +7,74 @@ const lqip =
 <table>
   <tbody>
     <tr>
-      <th />
-      <th>Online</th>
-      <th>Offline</th>
-    </tr>
-    <tr>
-      <th align="left">Initial uncontrolled</th>
+      <th align="left" width="100">load</th>
       <td>
-        <Precious
+        <MediaWithDefaultIcons
           width={3500}
           height={2095}
           lqip={lqip}
-          style={{ maxWidth: 200 }}
-          onLine={true}
           src="andre-spieker-238-unsplash.jpg"
+          style={{ maxWidth: 200 }}
+          icon={"load"}
         />
       </td>
+      <th align="left" width="100">noicon</th>
       <td>
-        <Precious
+        <MediaWithDefaultIcons
           width={3500}
           height={2095}
           lqip={lqip}
-          style={{ maxWidth: 200 }}
-          onLine={false}
           src="andre-spieker-238-unsplash.jpg"
+          style={{ maxWidth: 200 }}
+          icon={"noicon"}
         />
       </td>
     </tr>
     <tr>
-      <th align="left">Error</th>
+      <th align="left">loading</th>
       <td>
-        <Precious
+        <MediaWithDefaultIcons
           width={3500}
           height={2095}
           lqip={lqip}
+          src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          onLine={true}
-          src="/404.jpg"
+          icon={"loading"}
         />
       </td>
+      <th align="left">offline</th>
       <td>
-        <Precious
+        <MediaWithDefaultIcons
           width={3500}
           height={2095}
           lqip={lqip}
+          src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
-          onLine={false}
-          src="/404.jpg"
+          icon={"offline"}
+        />
+      </td>
+    </tr>
+    <tr>
+      <th align="left">loaded</th>
+      <td>
+        <MediaWithDefaultIcons
+          width={3500}
+          height={2095}
+          lqip={lqip}
+          src="andre-spieker-238-unsplash.jpg"
+          style={{ maxWidth: 200 }}
+          icon={"loaded"}
+        />
+      </td>
+      <th align="left">error</th>
+      <td>
+        <MediaWithDefaultIcons
+          width={3500}
+          height={2095}
+          lqip={lqip}
+          src="andre-spieker-238-unsplash.jpg"
+          style={{ maxWidth: 200 }}
+          icon={"error"}
         />
       </td>
     </tr>

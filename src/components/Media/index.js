@@ -2,31 +2,12 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 // import styles from "./index.module.css";
 import styles from "./index.module.js";
-import { universalStyle } from "../../utils";
+import { universalStyle } from "../utils";
+import { icons } from "../constants";
 
-// icons
-import DownloadIcon from "../Icon/Download";
-import OfflineIcon from "../Icon/Offline";
-import WarningIcon from "../Icon/Warning";
+const { load, loading, loaded, error, noicon, offline } = icons;
 
-// states - dev
-export const load = "load";
-export const loading = "loading";
-export const loaded = "loaded";
-export const error = "error";
-export const noicon = "noicon";
-export const offline = "offline";
-
-export const icons = {
-  load,
-  loading,
-  loaded,
-  error,
-  noicon,
-  offline
-};
-
-export default class PreciousStateless extends PureComponent {
+export default class Media extends PureComponent {
   static propTypes = {
     /** URL of the image */
     src: PropTypes.string.isRequired,
@@ -53,20 +34,14 @@ export default class PreciousStateless extends PureComponent {
     /** On click handler */
     onClick: PropTypes.func,
     /** display icon */
-    icon: PropTypes.oneOf([load, loading, loaded, error, noicon, offline])
+    icon: PropTypes.oneOf([load, loading, loaded, error, noicon, offline]),
+    /** Map of icons */
+    icons: PropTypes.object
   };
 
   static defaultProps = {
     iconColor: "#fff",
-    iconSize: 64,
-    icons: {
-      [load]: DownloadIcon,
-      [loading]: null,
-      [loaded]: null,
-      [error]: WarningIcon,
-      [noicon]: null,
-      [offline]: OfflineIcon
-    }
+    iconSize: 64
   };
 
   renderIcon(props) {

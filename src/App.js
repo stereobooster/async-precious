@@ -1,7 +1,7 @@
 import React from "react";
 import lqip from "lqip.macro";
-import Precious from "./components/Precious";
-import WaypointPrecious from "./components/WaypointPrecious";
+import ManualLoad from "./components/ManualLoad";
+import LazyLoad from "./components/LazyLoad";
 
 import coverImage1 from "./images/andre-spieker-238-unsplash.jpg";
 import coverImage2 from "./images/jairo-alzate-45522-unsplash.jpg";
@@ -17,35 +17,35 @@ const lqip5 = lqip("./images/nidhin-mundackal-281287-unsplash.jpg");
 
 const App = () => (
   <React.Fragment>
-    <Precious
+    <ManualLoad
       lqip={lqip1}
       src={coverImage1}
       alt="doggo 1"
       width={3500}
       height={2095}
     />
-    <WaypointPrecious
+    <LazyLoad
       lqip={lqip2}
       src={coverImage2}
       alt="doggo 2"
       width={3534}
       height={2366}
     />
-    <WaypointPrecious
+    <LazyLoad
       lqip={lqip3}
       src={coverImage3}
       alt="doggo 3"
       width={3204}
       height={4800}
     />
-    <WaypointPrecious
+    <LazyLoad
       lqip={lqip4}
       src={coverImage4}
       alt="doggo 4"
       width={7952}
       height={5304}
     />
-    <WaypointPrecious
+    <LazyLoad
       lqip={lqip5}
       src={coverImage5}
       alt="doggo 5"

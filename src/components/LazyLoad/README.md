@@ -21,35 +21,35 @@ const image5 = "nidhin-mundackal-281287-unsplash.jpg";
 const src = "andre-spieker-238-unsplash.jpg";
 
 <React.Fragment>
-  <WaypointPrecious
+  <LazyLoad
     lqip={lqip1}
     src={image1}
     alt="doggo 1"
     width={3500}
     height={2095}
   />
-  <WaypointPrecious
+  <LazyLoad
     lqip={lqip2}
     src={image2}
     alt="doggo 2"
     width={3534}
     height={2366}
   />
-  <WaypointPrecious
+  <LazyLoad
     lqip={lqip3}
     src={image3}
     alt="doggo 3"
     width={3204}
     height={4800}
   />
-  <WaypointPrecious
+  <LazyLoad
     lqip={lqip4}
     src={image4}
     alt="doggo 4"
     width={7952}
     height={5304}
   />
-  <WaypointPrecious
+  <LazyLoad
     lqip={lqip5}
     src={image5}
     alt="doggo 5"

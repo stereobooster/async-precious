@@ -1,20 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import PreciousStateless, { icons } from "../PreciousStateless";
+import Media from "../Media";
+import { icons, loadStates } from "../constants";
+import defaultIcons from "../defaultIcons";
 
-export const initial = "initial";
-export const loading = "loading";
-export const loaded = "loaded";
-export const error = "error";
+const { initial, loading, loaded, error } = loadStates;
 
-export const mediaStates = {
-  initial,
-  loading,
-  loaded,
-  error
-};
-
-export default class Precious extends Component {
+export default class ManualLoad extends Component {
   static propTypes = {
     /** URL of the image */
     src: PropTypes.string.isRequired,
@@ -52,7 +44,7 @@ export default class Precious extends Component {
       onLine: controledOnLine ? props.onLine : true,
       controledLoad,
       controledOnLine,
-      mediaState: initial
+      loadState: initial
     };
   }
 
@@ -88,13 +80,13 @@ export default class Precious extends Component {
     }
     if (nextProps.load === true) this.load();
     if (nextProps.src !== this.props.src)
-      this.setState({ mediaState: initial });
+      this.setState({ loadState: initial });
   }
 
   onClick() {
-    const { mediaState, onLine } = this.state;
+    const { loadState, onLine } = this.state;
     if (!onLine) return;
-    switch (mediaState) {
+    switch (loadState) {
       case loading:
         // nothing, but can be cancel
         return;
@@ -106,22 +98,22 @@ export default class Precious extends Component {
         this.load();
         return;
       default:
-        throw new Error(`Wrong state: ${mediaState}`);
+        throw new Error(`Wrong state: ${loadState}`);
     }
   }
 
   load() {
-    const { mediaState } = this.state;
-    if (loaded === mediaState || loading === mediaState) return;
-    this.setState({ mediaState: loading });
+    const { loadState } = this.state;
+    if (loaded === loadState || loading === loadState) return;
+    this.setState({ loadState: loading });
     const image = new Image();
     const onload = () => {
       image.onload = image.onerror = image.onabort = undefined;
-      this.setState({ mediaState: loaded });
+      this.setState({ loadState: loaded });
     };
     const onerror = () => {
       image.onload = image.onerror = image.onabort = undefined;
-      this.setState({ mediaState: error });
+      this.setState({ loadState: error });
     };
     image.onload = onload;
     image.onerror = onerror;
@@ -129,8 +121,8 @@ export default class Precious extends Component {
     image.src = this.props.src;
   }
 
-  stateToIcon({ mediaState, onLine }) {
-    switch (mediaState) {
+  stateToIcon({ loadState, onLine }) {
+    switch (loadState) {
       case loaded:
         return icons.loaded;
       case loading:
@@ -140,7 +132,7 @@ export default class Precious extends Component {
       case error:
         return onLine ? icons.error : icons.offline;
       default:
-        throw new Error(`Wrong state: ${mediaState}`);
+        throw new Error(`Wrong state: ${loadState}`);
     }
   }
 
@@ -153,10 +145,11 @@ export default class Precious extends Component {
       icon = this.stateToIcon(this.state);
     }
     return (
-      <PreciousStateless
+      <Media
         {...this.props}
         onClick={() => this.onClick()}
         icon={icon}
+        icons={defaultIcons}
       />
     );
   }
