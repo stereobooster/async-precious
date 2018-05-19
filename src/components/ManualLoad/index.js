@@ -174,8 +174,7 @@ export default class ManualLoad extends Component {
       case loaded:
         return icons.loaded;
       case loading:
-        // TODO: slow-loading icon
-        return overThreshold ? icons.loading : icons.loading;
+        return overThreshold ? icons.loading : icons.noicon;
       case initial:
         return onLine ? icons.load : icons.offline;
       case error:
