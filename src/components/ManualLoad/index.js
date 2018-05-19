@@ -33,7 +33,15 @@ export default class ManualLoad extends Component {
     /** React's style attribute for root element of the component */
     style: PropTypes.object,
     /** React's className attribute for root element of the component */
-    className: PropTypes.string
+    className: PropTypes.string,
+    /** callback for load state change */
+    onLoadStateChange: PropTypes.func,
+    /** how much to wait in ms until concider download to slow */
+    threshold: PropTypes.number
+  };
+
+  static defaultProps = {
+    interval: 500
   };
 
   constructor(props) {
@@ -44,7 +52,8 @@ export default class ManualLoad extends Component {
       onLine: controledOnLine ? props.onLine : true,
       controledLoad,
       controledOnLine,
-      loadState: initial
+      loadState: initial,
+      overThreshold: false
     };
   }
 
@@ -60,6 +69,7 @@ export default class ManualLoad extends Component {
   }
 
   componentWillUnmount() {
+    this.clear();
     if (!this.state.controledOnLine) {
       window.removeEventListener("online", this.updateOnlineStatus);
       window.removeEventListener("offline", this.updateOnlineStatus);
@@ -79,16 +89,16 @@ export default class ManualLoad extends Component {
       }
     }
     if (nextProps.load === true) this.load();
-    if (nextProps.src !== this.props.src)
-      this.setState({ loadState: initial });
+    if (nextProps.load === false) this.cancel();
+    if (nextProps.src !== this.props.src) this.cancel();
   }
 
   onClick() {
-    const { loadState, onLine } = this.state;
+    const { loadState, onLine, overThreshold } = this.state;
     if (!onLine) return;
     switch (loadState) {
       case loading:
-        // nothing, but can be cancel
+        if (overThreshold) this.cancel();
         return;
       case loaded:
         // nothing
@@ -102,31 +112,70 @@ export default class ManualLoad extends Component {
     }
   }
 
+  clear() {
+    let image = this.image;
+    if (this.image) {
+      clearInterval(this.refreshIntervalId);
+      this.refreshIntervalId = undefined;
+      image.onabort = image.onerror = image.onload = undefined;
+      this.image.src = "";
+      this.image = image = undefined;
+    }
+  }
+
+  cancel() {
+    const { loadState } = this.state;
+    if (loading !== loadState) return;
+    this.clear();
+    this.loadStateChange(initial);
+  }
+
+  loadStateChange(loadState) {
+    this.setState({ loadState, overThreshold: false });
+    const onLoadStateChange = this.props.onLoadStateChange;
+    if (onLoadStateChange) onLoadStateChange(loadState);
+  }
+
+  startTimer() {
+    const { size, threshold } = this.props;
+    const startTime = new Date().getTime();
+    return setInterval(() => {
+      const time = new Date().getTime() - startTime;
+      // dynamic treshold based on size?
+      if (threshold && time > threshold) this.setState({ overThreshold: true });
+      window.document.dispatchEvent(
+        new CustomEvent("connection", {
+          detail: { time, size, overThreshold: threshold && time > threshold }
+        })
+      );
+    }, this.props.interval);
+  }
+
   load() {
     const { loadState } = this.state;
     if (loaded === loadState || loading === loadState) return;
-    this.setState({ loadState: loading });
+    this.loadStateChange(loading);
+    this.refreshIntervalId = this.startTimer();
     const image = new Image();
-    const onload = () => {
-      image.onload = image.onerror = image.onabort = undefined;
-      this.setState({ loadState: loaded });
+    image.onload = () => {
+      this.clear();
+      this.loadStateChange(loaded);
     };
-    const onerror = () => {
-      image.onload = image.onerror = image.onabort = undefined;
-      this.setState({ loadState: error });
+    image.onabort = image.onerror = () => {
+      this.clear();
+      this.loadStateChange(error);
     };
-    image.onload = onload;
-    image.onerror = onerror;
-    image.onabort = onerror;
     image.src = this.props.src;
+    this.image = image;
   }
 
-  stateToIcon({ loadState, onLine }) {
+  stateToIcon({ loadState, onLine, overThreshold }) {
     switch (loadState) {
       case loaded:
         return icons.loaded;
       case loading:
-        return icons.loading;
+        // TODO: slow-loading icon
+        return overThreshold ? icons.loading : icons.loading;
       case initial:
         return onLine ? icons.load : icons.offline;
       case error:
@@ -138,12 +187,8 @@ export default class ManualLoad extends Component {
 
   render() {
     let icon;
-    if (this.props.stateToIcon) {
-      icon = this.props.stateToIcon(this.state);
-    }
-    if (!icon) {
-      icon = this.stateToIcon(this.state);
-    }
+    if (this.props.stateToIcon) icon = this.props.stateToIcon(this.state);
+    if (!icon) icon = this.stateToIcon(this.state);
     return (
       <Media
         {...this.props}

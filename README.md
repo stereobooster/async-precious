@@ -6,12 +6,13 @@ Experiment to build async component according to [Guide To Async Components](htt
 
 ## Ideas
 
+* https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
 * preview: lqip, sqip, color, function
 * webp
 * [lazy-image](https://meowni.ca/lazy-image/): `srcset`
 * [Webworker](https://aerotwist.com/blog/one-weird-trick/) maybe?
 * contrast
-* [navigator.connection.effectiveType](https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/effectiveType)
+* https://materialdesignicons.com/
 
 No script fallback:
 
@@ -42,3 +43,12 @@ supportsWebp().then(x => (webp = x));
 
 * https://github.com/styleguidist/react-styleguidist/blob/master/docs/Documenting.md
 * https://reactjs.org/docs/typechecking-with-proptypes.html
+
+```
+accept-ranges: bytes
+cache-control: max-age=3600
+content-length: 366
+date: Sat, 19 May 2018 22:22:50 GMT
+last-modified: Thu, 10 May 2018 16:24:38 GMT
+status: 200
+```

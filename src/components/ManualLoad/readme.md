@@ -12,7 +12,7 @@ const lqip =
       <th>Offline</th>
     </tr>
     <tr>
-      <th align="left">Initial uncontrolled</th>
+      <th align="left">Ok</th>
       <td>
         <ManualLoad
           width={3500}

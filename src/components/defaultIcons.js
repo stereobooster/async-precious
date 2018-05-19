@@ -1,4 +1,3 @@
-// icons
 import DownloadIcon from "./Icon/Download";
 import OfflineIcon from "./Icon/Offline";
 import WarningIcon from "./Icon/Warning";
