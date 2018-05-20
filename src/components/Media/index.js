@@ -108,7 +108,7 @@ export default class Media extends PureComponent {
     let background;
     if (placeholder.preview) {
       background = {
-        backgroundImage: `url(${placeholder.preview})`
+        backgroundImage: `url("${placeholder.preview}")`
       };
     } else {
       background = {
