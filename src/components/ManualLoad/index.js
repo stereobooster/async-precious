@@ -15,9 +15,19 @@ export default class ManualLoad extends Component {
     /** Height of the image in px */
     height: PropTypes.number.isRequired,
     /** [Low Quality Image Placeholder](https://github.com/zouhir/lqip) */
-    lqip: PropTypes.string.isRequired,
-    /** Solid color placeholder */
-    // color: PropTypes.string.isRequired,
+    placeholder: PropTypes.oneOfType([
+      PropTypes.shape({
+        /** Solid color placeholder */
+        color: PropTypes.string.isRequired
+      }),
+      PropTypes.shape({
+        /** [Low Quality Image Placeholder](https://github.com/zouhir/lqip) */
+        lqip: PropTypes.string.isRequired
+      })
+      // PropTypes.shape({
+      //   sqip: PropTypes.string.isRequired
+      // })
+    ]).isRequired,
     /** Alternative text */
     alt: PropTypes.string,
     /** If you will not pass this value, component will detect onLine status based on browser API, otherwise will use passed value */

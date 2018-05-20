@@ -16,15 +16,21 @@ Image component which will lazy load images:
 
 Additionally:
 
-* When load starts there is no additional inidcator of process (clean placeholder), but if it takes more than specified threshold additional indicator appears and user can cancel download
+* When load starts there is no additional inidcator of loading state (clean placeholder), but if it takes more than specified threshold additional indicator appears and user can cancel download
 * If error occurred while downloading image, component will provide visual indication and will allow to retry load
 * If browser is offline and image is not loaded yet, component will provide visual indicator of this case, so user would know image is not loaded and there is no way to load it at the moment
 
 ### Technical limitations
 
-There is no way to reliably measure speed of the connection, unless broswer provides [facility for it](https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/effectiveType). Theoretically we can take size of image (provided upfront or read from HTTP headers) and divide by time spent donwloading it, but connection capacity will be equlay splited between all parallel downloads, so this is not precise, and we need to wait finish of download to get final value of speed.
+There is no way to reliably measure speed of the connection, unless browser provides [facility for it](https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/effectiveType). Theoretically we can take size of image (provided upfront or read from HTTP headers) and divide by time spent donwloading it, but connection capacity will be equlay splited between all parallel downloads, so this is not precise, and we need to wait finish of download to get final value.
 
+If browser provides `navigator.connection.effectiveType` it will be used to detect speed of connection: 'slow-2g', '2g' are considered to be slow; '3g' is (sometimes) considerd slow, '4g' and everything else is considered as fast.
 
+If browser doesn't provide `navigator.connection.effectiveType` and threshold provided component will broadcast event (to other components) in case of surpass threshold and all components which haven't started download yet will treat current browser connection as slow. Threshol is the time (in ms) till component considers load of image fast enough, if component gets over treshold it will show indicator of slow load and user will be able to cancel download.
+
+If current browser connection considered to be **slow** all components fallback to manual-load mode.
+
+If current browser connection considered to be **fast** all components use lazy-load mode, e.g. they will start download as soon as user scrolls to it.
 
 ### Inspiration
 
@@ -37,7 +43,7 @@ There is no way to reliably measure speed of the connection, unless broswer prov
 
 ## TODO
 
-* placeholder: lqip, sqip or solid color
+* placeholder: ~~lqip~~, sqip or ~~solid color~~
 * Use [cancelable fetch](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort) to read http headers (`content-length`, `status`, `date` to detect if response is cached or not).
 * `srcset` ([lazy-image](https://meowni.ca/lazy-image/))
 * Add note about icons
@@ -47,6 +53,9 @@ There is no way to reliably measure speed of the connection, unless broswer prov
 
 * [Webworker](https://aerotwist.com/blog/one-weird-trick/) maybe?
 * check contrast between placeholder and icon
+* use text together with (or instead of) icons. Examples: download image, download image (1.2mb), error occurred - click to retry, error - 404 image not found etc.
+* In case of SSR (or snapshoting) generate component in "noicon" state
+* In case of no JS situation we can show palseholder with links to full size images, instead download icon.
 
 ## Usorted notes
 
@@ -69,8 +78,17 @@ async function supportsWebp() {
     .then(response => response.blob())
     .then(blob => createImageBitmap(blob).then(() => true, () => false));
 }
-let webp = false;
-supportsWebp().then(x => (webp = x));
+
+let webp = undefined;
+const webpPromise = supportsWebp();
+webpPromise.then(x => (webp = x));
+
+const supportsWebpSync = () => {
+  if (webp === undefined) return webpPromise;
+  return {
+    then: callback => callback(webp)
+  };
+};
 ```
 
 ```html
@@ -81,3 +99,17 @@ supportsWebp().then(x => (webp = x));
 * https://reactjs.org/docs/typechecking-with-proptypes.html
 * https://via.placeholder.com/200x100
 * https://www.ampproject.org/docs/design/responsive/control_layout
+
+```css
+.hourglass {
+  animation: spin 5s cubic-bezier(0.8, 0, 0.2, 1) infinite;
+}
+@keyframes spin {
+  90% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+```

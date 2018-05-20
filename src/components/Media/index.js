@@ -15,10 +15,19 @@ export default class Media extends PureComponent {
     width: PropTypes.number.isRequired,
     /** Height of the image in px */
     height: PropTypes.number.isRequired,
-    /** [Low Quality Image Placeholder](https://github.com/zouhir/lqip) */
-    lqip: PropTypes.string.isRequired,
-    /** Solid color placeholder */
-    // color: PropTypes.string.isRequired,
+    placeholder: PropTypes.oneOfType([
+      PropTypes.shape({
+        /** Solid color placeholder */
+        color: PropTypes.string.isRequired
+      }),
+      PropTypes.shape({
+        /** [Low Quality Image Placeholder](https://github.com/zouhir/lqip) */
+        lqip: PropTypes.string.isRequired
+      })
+      // PropTypes.shape({
+      //   sqip: PropTypes.string.isRequired
+      // })
+    ]).isRequired,
     /** Alternative text */
     alt: PropTypes.string,
     /** Color of the icon */
@@ -94,16 +103,17 @@ export default class Media extends PureComponent {
 
   render() {
     const props = this.props;
+    const { placeholder } = props;
     let background;
-    background = {
-      backgroundImage: `url(${props.lqip})`
-    };
-    // if (props.lqip) {
-    // } else {
-    //   background = {
-    //     backgroundColor: props.color
-    //   };
-    // }
+    if (placeholder.lqip) {
+      background = {
+        backgroundImage: `url(${placeholder.lqip})`
+      };
+    } else {
+      background = {
+        backgroundColor: placeholder.color
+      };
+    }
     return (
       <div
         {...universalStyle(

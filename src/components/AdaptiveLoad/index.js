@@ -20,19 +20,25 @@ export default class AdaptiveLoad extends Component {
   }
 
   static defaultProps = {
-    connections: {
-      "slow-2g": false, // don't load
-      "2g": false, // don't load
-      "3g": ({ size, threshold }) => {
-        if (!size || !threshold) {
-          return false; // don't load
-        } else {
-          // assume slow 3g e.g. 400Kbps
-          // threshold is in ms
-          return size * 8 / 400 < threshold;
-        }
-      },
-      "4g": true // load
+    /** is connection good enough to auto load the image */
+    connectionToLoad: (connection, { size, threshold }) => {
+      switch (connection) {
+        case "slow-2g":
+        case "2g":
+          return false;
+        case "3g":
+          if (!size || !threshold) {
+            return false; // don't load
+          } else {
+            // assume slow 3g e.g. 400Kbps
+            // threshold is in ms
+            return size * 8 / 400 < threshold;
+          }
+        case "4g":
+          return true;
+        default:
+          return true;
+      }
     }
   };
 
@@ -95,16 +101,10 @@ export default class AdaptiveLoad extends Component {
   }
 
   stateToComponent({ connection, canceled, overThreshold }) {
-    let connectionPredicate;
-    if (nativeConnection) {
-      connectionPredicate = this.props.connections[connection];
-      if (connectionPredicate && connectionPredicate !== true) {
-        connectionPredicate = connectionPredicate(this.props);
-      }
-    } else {
-      connectionPredicate = true;
-    }
-    if (canceled || overThreshold || !connectionPredicate) {
+    let autoLoad = nativeConnection
+      ? this.props.connectionToLoad(connection, this.props)
+      : true;
+    if (canceled || overThreshold || !autoLoad) {
       return ManualLoad;
     } else {
       return LazyLoad;

@@ -12,7 +12,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          lqip={lqip}
+          placeholder={{lqip}}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"load"}
@@ -23,7 +23,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          lqip={lqip}
+          placeholder={{lqip}}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"noicon"}
@@ -36,7 +36,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          lqip={lqip}
+          placeholder={{lqip}}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"loading"}
@@ -47,7 +47,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          lqip={lqip}
+          placeholder={{lqip}}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"offline"}
@@ -60,7 +60,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          lqip={lqip}
+          placeholder={{lqip}}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"loaded"}
@@ -71,7 +71,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          lqip={lqip}
+          placeholder={{lqip}}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"error"}
