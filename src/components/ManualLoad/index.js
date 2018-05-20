@@ -36,6 +36,8 @@ export default class ManualLoad extends Component {
     className: PropTypes.string,
     /** callback for load state change */
     onLoadStateChange: PropTypes.func,
+    /** size of image in bytes */
+    size: PropTypes.number,
     /** how much to wait in ms until concider download to slow */
     threshold: PropTypes.number
   };
@@ -137,16 +139,20 @@ export default class ManualLoad extends Component {
   }
 
   startTimer() {
-    const { size, threshold } = this.props;
+    const { threshold } = this.props;
+    if (!threshold) return;
     const startTime = new Date().getTime();
     return setInterval(() => {
       const time = new Date().getTime() - startTime;
-      // dynamic treshold based on size?
-      if (threshold && time > threshold) this.setState({ overThreshold: true });
+      // window.document.dispatchEvent(
+      //   new CustomEvent("connection", {
+      //     detail: { time, size, overThreshold: threshold && time > threshold }
+      //   })
+      // );
+      if (time < threshold) return;
+      this.setState({ overThreshold: true });
       window.document.dispatchEvent(
-        new CustomEvent("connection", {
-          detail: { time, size, overThreshold: threshold && time > threshold }
-        })
+        new CustomEvent("overThreshold", { detail: { overThreshold: true } })
       );
     }, this.props.interval);
   }

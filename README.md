@@ -22,6 +22,10 @@ Additionally:
 
 ### Technical limitations
 
+There is no way to reliably measure speed of the connection, unless broswer provides [facility for it](https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/effectiveType). Theoretically we can take size of image (provided upfront or read from HTTP headers) and divide by time spent donwloading it, but connection capacity will be equlay splited between all parallel downloads, so this is not precise, and we need to wait finish of download to get final value of speed.
+
+
+
 ### Inspiration
 
 * Lazy load - this is technique known from jQuery ages.

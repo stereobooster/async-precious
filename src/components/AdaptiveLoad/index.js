@@ -3,23 +3,42 @@ import ManualLoad from "../ManualLoad";
 import LazyLoad from "../LazyLoad";
 import { loadStates } from "../constants";
 
-const useNativeConnection = false;
+const nativeConnection =
+  typeof window !== undefined && !!window.navigator.connection;
 
 export default class AdaptiveLoad extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loadState: loadStates.initial,
-      connection: navigator.connection
-        ? navigator.connection.effectiveType
+      connection: nativeConnection
+        ? navigator.connection.effectiveType // 'slow-2g', '2g', '3g', or '4g'
         : null,
-      canceled: false
+      canceled: false,
+      overThreshold: false
     };
   }
 
+  static defaultProps = {
+    connections: {
+      "slow-2g": false, // don't load
+      "2g": false, // don't load
+      "3g": ({ size, threshold }) => {
+        if (!size || !threshold) {
+          return false; // don't load
+        } else {
+          // assume slow 3g e.g. 400Kbps
+          // threshold is in ms
+          return size * 8 / 400 < threshold;
+        }
+      },
+      "4g": true // load
+    }
+  };
+
   componentDidMount() {
     if (!this.state.controledConnection) {
-      if (useNativeConnection && navigator.connection) {
+      if (nativeConnection) {
         this.updateConnection = () => {
           if (!navigator.onLine) return;
           if (this.state.loadState === loadStates.initial) {
@@ -30,36 +49,62 @@ export default class AdaptiveLoad extends Component {
           "onchange",
           this.updateConnection
         );
-      } else {
-        this.messageListener = e => {
+      } else if (this.props.threshold) {
+        this.overThresholdListener = e => {
           if (this.state.loadState !== loadStates.initial) return;
-          const { size, time } = e.detail;
-          const speed = 8 * size / time; //Kbps
-          // this is not precise because browser can do parallel downloads
-          if (speed < 400 && this.state.connection > "3g") {
-            this.setState({ connection: "3g" });
+          const { overThreshold } = e.detail;
+          if (!this.state.overThreshold && overThreshold) {
+            this.setState({ overThreshold: overThreshold });
           }
         };
-        window.document.addEventListener("connection", this.messageListener);
+        window.document.addEventListener(
+          "overThreshold",
+          this.overThresholdListener
+        );
+        // this.connectionListener = e => {
+        //   if (this.state.loadState !== loadStates.initial) return;
+        //   const { size, time } = e.detail;
+        //   const speed = 8 * size / time; //Kbps
+        //   if (speed < 400 && this.state.connection > "3g") {
+        //     this.setState({ connection: "3g" });
+        //   }
+        // };
+        // window.document.addEventListener("connection", this.connectionListener);
       }
     }
   }
 
   componentWillUnmount() {
     if (!this.state.controledOnLine) {
-      if (useNativeConnection && navigator.connection) {
+      if (nativeConnection) {
         navigator.connection.removeEventListener(
           "onchange",
           this.updateConnection
         );
-      } else {
-        window.document.removeEventListener("connection", this.messageListener);
+      } else if (this.props.threshold) {
+        window.document.removeEventListener(
+          "overThreshold",
+          this.overThresholdListener
+        );
+        // window.document.removeEventListener(
+        //   "connection",
+        //   this.connectionListener
+        // );
       }
     }
   }
 
-  connectionToComponent({ connection, canceled }) {
-    if (canceled || connection <= "3g") {
+  stateToComponent({ connection, canceled, overThreshold }) {
+    let connectionPredicate;
+    if (nativeConnection) {
+      connectionPredicate = this.props.connections[connection];
+      if (connectionPredicate && connectionPredicate !== true) {
+        connectionPredicate = connectionPredicate(this.props);
+      }
+    } else {
+      connectionPredicate = true;
+    }
+    if (canceled || overThreshold || !connectionPredicate) {
       return ManualLoad;
     } else {
       return LazyLoad;
@@ -67,7 +112,7 @@ export default class AdaptiveLoad extends Component {
   }
 
   render() {
-    return React.createElement(this.connectionToComponent(this.state), {
+    return React.createElement(this.stateToComponent(this.state), {
       ...this.props,
       onLoadStateChange: loadState =>
         this.setState({
