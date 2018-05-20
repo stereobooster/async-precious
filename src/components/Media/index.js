@@ -21,12 +21,13 @@ export default class Media extends PureComponent {
         color: PropTypes.string.isRequired
       }),
       PropTypes.shape({
-        /** [Low Quality Image Placeholder](https://github.com/zouhir/lqip) */
-        lqip: PropTypes.string.isRequired
+        /**
+         * [Low Quality Image Placeholder](https://github.com/zouhir/lqip)
+         * [SVG-Based Image Placeholder](https://github.com/technopagan/sqip)
+         * base64 encoded image of low quality
+         */
+        preview: PropTypes.string.isRequired
       })
-      // PropTypes.shape({
-      //   sqip: PropTypes.string.isRequired
-      // })
     ]).isRequired,
     /** Alternative text */
     alt: PropTypes.string,
@@ -105,9 +106,9 @@ export default class Media extends PureComponent {
     const props = this.props;
     const { placeholder } = props;
     let background;
-    if (placeholder.lqip) {
+    if (placeholder.preview) {
       background = {
-        backgroundImage: `url(${placeholder.lqip})`
+        backgroundImage: `url(${placeholder.preview})`
       };
     } else {
       background = {

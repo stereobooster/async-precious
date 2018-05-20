@@ -14,19 +14,14 @@ export default class ManualLoad extends Component {
     width: PropTypes.number.isRequired,
     /** Height of the image in px */
     height: PropTypes.number.isRequired,
-    /** [Low Quality Image Placeholder](https://github.com/zouhir/lqip) */
+
     placeholder: PropTypes.oneOfType([
       PropTypes.shape({
-        /** Solid color placeholder */
         color: PropTypes.string.isRequired
       }),
       PropTypes.shape({
-        /** [Low Quality Image Placeholder](https://github.com/zouhir/lqip) */
-        lqip: PropTypes.string.isRequired
+        preview: PropTypes.string.isRequired
       })
-      // PropTypes.shape({
-      //   sqip: PropTypes.string.isRequired
-      // })
     ]).isRequired,
     /** Alternative text */
     alt: PropTypes.string,

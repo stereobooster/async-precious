@@ -7,23 +7,27 @@ const lqip =
 <table>
   <tbody>
     <tr>
-      <th align="left" width="100">load</th>
+      <th align="left" width="100">
+        load
+      </th>
       <td>
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          placeholder={{lqip}}
+          placeholder={{ preview: lqip }}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"load"}
         />
       </td>
-      <th align="left" width="100">noicon</th>
+      <th align="left" width="100">
+        noicon
+      </th>
       <td>
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          placeholder={{lqip}}
+          placeholder={{ preview: lqip }}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"noicon"}
@@ -36,7 +40,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          placeholder={{lqip}}
+          placeholder={{ preview: lqip }}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"loading"}
@@ -47,7 +51,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          placeholder={{lqip}}
+          placeholder={{ preview: lqip }}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"offline"}
@@ -60,7 +64,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          placeholder={{lqip}}
+          placeholder={{ preview: lqip }}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"loaded"}
@@ -71,7 +75,7 @@ const lqip =
         <MediaWithDefaultIcons
           width={3500}
           height={2095}
-          placeholder={{lqip}}
+          placeholder={{ preview: lqip }}
           src="andre-spieker-238-unsplash.jpg"
           style={{ maxWidth: 200 }}
           icon={"error"}

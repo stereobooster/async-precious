@@ -22,7 +22,7 @@ const src = "andre-spieker-238-unsplash.jpg";
 
 <React.Fragment>
   <AdaptiveLoad
-    placeholder={{ lqip: lqip1 }}
+    placeholder={{ preview: lqip1 }}
     src={image1}
     alt="doggo 1"
     width={3500}
@@ -31,7 +31,7 @@ const src = "andre-spieker-238-unsplash.jpg";
     threshold={1000}
   />
   <AdaptiveLoad
-    placeholder={{ lqip: lqip2 }}
+    placeholder={{ preview: lqip2 }}
     src={image2}
     alt="doggo 2"
     width={3534}
@@ -40,7 +40,7 @@ const src = "andre-spieker-238-unsplash.jpg";
     threshold={1000}
   />
   <AdaptiveLoad
-    placeholder={{ lqip: lqip3 }}
+    placeholder={{ preview: lqip3 }}
     src={image3}
     alt="doggo 3"
     width={3204}
@@ -49,7 +49,7 @@ const src = "andre-spieker-238-unsplash.jpg";
     threshold={1000}
   />
   <AdaptiveLoad
-    placeholder={{ lqip: lqip4 }}
+    placeholder={{ preview: lqip4 }}
     src={image4}
     alt="doggo 4"
     width={7952}
@@ -57,7 +57,7 @@ const src = "andre-spieker-238-unsplash.jpg";
     threshold={1000}
   />
   <AdaptiveLoad
-    placeholder={{ lqip: lqip5 }}
+    placeholder={{ preview: lqip5 }}
     src={image5}
     alt="doggo 5"
     width={6016}

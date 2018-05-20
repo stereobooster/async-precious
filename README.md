@@ -43,7 +43,6 @@ If current browser connection considered to be **fast** all components use lazy-
 
 ## TODO
 
-* placeholder: ~~lqip~~, sqip or ~~solid color~~
 * Use [cancelable fetch](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort) to read http headers (`content-length`, `status`, `date` to detect if response is cached or not).
 * `srcset` ([lazy-image](https://meowni.ca/lazy-image/))
 * Add note about icons
