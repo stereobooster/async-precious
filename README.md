@@ -4,6 +4,9 @@ development moved to https://github.com/stereobooster/react-precious-image
 
 Experiment to build async component according to [Guide To Async Components](https://github.com/stereobooster/guide-to-async-components)
 
+https://jmperezperez.com/svg-placeholders/
+https://github.com/gatsbyjs/gatsby/pull/2456
+
 ## TODO
 
 * WebP

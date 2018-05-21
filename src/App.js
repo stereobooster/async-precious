@@ -1,7 +1,6 @@
 import React from "react";
 import lqip from "lqip.macro";
-import ManualLoad from "./components/ManualLoad";
-import LazyLoad from "./components/LazyLoad";
+import {AdaptiveLoad} from 'react-precious-image'
 
 import coverImage1 from "./images/andre-spieker-238-unsplash.jpg";
 import coverImage2 from "./images/jairo-alzate-45522-unsplash.jpg";
@@ -17,36 +16,36 @@ const lqip5 = lqip("./images/nidhin-mundackal-281287-unsplash.jpg");
 
 const App = () => (
   <React.Fragment>
-    <ManualLoad
-      lqip={lqip1}
+    <AdaptiveLoad
+      placeholder={{lqip: lqip1}}
       src={coverImage1}
       alt="doggo 1"
       width={3500}
       height={2095}
     />
-    <LazyLoad
-      lqip={lqip2}
+    <AdaptiveLoad
+      placeholder={{lqip: lqip2}}
       src={coverImage2}
       alt="doggo 2"
       width={3534}
       height={2366}
     />
-    <LazyLoad
-      lqip={lqip3}
+    <AdaptiveLoad
+      placeholder={{lqip: lqip3}}
       src={coverImage3}
       alt="doggo 3"
       width={3204}
       height={4800}
     />
-    <LazyLoad
-      lqip={lqip4}
+    <AdaptiveLoad
+      placeholder={{lqip: lqip4}}
       src={coverImage4}
       alt="doggo 4"
       width={7952}
       height={5304}
     />
-    <LazyLoad
-      lqip={lqip5}
+    <AdaptiveLoad
+      placeholder={{lqip: lqip5}}
       src={coverImage5}
       alt="doggo 5"
       width={6016}
