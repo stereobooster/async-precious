@@ -12,7 +12,7 @@
     "react-waypoint": "8.0.1"
   },
   "devDependencies": {
-    "filesize.macro": "^0.1.1",
+    "filesize.macro": "0.1.1",
     "gh-pages": "1.1.0",
     "lqip.macro": "0.1.5",
     "react-snap": "1.12.2",

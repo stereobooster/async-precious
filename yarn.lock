@@ -4013,7 +4013,7 @@ fileset@^2.0.2:
     glob "^7.0.3"
     minimatch "^3.0.3"
 
-filesize.macro@^0.1.1:
+filesize.macro@0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/filesize.macro/-/filesize.macro-0.1.1.tgz#8d6ce1f3cedbfe12a8d17daf1ae41d48777307df"
   dependencies:
