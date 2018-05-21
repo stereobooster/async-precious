@@ -1,18 +1,18 @@
-import React from "react";
-import lqip from "lqip.macro";
+import React from 'react'
+import lqip from 'lqip.macro'
 import {AdaptiveLoad} from 'react-precious-image'
 
-import coverImage1 from "./images/andre-spieker-238-unsplash.jpg";
-import coverImage2 from "./images/jairo-alzate-45522-unsplash.jpg";
-import coverImage3 from "./images/vincent-van-zalinge-408523-unsplash.jpg";
-import coverImage4 from "./images/marvin-meyer-188676-unsplash.jpg";
-import coverImage5 from "./images/nidhin-mundackal-281287-unsplash.jpg";
+import coverImage1 from './images/andre-spieker-238-unsplash.jpg'
+import coverImage2 from './images/jairo-alzate-45522-unsplash.jpg'
+import coverImage3 from './images/vincent-van-zalinge-408523-unsplash.jpg'
+import coverImage4 from './images/marvin-meyer-188676-unsplash.jpg'
+import coverImage5 from './images/nidhin-mundackal-281287-unsplash.jpg'
 
-const lqip1 = lqip("./images/andre-spieker-238-unsplash.jpg");
-const lqip2 = lqip("./images/jairo-alzate-45522-unsplash.jpg");
-const lqip3 = lqip("./images/vincent-van-zalinge-408523-unsplash.jpg");
-const lqip4 = lqip("./images/marvin-meyer-188676-unsplash.jpg");
-const lqip5 = lqip("./images/nidhin-mundackal-281287-unsplash.jpg");
+const lqip1 = lqip('./images/andre-spieker-238-unsplash.jpg')
+const lqip2 = lqip('./images/jairo-alzate-45522-unsplash.jpg')
+const lqip3 = lqip('./images/vincent-van-zalinge-408523-unsplash.jpg')
+const lqip4 = lqip('./images/marvin-meyer-188676-unsplash.jpg')
+const lqip5 = lqip('./images/nidhin-mundackal-281287-unsplash.jpg')
 
 const App = () => (
   <React.Fragment>
@@ -52,6 +52,6 @@ const App = () => (
       height={4016}
     />
   </React.Fragment>
-);
+)
 
-export default App;
+export default App
