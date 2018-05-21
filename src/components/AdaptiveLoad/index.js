@@ -115,6 +115,8 @@ export default class AdaptiveLoad extends Component {
   render() {
     return React.createElement(this.stateToComponent(), {
       onLoadStateChange: loadState => {
+        // because those components doesn't compose well
+        // we need a lot of custom logic here
         if (loadState === loadStates.error) return
         this.setState({
           loadState,

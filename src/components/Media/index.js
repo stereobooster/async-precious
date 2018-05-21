@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
-import universalStyle from '../universalStyle'
+import compose from '../composeStyle'
 import {icons as defaultIcons} from '../constants'
 
 const {load, loading, loaded, error, noicon, offline} = defaultIcons
@@ -58,7 +58,7 @@ export default class Media extends PureComponent {
     const {icon, icons, iconColor: fill, iconSize: size, theme} = props
     const iconToRender = icons[icon]
     if (!iconToRender) return null
-    const styleOrClass = universalStyle(
+    const styleOrClass = compose(
       {width: size, height: size},
       theme.icon,
       props.noscript,
@@ -73,7 +73,7 @@ export default class Media extends PureComponent {
   renderImage(props) {
     return props.icon === loaded ? (
       <img
-        {...universalStyle(props.theme.img, props.noscript)}
+        {...compose(props.theme.img, props.noscript)}
         src={props.src}
         alt={props.alt}
         width={props.width}
@@ -81,7 +81,7 @@ export default class Media extends PureComponent {
       />
     ) : (
       <svg
-        {...universalStyle(props.theme.img, props.noscript)}
+        {...compose(props.theme.img, props.noscript)}
         width={props.width}
         height={props.height}
       />
@@ -92,7 +92,7 @@ export default class Media extends PureComponent {
     return props.noscript ? (
       <noscript>
         <img
-          {...universalStyle(props.theme.img)}
+          {...compose(props.theme.img)}
           src={props.src}
           alt={props.alt}
           width={props.width}
@@ -117,7 +117,7 @@ export default class Media extends PureComponent {
     }
     return (
       <div
-        {...universalStyle(
+        {...compose(
           theme.adaptive,
           background,
           props.style,
