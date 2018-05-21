@@ -12,14 +12,18 @@
     "react-waypoint": "8.0.1"
   },
   "devDependencies": {
-    "lqip.macro": "0.1.5"
+    "gh-pages": "^1.1.0",
+    "lqip.macro": "0.1.5",
+    "react-snap": "^1.12.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "predeploy": "styleguidist build"
+    "postbuild": "react-snap",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "browserslist": {
     "development": [
