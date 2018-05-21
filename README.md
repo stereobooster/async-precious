@@ -1,18 +1,20 @@
 # async-precious
 
-development moved to https://github.com/stereobooster/react-precious-image
-
 Experiment to build async component according to [Guide To Async Components](https://github.com/stereobooster/guide-to-async-components)
 
-https://jmperezperez.com/svg-placeholders/
-https://github.com/gatsbyjs/gatsby/pull/2456
+Eventually this will be extracted to [react-precious-image](https://github.com/stereobooster/react-precious-image)
 
 ## TODO
+
+- Implement loader, with interface similar to Promise (then, catch), that way it will be easy to integrate with other potential sources
+- but for image and fetch we can also implement cancel
+
+
+
 
 * WebP
 * Use [cancelable fetch](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort) to read http headers (`content-length`, `status`, `date` to detect if response is cached or not).
 * `srcset` ([lazy-image](https://meowni.ca/lazy-image/))
-* Add note about icons
 
 ## Ideas
 
@@ -22,9 +24,7 @@ https://github.com/gatsbyjs/gatsby/pull/2456
 * In case of SSR (or snapshoting) generate component in "noicon" state
 * In case of no JS situation we can show palseholder with links to full size images, instead download icon.
 
-## Usorted notes
-
-No script fallback:
+### No script fallback
 
 ```html
 <noscript>
@@ -32,7 +32,7 @@ No script fallback:
 </noscript>
 ```
 
-Detect WebP:
+### Detect WebP
 
 ```js
 async function supportsWebp() {
@@ -56,6 +56,8 @@ const supportsWebpSync = () => {
 };
 ```
 
+## Usorted notes
+
 ```html
 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=" />
 ```
@@ -78,3 +80,6 @@ const supportsWebpSync = () => {
   }
 }
 ```
+
+* https://jmperezperez.com/svg-placeholders/
+* https://github.com/gatsbyjs/gatsby/pull/2456
