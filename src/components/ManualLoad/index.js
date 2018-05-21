@@ -22,13 +22,7 @@ export default class ManualLoad extends Component {
     threshold: PropTypes.number,
     /** function to convert state of the component to icon in Media */
     stateToIcon: PropTypes.func,
-    /** interval in ms to check over threshold status */
-    // interval: PropTypes.number,
   }
-
-  // static defaultProps = {
-  //   interval: 500,
-  // }
 
   constructor(props) {
     super(props)
@@ -133,15 +127,6 @@ export default class ManualLoad extends Component {
         new CustomEvent('overThreshold', {detail: {overThreshold: true}}),
       )
     }, threshold)
-    // const startTime = new Date().getTime()
-    // return setInterval(() => {
-    //   const time = new Date().getTime() - startTime
-    //   window.document.dispatchEvent(
-    //     new CustomEvent("connection", {
-    //       detail: { time, size, overThreshold: threshold && time > threshold }
-    //     })
-    //   );
-    // }, this.props.interval)
   }
 
   load() {

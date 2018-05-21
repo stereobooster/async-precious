@@ -78,15 +78,6 @@ export default class AdaptiveLoad extends Component {
           'overThreshold',
           this.overThresholdListener,
         )
-        // this.connectionListener = e => {
-        //   if (this.state.loadState !== loadStates.initial) return;
-        //   const { size, time } = e.detail;
-        //   const speed = 8 * size / time; //Kbps
-        //   if (speed < 400 && this.state.connection > "3g") {
-        //     this.setState({ connection: "3g" });
-        //   }
-        // };
-        // window.document.addEventListener("connection", this.connectionListener);
       }
     }
   }
@@ -103,10 +94,6 @@ export default class AdaptiveLoad extends Component {
           'overThreshold',
           this.overThresholdListener,
         )
-        // window.document.removeEventListener(
-        //   "connection",
-        //   this.connectionListener
-        // );
       }
     }
   }
