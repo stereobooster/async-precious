@@ -1,9 +1,9 @@
-const load = "load";
-const loading = "loading";
-const loaded = "loaded";
-const error = "error";
-const noicon = "noicon";
-const offline = "offline";
+const load = 'load'
+const loading = 'loading'
+const loaded = 'loaded'
+const error = 'error'
+const noicon = 'noicon'
+const offline = 'offline'
 
 export const icons = {
   load,
@@ -11,10 +11,10 @@ export const icons = {
   loaded,
   error,
   noicon,
-  offline
-};
+  offline,
+}
 
-const initial = "initial";
+const initial = 'initial'
 // const loading = "loading";
 // const loaded = "loaded";
 // const error = "error";
@@ -23,5 +23,5 @@ export const loadStates = {
   initial,
   loading,
   loaded,
-  error
-};
+  error,
+}

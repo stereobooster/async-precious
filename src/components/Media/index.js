@@ -1,11 +1,11 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
+import React, {PureComponent} from 'react'
+import PropTypes from 'prop-types'
+import universalStyle from '../universalStyle'
+import {icons as defaultIcons} from '../constants'
 // import styles from "./index.module.css";
-import styles from "./index.module.js";
-import { universalStyle } from "../utils";
-import { icons } from "../constants";
+import styles from './index.module'
 
-const { load, loading, loaded, error, noicon, offline } = icons;
+const {load, loading, loaded, error, noicon, offline} = defaultIcons
 
 export default class Media extends PureComponent {
   static propTypes = {
@@ -18,7 +18,7 @@ export default class Media extends PureComponent {
     placeholder: PropTypes.oneOfType([
       PropTypes.shape({
         /** Solid color placeholder */
-        color: PropTypes.string.isRequired
+        color: PropTypes.string.isRequired,
       }),
       PropTypes.shape({
         /**
@@ -26,8 +26,8 @@ export default class Media extends PureComponent {
          * [SVG-Based Image Placeholder](https://github.com/technopagan/sqip)
          * base64 encoded image of low quality
          */
-        preview: PropTypes.string.isRequired
-      })
+        lqip: PropTypes.string.isRequired,
+      }),
     ]).isRequired,
     /** Alternative text */
     alt: PropTypes.string,
@@ -46,28 +46,29 @@ export default class Media extends PureComponent {
     /** display icon */
     icon: PropTypes.oneOf([load, loading, loaded, error, noicon, offline]),
     /** Map of icons */
-    icons: PropTypes.object
-  };
+    icons: PropTypes.object,
+    innerRef: PropTypes.any,
+  }
 
   static defaultProps = {
-    iconColor: "#fff",
-    iconSize: 64
-  };
+    iconColor: '#fff',
+    iconSize: 64,
+  }
 
   renderIcon(props) {
-    const { icon, icons, iconColor: fill, iconSize: size } = props;
-    const iconToRender = icons[icon];
-    if (!iconToRender) return;
+    const {icon, icons, iconColor: fill, iconSize: size} = props
+    const iconToRender = icons[icon]
+    if (!iconToRender) return null
     const styleOrClass = universalStyle(
-      { width: size, height: size },
+      {width: size, height: size},
       styles.icon,
-      props.noscript
-    );
+      props.noscript,
+    )
     return React.createElement(
-      "div",
+      'div',
       styleOrClass,
-      React.createElement(iconToRender, { fill, size })
-    );
+      React.createElement(iconToRender, {fill, size}),
+    )
   }
 
   renderImage(props) {
@@ -85,7 +86,7 @@ export default class Media extends PureComponent {
         width={props.width}
         height={props.height}
       />
-    );
+    )
   }
 
   renderNoscript(props) {
@@ -99,21 +100,21 @@ export default class Media extends PureComponent {
           height={props.height}
         />
       </noscript>
-    ) : null;
+    ) : null
   }
 
   render() {
-    const props = this.props;
-    const { placeholder } = props;
-    let background;
-    if (placeholder.preview) {
+    const props = this.props
+    const {placeholder} = props
+    let background
+    if (placeholder.lqip) {
       background = {
-        backgroundImage: `url("${placeholder.preview}")`
-      };
+        backgroundImage: `url("${placeholder.lqip}")`,
+      }
     } else {
       background = {
-        backgroundColor: placeholder.color
-      };
+        backgroundColor: placeholder.color,
+      }
     }
     return (
       <div
@@ -121,16 +122,17 @@ export default class Media extends PureComponent {
           styles.adaptive,
           background,
           props.style,
-          props.className
+          props.className,
         )}
         title={props.alt}
         onClick={this.props.onClick}
+        onKeyPress={this.props.onClick}
         ref={this.props.innerRef}
       >
         {this.renderImage(props)}
         {this.renderNoscript(props)}
         {this.renderIcon(props)}
       </div>
-    );
+    )
   }
 }

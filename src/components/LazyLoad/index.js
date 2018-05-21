@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import Waypoint from "react-waypoint";
-import ManualLoad from "../ManualLoad";
-import { icons, loadStates } from "../constants";
+import React, {Component} from 'react'
+import Waypoint from 'react-waypoint'
+import ManualLoad from '../ManualLoad'
+import {icons, loadStates} from '../constants'
 
 export default class LazyLoad extends Component {
   constructor(props) {
-    super(props);
-    this.state = { inViewport: false };
+    super(props)
+    this.state = {inViewport: false}
     this.onEnter = () => {
-      if (!this.state.inViewport) this.setState({ inViewport: true });
-    };
+      if (!this.state.inViewport) this.setState({inViewport: true})
+    }
   }
 
-  stateToIcon({ loadState }) {
+  stateToIcon({loadState}) {
     switch (loadState) {
       case loadStates.initial:
-        return icons.noicon;
+        return icons.noicon
       default:
-        return undefined;
+        return undefined
     }
   }
 
@@ -30,8 +30,8 @@ export default class LazyLoad extends Component {
           stateToIcon={this.stateToIcon}
         />
       </Waypoint>
-    );
+    )
   }
 }
 
-LazyLoad.props = ManualLoad.props;
+LazyLoad.props = ManualLoad.props

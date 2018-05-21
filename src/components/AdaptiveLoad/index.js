@@ -1,72 +1,78 @@
-import React, { Component } from "react";
-import ManualLoad from "../ManualLoad";
-import LazyLoad from "../LazyLoad";
-import { loadStates } from "../constants";
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import ManualLoad from '../ManualLoad'
+import LazyLoad from '../LazyLoad'
+import {loadStates} from '../constants'
 
 const nativeConnection =
-  typeof window !== undefined && !!window.navigator.connection;
+  typeof window !== undefined && !!window.navigator.connection
 
 export default class AdaptiveLoad extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       loadState: loadStates.initial,
       connection: nativeConnection
         ? navigator.connection.effectiveType // 'slow-2g', '2g', '3g', or '4g'
         : null,
       canceled: false,
-      overThreshold: false
-    };
+      overThreshold: false,
+    }
+  }
+
+  static propTypes = {
+    threshold: PropTypes.number,
+    connectionToLoad: PropTypes.func,
   }
 
   static defaultProps = {
-    /** is connection good enough to auto load the image */
-    connectionToLoad: (connection, { size, threshold }) => {
+    /**
+     * @param {string} connection - effective connection type e.g. 'slow-2g', '2g', '3g', or '4g'
+     * @returns {boolean} - is connection good enough to auto load the image
+     */
+    connectionToLoad: (connection, {size, threshold}) => {
       switch (connection) {
-        case "slow-2g":
-        case "2g":
-          return false;
-        case "3g":
+        case 'slow-2g':
+        case '2g':
+          return false
+        case '3g':
           if (!size || !threshold) {
-            return false; // don't load
+            return false // don't load
           } else {
             // assume slow 3g e.g. 400Kbps
             // threshold is in ms
-            return size * 8 / 400 < threshold;
+            return size * 8 / 400 < threshold
           }
-        case "4g":
-          return true;
+        case '4g':
+          return true
         default:
-          return true;
+          return true
       }
-    }
-  };
+    },
+  }
 
   componentDidMount() {
     if (!this.state.controledConnection) {
       if (nativeConnection) {
         this.updateConnection = () => {
-          if (!navigator.onLine) return;
+          if (!navigator.onLine) return
           if (this.state.loadState === loadStates.initial) {
-            this.setState({ connection: navigator.connection.effectiveType });
+            this.setState({connection: navigator.connection.effectiveType})
           }
-        };
-        navigator.connection.addEventListener(
-          "onchange",
-          this.updateConnection
-        );
+        }
+        navigator.connection.addEventListener('onchange', this.updateConnection)
       } else if (this.props.threshold) {
         this.overThresholdListener = e => {
-          if (this.state.loadState !== loadStates.initial) return;
-          const { overThreshold } = e.detail;
+          if (this.state.loadState !== loadStates.initial) return
+          const {overThreshold} = e.detail
           if (!this.state.overThreshold && overThreshold) {
-            this.setState({ overThreshold: overThreshold });
+            this.setState({overThreshold})
           }
-        };
+        }
         window.document.addEventListener(
-          "overThreshold",
-          this.overThresholdListener
-        );
+          'overThreshold',
+          this.overThresholdListener,
+        )
         // this.connectionListener = e => {
         //   if (this.state.loadState !== loadStates.initial) return;
         //   const { size, time } = e.detail;
@@ -84,14 +90,14 @@ export default class AdaptiveLoad extends Component {
     if (!this.state.controledOnLine) {
       if (nativeConnection) {
         navigator.connection.removeEventListener(
-          "onchange",
-          this.updateConnection
-        );
+          'onchange',
+          this.updateConnection,
+        )
       } else if (this.props.threshold) {
         window.document.removeEventListener(
-          "overThreshold",
-          this.overThresholdListener
-        );
+          'overThreshold',
+          this.overThresholdListener,
+        )
         // window.document.removeEventListener(
         //   "connection",
         //   this.connectionListener
@@ -100,14 +106,14 @@ export default class AdaptiveLoad extends Component {
     }
   }
 
-  stateToComponent({ connection, canceled, overThreshold }) {
-    let autoLoad = nativeConnection
+  stateToComponent({connection, canceled, overThreshold}) {
+    const autoLoad = nativeConnection
       ? this.props.connectionToLoad(connection, this.props)
-      : true;
+      : true
     if (canceled || overThreshold || !autoLoad) {
-      return ManualLoad;
+      return ManualLoad
     } else {
-      return LazyLoad;
+      return LazyLoad
     }
   }
 
@@ -117,10 +123,10 @@ export default class AdaptiveLoad extends Component {
       onLoadStateChange: loadState =>
         this.setState({
           loadState,
-          canceled: loadState === loadStates.initial
-        })
-    });
+          canceled: loadState === loadStates.initial,
+        }),
+    })
   }
 }
 
-AdaptiveLoad.props = ManualLoad.props;
+AdaptiveLoad.props = ManualLoad.props
