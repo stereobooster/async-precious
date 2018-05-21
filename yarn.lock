@@ -7262,7 +7262,7 @@ react-error-overlay@5.0.0-next.b2fd8db8:
   version "5.0.0-next.b2fd8db8"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.0.0-next.b2fd8db8.tgz#e411264d5e16ffc1b5b27149451be99ed24b43f1"
 
-react-precious-image@^0.0.2:
+react-precious-image@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/react-precious-image/-/react-precious-image-0.0.2.tgz#cbc3663cb724fecbeb06458c25d1013d33d0567a"
 
