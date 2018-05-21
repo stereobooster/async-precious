@@ -2,50 +2,27 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
-import defaultIcons from '../defaultIcons'
 
 const {initial, loading, loaded, error} = loadStates
+
+const ssr =
+  typeof window === 'undefined' || window.navigator.userAgent === 'ReactSnap'
 
 export default class ManualLoad extends Component {
   static propTypes = {
     /** URL of the image */
     src: PropTypes.string.isRequired,
-    /** Width of the image in px */
-    width: PropTypes.number.isRequired,
-    /** Height of the image in px */
-    height: PropTypes.number.isRequired,
-
-    placeholder: PropTypes.oneOfType([
-      PropTypes.shape({
-        color: PropTypes.string.isRequired,
-      }),
-      PropTypes.shape({
-        lqip: PropTypes.string.isRequired,
-      }),
-    ]).isRequired,
-    /** Alternative text */
-    alt: PropTypes.string,
     /** If you will not pass this value, component will detect onLine status based on browser API, otherwise will use passed value */
     onLine: PropTypes.bool,
     /** If you will pass true it will immediately load image otherwise load will be controlled by user */
     load: PropTypes.bool,
-    /** Color of the icon */
-    iconColor: PropTypes.string,
-    /** Size of the icon in px */
-    iconSize: PropTypes.number,
-    /** CSS class which will hide elements if JS is disabled */
-    noscript: PropTypes.string,
-    /** React's style attribute for root element of the component */
-    style: PropTypes.object,
-    /** React's className attribute for root element of the component */
-    className: PropTypes.string,
     /** callback for load state change */
     onLoadStateChange: PropTypes.func,
-    /** size of image in bytes */
-    size: PropTypes.number,
     /** how much to wait in ms until concider download to slow */
     threshold: PropTypes.number,
+    /** interval in ms to check over threshold status */
     interval: PropTypes.number,
+    /** function to convert state of the component to icon in Media */
     stateToIcon: PropTypes.func,
   }
 
@@ -167,6 +144,7 @@ export default class ManualLoad extends Component {
   }
 
   load() {
+    if (ssr) return
     const {loadState} = this.state
     if (loaded === loadState || loading === loadState) return
     this.loadStateChange(loading)
@@ -186,6 +164,7 @@ export default class ManualLoad extends Component {
   }
 
   stateToIcon({loadState, onLine, overThreshold}) {
+    if (ssr) return icons.noicon
     switch (loadState) {
       case loaded:
         return icons.loaded
@@ -209,7 +188,6 @@ export default class ManualLoad extends Component {
         {...this.props}
         onClick={() => this.onClick()}
         icon={icon}
-        icons={defaultIcons}
       />
     )
   }

@@ -20,40 +20,48 @@ const image5 = 'nidhin-mundackal-281287-unsplash.jpg'
 
 const src = 'andre-spieker-238-unsplash.jpg'
 ;<React.Fragment>
-  <LazyLoad
+  <AdaptiveLoadWithDefaults
     placeholder={{lqip: lqip1}}
     src={image1}
     alt="doggo 1"
     width={3500}
     height={2095}
+    size={1240243}
+    threshold={1000}
   />
-  <LazyLoad
+  <AdaptiveLoadWithDefaults
     placeholder={{lqip: lqip2}}
     src={image2}
     alt="doggo 2"
     width={3534}
     height={2366}
+    size={1193886}
+    threshold={1000}
   />
-  <LazyLoad
+  <AdaptiveLoadWithDefaults
     placeholder={{lqip: lqip3}}
     src={image3}
     alt="doggo 3"
     width={3204}
     height={4800}
+    size={3122833}
+    threshold={1000}
   />
-  <LazyLoad
+  <AdaptiveLoadWithDefaults
     placeholder={{lqip: lqip4}}
     src={image4}
     alt="doggo 4"
     width={7952}
     height={5304}
+    threshold={1000}
   />
-  <LazyLoad
+  <AdaptiveLoadWithDefaults
     placeholder={{lqip: lqip5}}
     src={image5}
     alt="doggo 5"
     width={6016}
     height={4016}
+    threshold={1000}
   />
 </React.Fragment>
 ```

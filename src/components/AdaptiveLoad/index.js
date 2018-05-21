@@ -119,14 +119,12 @@ export default class AdaptiveLoad extends Component {
 
   render() {
     return React.createElement(this.stateToComponent(this.state), {
-      ...this.props,
       onLoadStateChange: loadState =>
         this.setState({
           loadState,
           canceled: loadState === loadStates.initial,
         }),
+      ...this.props,
     })
   }
 }
-
-AdaptiveLoad.props = ManualLoad.props

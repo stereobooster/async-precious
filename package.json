@@ -14,7 +14,8 @@
   "devDependencies": {
     "gh-pages": "1.1.0",
     "lqip.macro": "0.1.5",
-    "react-snap": "1.12.2"
+    "react-snap": "1.12.2",
+    "react-styleguidist": "~6"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,10 +24,12 @@
     "eject": "react-scripts eject",
     "postbuild": "react-snap",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build"
   },
   "reactSnap": {
-    "inlineCss": false
+    "inlineCss": true
   },
   "browserslist": {
     "development": [
