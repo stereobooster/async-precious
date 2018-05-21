@@ -27,7 +27,7 @@ const src = 'andre-spieker-238-unsplash.jpg'
     width={3500}
     height={2095}
     size={1240243}
-    threshold={1000}
+    threshold={5000}
   />
   <AdaptiveLoadWithDefaults
     placeholder={{lqip: lqip2}}
@@ -36,7 +36,7 @@ const src = 'andre-spieker-238-unsplash.jpg'
     width={3534}
     height={2366}
     size={1193886}
-    threshold={1000}
+    threshold={5000}
   />
   <AdaptiveLoadWithDefaults
     placeholder={{lqip: lqip3}}
@@ -45,7 +45,7 @@ const src = 'andre-spieker-238-unsplash.jpg'
     width={3204}
     height={4800}
     size={3122833}
-    threshold={1000}
+    threshold={5000}
   />
   <AdaptiveLoadWithDefaults
     placeholder={{lqip: lqip4}}
@@ -53,15 +53,15 @@ const src = 'andre-spieker-238-unsplash.jpg'
     alt="doggo 4"
     width={7952}
     height={5304}
-    threshold={1000}
+    threshold={5000}
   />
   <AdaptiveLoadWithDefaults
     placeholder={{lqip: lqip5}}
-    src={image5}
+    src={"image5"}
     alt="doggo 5"
     width={6016}
     height={4016}
-    threshold={1000}
+    threshold={5000}
   />
 </React.Fragment>
 ```

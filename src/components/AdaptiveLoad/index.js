@@ -12,6 +12,12 @@ export default class AdaptiveLoad extends Component {
     super(props)
     this.state = {
       loadState: loadStates.initial,
+      downlink: nativeConnection
+        ? navigator.connection.downlink // megabits per second
+        : null,
+      rtt: nativeConnection
+        ? navigator.connection.rtt // ms
+        : null,
       connection: nativeConnection
         ? navigator.connection.effectiveType // 'slow-2g', '2g', '3g', or '4g'
         : null,
@@ -27,10 +33,12 @@ export default class AdaptiveLoad extends Component {
 
   static defaultProps = {
     /**
-     * @param {string} connection - effective connection type e.g. 'slow-2g', '2g', '3g', or '4g'
      * @returns {boolean} - is connection good enough to auto load the image
      */
-    connectionToLoad: (connection, {size, threshold}) => {
+    connectionToLoad: ({connection, downlink, rtt, size, threshold}) => {
+      if (downlink && size && threshold) {
+        return (size * 8 / (downlink * 1000) + rtt) < threshold
+      }
       switch (connection) {
         case 'slow-2g':
         case '2g':
@@ -57,7 +65,11 @@ export default class AdaptiveLoad extends Component {
         this.updateConnection = () => {
           if (!navigator.onLine) return
           if (this.state.loadState === loadStates.initial) {
-            this.setState({connection: navigator.connection.effectiveType})
+            this.setState({
+              connection: navigator.connection.effectiveType,
+              downlink: navigator.connection.downlink,
+              rtt: navigator.connection.rtt,
+            })
           }
         }
         navigator.connection.addEventListener('onchange', this.updateConnection)
@@ -106,9 +118,10 @@ export default class AdaptiveLoad extends Component {
     }
   }
 
-  stateToComponent({connection, canceled, overThreshold}) {
+  stateToComponent() {
+    const {canceled, overThreshold} = this.state
     const autoLoad = nativeConnection
-      ? this.props.connectionToLoad(connection, this.props)
+      ? this.props.connectionToLoad({...this.props, ...this.state})
       : true
     if (canceled || overThreshold || !autoLoad) {
       return ManualLoad
@@ -118,12 +131,14 @@ export default class AdaptiveLoad extends Component {
   }
 
   render() {
-    return React.createElement(this.stateToComponent(this.state), {
-      onLoadStateChange: loadState =>
+    return React.createElement(this.stateToComponent(), {
+      onLoadStateChange: loadState => {
+        if (loadState === loadStates.error) return
         this.setState({
           loadState,
           canceled: loadState === loadStates.initial,
-        }),
+        })
+      },
       ...this.props,
     })
   }
