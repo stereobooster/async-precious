@@ -20,15 +20,15 @@ export default class ManualLoad extends Component {
     onLoadStateChange: PropTypes.func,
     /** how much to wait in ms until concider download to slow */
     threshold: PropTypes.number,
-    /** interval in ms to check over threshold status */
-    interval: PropTypes.number,
     /** function to convert state of the component to icon in Media */
     stateToIcon: PropTypes.func,
+    /** interval in ms to check over threshold status */
+    // interval: PropTypes.number,
   }
 
-  static defaultProps = {
-    interval: 500,
-  }
+  // static defaultProps = {
+  //   interval: 500,
+  // }
 
   constructor(props) {
     super(props)
@@ -101,8 +101,8 @@ export default class ManualLoad extends Component {
   clear() {
     let image = this.image
     if (this.image) {
-      clearInterval(this.refreshIntervalId)
-      this.refreshIntervalId = undefined
+      clearTimeout(this.thresholdTimer)
+      this.thresholdTimer = undefined
       // eslint-disable-next-line no-multi-assign
       image.onabort = image.onerror = image.onload = undefined
       this.image.src = ''
@@ -127,20 +127,21 @@ export default class ManualLoad extends Component {
   startTimer() {
     const {threshold} = this.props
     if (!threshold) return undefined
-    const startTime = new Date().getTime()
-    return setInterval(() => {
-      const time = new Date().getTime() - startTime
-      // window.document.dispatchEvent(
-      //   new CustomEvent("connection", {
-      //     detail: { time, size, overThreshold: threshold && time > threshold }
-      //   })
-      // );
-      if (time < threshold) return
+    return setTimeout(() => {
       this.setState({overThreshold: true})
       window.document.dispatchEvent(
         new CustomEvent('overThreshold', {detail: {overThreshold: true}}),
       )
-    }, this.props.interval)
+    }, threshold)
+    // const startTime = new Date().getTime()
+    // return setInterval(() => {
+    //   const time = new Date().getTime() - startTime
+    //   window.document.dispatchEvent(
+    //     new CustomEvent("connection", {
+    //       detail: { time, size, overThreshold: threshold && time > threshold }
+    //     })
+    //   );
+    // }, this.props.interval)
   }
 
   load() {
@@ -148,7 +149,7 @@ export default class ManualLoad extends Component {
     const {loadState} = this.state
     if (loaded === loadState || loading === loadState) return
     this.loadStateChange(loading)
-    this.refreshIntervalId = this.startTimer()
+    this.thresholdTimer = this.startTimer()
     const image = new Image()
     image.onload = () => {
       this.clear()
@@ -183,12 +184,6 @@ export default class ManualLoad extends Component {
     let icon
     if (this.props.stateToIcon) icon = this.props.stateToIcon(this.state)
     if (!icon) icon = this.stateToIcon(this.state)
-    return (
-      <Media
-        {...this.props}
-        onClick={() => this.onClick()}
-        icon={icon}
-      />
-    )
+    return <Media {...this.props} onClick={() => this.onClick()} icon={icon} />
   }
 }

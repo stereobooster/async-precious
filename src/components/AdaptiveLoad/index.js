@@ -42,15 +42,8 @@ export default class AdaptiveLoad extends Component {
       switch (connection) {
         case 'slow-2g':
         case '2g':
-          return false
         case '3g':
-          if (!size || !threshold) {
-            return false // don't load
-          } else {
-            // assume slow 3g e.g. 400Kbps
-            // threshold is in ms
-            return size * 8 / 400 < threshold
-          }
+            return false
         case '4g':
           return true
         default:
