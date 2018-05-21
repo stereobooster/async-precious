@@ -10,18 +10,25 @@ const ssr =
 
 export default class ManualLoad extends Component {
   static propTypes = {
+    // core properties
     /** URL of the image */
     src: PropTypes.string.isRequired,
-    /** If you will not pass this value, component will detect onLine status based on browser API, otherwise will use passed value */
-    onLine: PropTypes.bool,
-    /** If you will pass true it will immediately load image otherwise load will be controlled by user */
-    load: PropTypes.bool,
-    /** callback for load state change */
-    onLoadStateChange: PropTypes.func,
     /** how much to wait in ms until concider download to slow */
     threshold: PropTypes.number,
+
+    // for testing
+    /** If you will not pass this value, component will detect onLine status based on browser API, otherwise will use passed value */
+    onLine: PropTypes.bool,
+
+    // for LazyLoad
     /** function to convert state of the component to icon in Media */
     stateToIcon: PropTypes.func,
+    /** If you will pass true it will immediately load image otherwise load will be controlled by user */
+    load: PropTypes.bool,
+
+    // for AdaptiveLoad
+    /** callback for load state change */
+    onLoadStateChange: PropTypes.func,
   }
 
   constructor(props) {
@@ -123,6 +130,7 @@ export default class ManualLoad extends Component {
     if (!threshold) return undefined
     return setTimeout(() => {
       this.setState({overThreshold: true})
+      // for AdaptiveLoad
       window.document.dispatchEvent(
         new CustomEvent('overThreshold', {detail: {overThreshold: true}}),
       )

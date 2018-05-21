@@ -74,6 +74,7 @@ export default class AdaptiveLoad extends Component {
             this.setState({overThreshold})
           }
         }
+        // From ManualLoad
         window.document.addEventListener(
           'overThreshold',
           this.overThresholdListener,
@@ -90,6 +91,7 @@ export default class AdaptiveLoad extends Component {
           this.updateConnection,
         )
       } else if (this.props.threshold) {
+        // From ManualLoad
         window.document.removeEventListener(
           'overThreshold',
           this.overThresholdListener,
