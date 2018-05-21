@@ -25,6 +25,9 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "reactSnap": {
+    "inlineCss": false
+  },
   "browserslist": {
     "development": [
       "last 2 chrome versions",
