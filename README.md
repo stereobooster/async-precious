@@ -4,6 +4,15 @@ Experiment to build async component according to [Guide To Async Components](htt
 
 Eventually this will be extracted to [react-precious-image](https://github.com/stereobooster/react-precious-image)
 
+## Find a way to compose components
+
+* https://reactions.github.io/component/
+* https://github.com/JamieDixon/react-lifecycle-component
+* https://reactpatterns.com/#stateless-function
+* https://github.com/developit/unistore
+* https://github.com/acdlite/recompose
+* https://krasimir.gitbooks.io/react-in-patterns/content/
+
 ## TODO
 
 * WebP
@@ -30,24 +39,24 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 
 ```js
 async function supportsWebp() {
-  if (typeof createImageBitmap === "undefined") return false;
+  if (typeof createImageBitmap === 'undefined') return false
   return fetch(
-    "data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA="
+    'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA=',
   )
     .then(response => response.blob())
-    .then(blob => createImageBitmap(blob).then(() => true, () => false));
+    .then(blob => createImageBitmap(blob).then(() => true, () => false))
 }
 
-let webp = undefined;
-const webpPromise = supportsWebp();
-webpPromise.then(x => (webp = x));
+let webp = undefined
+const webpPromise = supportsWebp()
+webpPromise.then(x => (webp = x))
 
 const supportsWebpSync = () => {
-  if (webp === undefined) return webpPromise;
+  if (webp === undefined) return webpPromise
   return {
-    then: callback => callback(webp)
-  };
-};
+    then: callback => callback(webp),
+  }
+}
 ```
 
 ## Usorted notes
