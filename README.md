@@ -6,12 +6,6 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 
 ## TODO
 
-- Implement loader, with interface similar to Promise (then, catch), that way it will be easy to integrate with other potential sources
-- but for image and fetch we can also implement cancel
-
-
-
-
 * WebP
 * Use [cancelable fetch](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort) to read http headers (`content-length`, `status`, `date` to detect if response is cached or not).
 * `srcset` ([lazy-image](https://meowni.ca/lazy-image/))

@@ -89,6 +89,10 @@ export default class Media extends PureComponent {
   }
 
   renderNoscript(props) {
+    return null
+    // img inside noscript will trigger download
+    // even if JS is enabled
+    // TODO: use icon instead with link to the original image
     return props.noscript ? (
       <noscript>
         <img
@@ -117,12 +121,7 @@ export default class Media extends PureComponent {
     }
     return (
       <div
-        {...compose(
-          theme.adaptive,
-          background,
-          props.style,
-          props.className,
-        )}
+        {...compose(theme.adaptive, background, props.style, props.className)}
         title={props.alt}
         onClick={this.props.onClick}
         onKeyPress={this.props.onClick}
