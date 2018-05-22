@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
+import {image, timeout, cancelSecond} from '../loaders'
 
 const {initial, loading, loaded, error} = loadStates
 
@@ -75,9 +76,9 @@ export default class ManualLoad extends Component {
         this.setState({onLine: nextProps.onLine})
       }
     }
+    if (nextProps.src !== this.props.src) this.cancel()
     if (nextProps.load === true) this.load()
     if (nextProps.load === false) this.cancel()
-    if (nextProps.src !== this.props.src) this.cancel()
   }
 
   onClick() {
@@ -100,61 +101,48 @@ export default class ManualLoad extends Component {
   }
 
   clear() {
-    let image = this.image
-    if (this.image) {
-      clearTimeout(this.thresholdTimer)
-      this.thresholdTimer = undefined
-      // eslint-disable-next-line no-multi-assign
-      image.onabort = image.onerror = image.onload = undefined
-      this.image.src = ''
-      // eslint-disable-next-line no-multi-assign
-      this.image = image = undefined
+    if (this.loader) {
+      this.loader.cancel()
+      this.loader = undefined
     }
   }
 
   cancel() {
-    const {loadState} = this.state
-    if (loading !== loadState) return
+    if (loading !== this.state.loadState) return
     this.clear()
     this.loadStateChange(initial)
   }
 
   loadStateChange(loadState) {
     this.setState({loadState, overThreshold: false})
-    const onLoadStateChange = this.props.onLoadStateChange
+    const {onLoadStateChange} = this.props
     if (onLoadStateChange) onLoadStateChange(loadState)
   }
 
-  startTimer() {
-    const {threshold} = this.props
-    if (!threshold) return undefined
-    return setTimeout(() => {
-      this.setState({overThreshold: true})
-      // for AdaptiveLoad
-      window.document.dispatchEvent(
-        new CustomEvent('overThreshold', {detail: {overThreshold: true}}),
-      )
-    }, threshold)
-  }
-
   load() {
-    if (ssr) return
     const {loadState} = this.state
-    if (loaded === loadState || loading === loadState) return
+    if (ssr || loaded === loadState || loading === loadState) return
     this.loadStateChange(loading)
-    this.thresholdTimer = this.startTimer()
-    const image = new Image()
-    image.onload = () => {
-      this.clear()
-      this.loadStateChange(loaded)
+
+    const {threshold, src} = this.props
+    const imageLoader = image(src)
+    imageLoader
+      .then(() => this.loadStateChange(loaded))
+      .catch(() => this.loadStateChange(error))
+
+    let timeoutLoader
+    if (threshold) {
+      timeoutLoader = timeout(threshold)
+      timeoutLoader.then(() => {
+        this.setState({overThreshold: true})
+        // for AdaptiveLoad
+        window.document.dispatchEvent(
+          new CustomEvent('overThreshold', {detail: {overThreshold: true}}),
+        )
+      })
     }
-    // eslint-disable-next-line no-multi-assign
-    image.onabort = image.onerror = () => {
-      this.clear()
-      this.loadStateChange(error)
-    }
-    image.src = this.props.src
-    this.image = image
+
+    this.loader = cancelSecond(imageLoader, timeoutLoader)
   }
 
   stateToIcon({loadState, onLine, overThreshold}) {
