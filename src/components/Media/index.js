@@ -88,22 +88,22 @@ export default class Media extends PureComponent {
     )
   }
 
-  renderNoscript(props) {
+  renderNoscript() {
     return null
     // img inside noscript will trigger download
     // even if JS is enabled
     // TODO: use icon instead with link to the original image
-    return props.noscript ? (
-      <noscript>
-        <img
-          {...compose(props.theme.img)}
-          src={props.src}
-          alt={props.alt}
-          width={props.width}
-          height={props.height}
-        />
-      </noscript>
-    ) : null
+    // return props.noscript ? (
+    //   <noscript>
+    //     <img
+    //       {...compose(props.theme.img)}
+    //       src={props.src}
+    //       alt={props.alt}
+    //       width={props.width}
+    //       height={props.height}
+    //     />
+    //   </noscript>
+    // ) : null
   }
 
   render() {

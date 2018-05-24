@@ -3,6 +3,8 @@
 // `image(src)` has `cancel` function
 // but `image(src).then()` doesn't
 
+// import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
+
 export const image = src => {
   let image = new Image()
   const result = new Promise((resolve, reject) => {
@@ -21,7 +23,7 @@ export const image = src => {
 
 export const timeout = threshold => {
   let timerId
-  const result = new Promise((resolve) => {
+  const result = new Promise(resolve => {
     timerId = setTimeout(resolve, threshold)
   })
   result.cancel = () => {
@@ -51,8 +53,8 @@ export const cancelSecond = (p1, p2) => {
       return x
     },
   )
-  // TODO check if 1 already canceled
-  // then cancel 2 immediately
+  // TODO check if p1 already canceled
+  // then cancel p2 immediately
   result.cancel = () => {
     p1.cancel()
     p2.cancel()
@@ -65,10 +67,16 @@ export const cancelSecond = (p1, p2) => {
 //   let controller = new AbortController()
 //   const signal = controller.signal
 //   const result = new Promise((resolve, reject) =>
-//     fetch(url, {...options, signal}).then(response => {
+//     fetch(url, {
+//       ...options,
+//       signal,
+//       method: 'GET',
+//       mode: 'cors',
+//       cache: 'default',
+//     }).then(response => {
 //       if (response.ok) {
-//         options.onMeta && options.onMeta(response.headers)
-//         response.arrayBuffer().then(resolve)
+//         options && options.onMeta && options.onMeta(response.headers)
+//         response.blob().then(resolve)
 //       } else {
 //         reject(response.status)
 //       }

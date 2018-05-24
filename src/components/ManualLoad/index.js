@@ -26,10 +26,6 @@ export default class ManualLoad extends Component {
     stateToIcon: PropTypes.func,
     /** If you will pass true it will immediately load image otherwise load will be controlled by user */
     load: PropTypes.bool,
-
-    // for AdaptiveLoad
-    /** callback for load state change */
-    onLoadStateChange: PropTypes.func,
   }
 
   constructor(props) {
@@ -115,8 +111,6 @@ export default class ManualLoad extends Component {
 
   loadStateChange(loadState) {
     this.setState({loadState, overThreshold: false})
-    const {onLoadStateChange} = this.props
-    if (onLoadStateChange) onLoadStateChange(loadState)
   }
 
   load() {
@@ -133,13 +127,7 @@ export default class ManualLoad extends Component {
     let timeoutLoader
     if (threshold) {
       timeoutLoader = timeout(threshold)
-      timeoutLoader.then(() => {
-        this.setState({overThreshold: true})
-        // for AdaptiveLoad
-        window.document.dispatchEvent(
-          new CustomEvent('overThreshold', {detail: {overThreshold: true}}),
-        )
-      })
+      timeoutLoader.then(() => this.setState({overThreshold: true}))
     }
 
     this.loader = cancelSecond(imageLoader, timeoutLoader)

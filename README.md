@@ -8,7 +8,7 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 
 * https://reactions.github.io/component/
 * https://github.com/JamieDixon/react-lifecycle-component
-* https://reactpatterns.com/#stateless-function
+* https://reactpatterns.com/
 * https://github.com/developit/unistore
 * https://github.com/acdlite/recompose
 * https://krasimir.gitbooks.io/react-in-patterns/content/
