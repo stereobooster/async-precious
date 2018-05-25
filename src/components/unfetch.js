@@ -1,4 +1,4 @@
-export function AbortController() {
+export function UnfetchAbortController() {
   this.signal = {onabort: () => {}}
   this.abort = () => {
     this.signal.onabort()
@@ -6,6 +6,8 @@ export function AbortController() {
 }
 
 // modified version of https://github.com/developit/unfetch
+// - ponyfill intead of polyfill
+// - add support for AbortController
 export const unfetch = (url, options) => {
   options = options || {}
   return new Promise((resolve, reject) => {
@@ -23,11 +25,13 @@ export const unfetch = (url, options) => {
       resolve(response())
     }
 
-    if (options.signal) options.signal.onabort = () => request.abort()
-
-    // request.onabort = reject;
-
     request.onerror = reject
+
+    if (options.signal)
+      options.signal.onabort = () => {
+        request.onerror = request.onload = undefined
+        request.abort()
+      }
 
     request.send(options.body)
 

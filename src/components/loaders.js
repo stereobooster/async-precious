@@ -3,36 +3,7 @@
 // `image(src)` has `cancel` function
 // but `image(src).then()` doesn't
 
-import {unfetch, AbortController} from './unfetch'
-
-export const image = src => {
-  let image = new Image()
-  const result = new Promise((resolve, reject) => {
-    image.onload = resolve
-    image.onabort = image.onerror = reject
-    image.src = src
-  })
-  result.cancel = () => {
-    if (!image) throw new Error('Already canceled')
-    image.onload = image.onabort = image.onerror = undefined
-    image.src = ''
-    image = undefined
-  }
-  return result
-}
-
-export const timeout = threshold => {
-  let timerId
-  const result = new Promise(resolve => {
-    timerId = setTimeout(resolve, threshold)
-  })
-  result.cancel = () => {
-    // if (!timerId) throw new Error('Already canceled')
-    clearTimeout(timerId)
-    timerId = undefined
-  }
-  return result
-}
+import {unfetch, UnfetchAbortController} from './unfetch'
 
 /**
  * If first promise resolved, rejected or canceled
@@ -62,20 +33,50 @@ export const cancelSecond = (p1, p2) => {
   return result
 }
 
-export const unfetchCancelable = (url, options) => {
-  // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
-  let controller = new AbortController()
+export const timeout = threshold => {
+  let timerId
+  const result = new Promise(resolve => {
+    timerId = setTimeout(resolve, threshold)
+  })
+  result.cancel = () => {
+    // there is a bug with cancel somewhere in the code
+    // if (!timerId) throw new Error('Already canceled')
+    clearTimeout(timerId)
+    timerId = undefined
+  }
+  return result
+}
+
+export const image = src => {
+  let image = new Image()
+  const result = new Promise((resolve, reject) => {
+    image.onload = resolve
+    image.onabort = image.onerror = () => reject({})
+    image.src = src
+  })
+  result.cancel = () => {
+    if (!image) throw new Error('Already canceled')
+    image.onload = image.onabort = image.onerror = undefined
+    image.src = ''
+    image = undefined
+  }
+  return result
+}
+
+export const xhrLoader = (url, options) => {
+  let controller = new UnfetchAbortController()
   const signal = controller.signal
   const result = new Promise((resolve, reject) =>
     unfetch(url, {...options, signal}).then(response => {
       if (response.ok) {
-        options && options.onMeta && options.onMeta(response.headers)
         response
           .blob()
+          // we still need image to do actual decoding
+          // but if images are uncachable this will lead to two requests
           .then(() => image(url))
           .then(resolve)
       } else {
-        reject(response.status)
+        reject({status: response.status})
       }
     }, reject),
   )
@@ -87,15 +88,29 @@ export const unfetchCancelable = (url, options) => {
   return result
 }
 
-// export const fetchNonCancelable = (url, options) => {
-//   return new Promise((resolve, reject) =>
-//     fetch(url, options).then(response => {
+// export const fetchLoader = (url, options) => {
+//   // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
+//   let controller = new AbortController()
+//   const signal = controller.signal
+//   const result = new Promise((resolve, reject) =>
+//     fetch(url, {...options, signal}).then(response => {
 //       if (response.ok) {
-//         options.onMeta && options.onMeta(response.headers)
-//         response.arrayBuffer().then(resolve)
+//         options && options.onMeta && options.onMeta(response.headers)
+//         response
+//           .blob()
+//           // we still need image to do actual decoding
+//           // but if images are uncachable this will lead to two requests
+//           .then(() => image(url))
+//           .then(resolve)
 //       } else {
-//         reject(response.status)
+//         reject({status: response.status})
 //       }
 //     }, reject),
 //   )
+//   result.cancel = () => {
+//     if (!controller) throw new Error('Already canceled')
+//     controller.abort()
+//     controller = undefined
+//   }
+//   return result
 // }

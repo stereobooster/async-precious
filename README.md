@@ -4,6 +4,12 @@ Experiment to build async component according to [Guide To Async Components](htt
 
 Eventually this will be extracted to [react-precious-image](https://github.com/stereobooster/react-precious-image)
 
+## TODO
+
+* WebP
+* `srcset` ([lazy-image](https://meowni.ca/lazy-image/))
+* Use fetch to read http headers (`content-length`, `status`, `date` to detect if response is cached or not), without downloading the content itself.
+
 ## Find a way to compose components
 
 * https://reactions.github.io/component/
@@ -12,12 +18,6 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 * https://github.com/developit/unistore
 * https://github.com/acdlite/recompose
 * https://krasimir.gitbooks.io/react-in-patterns/content/
-
-## TODO
-
-* WebP
-* Use [cancelable fetch](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort) to read http headers (`content-length`, `status`, `date` to detect if response is cached or not).
-* `srcset` ([lazy-image](https://meowni.ca/lazy-image/))
 
 ## Ideas
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Waypoint from 'react-waypoint'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
-import {unfetchCancelable, timeout, cancelSecond} from '../loaders'
+import {xhrLoader, timeout, cancelSecond} from '../loaders'
 
 const {initial, loading, loaded, error} = loadStates
 
@@ -190,24 +190,29 @@ export default class AdaptiveLoad extends Component {
     this.loadStateChange(loading, userTriggered)
 
     const {threshold, src} = this.props
-    const imageLoader = unfetchCancelable(src)
-    imageLoader
-      .then(() => this.loadStateChange(loaded, false))
-      .catch(() => this.loadStateChange(error, false))
+    const imageLoader = xhrLoader(src)
+    imageLoader.then(() => this.loadStateChange(loaded, false)).catch(() => {
+      // if (e.status === 404) {
+      //   this.setState({errorMeassage: 'Image not found'})
+      // }
+      this.loadStateChange(error, false)
+    })
 
-    let timeoutLoader
     if (threshold) {
-      timeoutLoader = timeout(threshold)
+      const timeoutLoader = timeout(threshold)
       timeoutLoader.then(() => {
         window.document.dispatchEvent(
-          new CustomEvent('possiblySlowNetwork', {detail: {possiblySlowNetwork: true}}),
+          new CustomEvent('possiblySlowNetwork', {
+            detail: {possiblySlowNetwork: true},
+          }),
         )
         this.setState({overThreshold: true})
         if (!this.state.userTriggered) this.cancel(true)
       })
+      this.loader = cancelSecond(imageLoader, timeoutLoader)
+    } else {
+      this.loader = imageLoader
     }
-
-    this.loader = cancelSecond(imageLoader, timeoutLoader)
   }
 
   stateToIcon(state) {
