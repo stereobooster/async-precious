@@ -29,11 +29,11 @@ const meta5 = rpi('./images/nidhin-mundackal-281287-unsplash.jpg')
 
 const App = () => (
   <React.Fragment>
-    <Al {...meta1} src={coverImage1} alt="doggo 1" noscript={'noscript'} />
-    <Al {...meta2} src={coverImage2} alt="doggo 2" noscript={'noscript'} />
-    <Al {...meta3} src={coverImage3} alt="doggo 3" noscript={'noscript'} />
-    <Al {...meta4} src={coverImage4} alt="doggo 4" noscript={'noscript'} />
-    <Al {...meta5} src={coverImage5} alt="doggo 5" noscript={'noscript'} />
+    <Al {...meta1} src={coverImage1} alt="doggo 1" webp={true} />
+    <Al {...meta2} src={coverImage2} alt="doggo 2" webp={true} />
+    <Al {...meta3} src={coverImage3} alt="doggo 3" webp={true} />
+    <Al {...meta4} src={coverImage4} alt="doggo 4" webp={true} />
+    <Al {...meta5} src={coverImage5} alt="doggo 5" webp={true} />
   </React.Fragment>
 )
 
