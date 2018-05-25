@@ -25,7 +25,7 @@ Al.defaultProps = {
   ...AdaptiveLoad.defaultProps,
   icons,
   theme,
-  threshold: 2500,
+  threshold: 1000,
 }
 
 const meta1 = rpi('./images/andre-spieker-238-unsplash.jpg')

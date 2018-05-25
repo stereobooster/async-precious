@@ -7,11 +7,9 @@
 //     .then(response => response.blob())
 //     .then(blob => createImageBitmap(blob).then(() => true, () => false))
 // }
-
 // let webp = undefined
 // const webpPromise = supportsWebp()
 // webpPromise.then(x => (webp = x))
-
 // export default () => {
 //   if (webp === undefined) return webpPromise
 //   return {
@@ -20,6 +18,11 @@
 // }
 
 function supportsWebp() {
+  if (typeof window === 'undefined') {
+    // SSR
+    // it is possible to use request headers to detect support on the server
+    return false
+  }
   const elem = document.createElement('canvas')
   if (elem.getContext && elem.getContext('2d')) {
     // was able or not to get WebP representation
