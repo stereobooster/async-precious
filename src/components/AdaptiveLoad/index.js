@@ -4,6 +4,7 @@ import Waypoint from 'react-waypoint'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
 import {xhrLoader, timeout, cancelSecond} from '../loaders'
+import supportsWebp from '../webp'
 
 const {initial, loading, loaded, error} = loadStates
 
@@ -184,23 +185,41 @@ export default class AdaptiveLoad extends Component {
     })
   }
 
-  load(userTriggered) {
+  load = async userTriggered => {
     const {loadState} = this.state
     if (ssr || loaded === loadState || loading === loadState) return
     this.loadStateChange(loading, userTriggered)
 
-    const {threshold, src} = this.props
-    const imageLoader = xhrLoader(src)
-    imageLoader.then(() => this.loadStateChange(loaded, false)).catch(() => {
-      // if (e.status === 404) {
-      //   this.setState({errorMeassage: 'Image not found'})
-      // }
-      this.loadStateChange(error, false)
-    })
+    const {threshold, src, webp} = this.props
+    let url = src
+    if (webp && (await supportsWebp())) {
+      if (webp === true) {
+        url = src.replace(/\.jpe?g$/i, '.webp')
+      } else if (typeof webp === 'function') {
+        url = webp(src)
+      } else {
+        url = webp
+      }
+    }
+
+    const imageLoader = xhrLoader(url)
+    imageLoader
+      .then(() => {
+        this.clear()
+        this.loadStateChange(loaded, false)
+      })
+      .catch(() => {
+        this.clear()
+        // if (e.status === 404) {
+        //   this.setState({errorMeassage: 'Image not found'})
+        // }
+        this.loadStateChange(error, false)
+      })
 
     if (threshold) {
       const timeoutLoader = timeout(threshold)
       timeoutLoader.then(() => {
+        if (!this.loader) return
         window.document.dispatchEvent(
           new CustomEvent('possiblySlowNetwork', {
             detail: {possiblySlowNetwork: true},

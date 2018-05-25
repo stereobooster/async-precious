@@ -14,16 +14,17 @@ import {unfetch, UnfetchAbortController} from './unfetch'
  */
 export const cancelSecond = (p1, p2) => {
   if (!p2) return p1
-  const result = p1.then(
-    x => {
-      p2.cancel()
-      return x
-    },
-    x => {
-      p2.cancel()
-      return x
-    },
-  )
+  // const result = p1.then(
+  //   x => {
+  //     p2.cancel()
+  //     return x
+  //   },
+  //   x => {
+  //     p2.cancel()
+  //     return x
+  //   },
+  // )
+  const result = p1.then(x => x, x => x)
   // TODO check if p1 already canceled
   // then cancel p2 immediately
   result.cancel = () => {
