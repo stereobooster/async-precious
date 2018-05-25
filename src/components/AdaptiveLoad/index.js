@@ -36,6 +36,7 @@ export default class AdaptiveLoad extends Component {
       userTriggered: false,
       possiblySlowNetwork: false,
       src: props.src,
+      size: props.size,
     }
   }
 
@@ -45,6 +46,11 @@ export default class AdaptiveLoad extends Component {
     src: PropTypes.string.isRequired,
     /** how much to wait in ms until concider download to slow */
     threshold: PropTypes.number,
+    /** size of src image in bytes */
+    size: PropTypes.number,
+    /** size of webp image in bytes */
+    // webpSize: PropTypes.number,
+    /** function which decides if image should be downloaded */
     shouldAutoDownload: PropTypes.func,
 
     // for testing
@@ -81,6 +87,11 @@ export default class AdaptiveLoad extends Component {
   }
 
   componentDidMount() {
+    // if (this.props.webp) {
+    //   supportsWebp().then(x => {
+    //     if (x) this.setState({size: this.props.webpSize})
+    //   })
+    // }
     if (nativeConnection) {
       this.updateConnection = () => {
         if (!navigator.onLine) return
@@ -258,9 +269,14 @@ export default class AdaptiveLoad extends Component {
     }
   }
 
-  onEnter = () => {
+  onEnter = async () => {
     if (this.state.inViewport) return
     this.setState({inViewport: true})
+    // const {webp, webpSize} = this.props
+    // if (webp && (await supportsWebp())) {
+    //   if (this.props.shouldAutoDownload({...this.state, size: webpSize}))
+    //     this.load(false)
+    // }
     if (this.props.shouldAutoDownload(this.state)) this.load(false)
   }
 

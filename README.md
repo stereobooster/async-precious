@@ -6,6 +6,7 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 
 ## TODO
 
+* webp needs size, each image in srcset needs size
 * compare with webp
 * tool to generate srcsets
 * `srcset` ([lazy-image](https://meowni.ca/lazy-image/))
@@ -40,6 +41,65 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 ```
 
 ## Usorted notes
+
+```js
+var oReq = new XMLHttpRequest();
+
+oReq.addEventListener("progress", updateProgress);
+function updateProgress (oEvent) {
+  if (oEvent.lengthComputable) {
+    var percentComplete = oEvent.loaded / oEvent.total * 100;
+    // ...
+  } else {
+    // Unable to compute progress information since the total size is unknown
+  }
+}
+```
+
+```ts
+type AdaptiveProps = {
+  width: number
+  height: number
+  threshold?: number
+  placeholder: {color: string} | {lqip: string}
+  alt: string
+  src: string
+  size?: number
+  webp?: string | bool | function
+  webpSize?: number
+}
+
+type ResponsiveProps = {
+  width: number
+  height: number
+  threshold?: number
+  placeholder: {color: string} | {lqip: string}
+  alt: string
+  srcset: [
+    {
+      width: number
+      src: string
+      size: number
+      webp?: string | bool
+      webpSize?: number
+    }
+  ]
+}
+```
+
+```js
+window.addEventListener('orientationchange', function() {
+  alert('the orientation of the device is now ' + screen.orientation.angle)
+})
+window.devicePixelRatio
+screen.height
+screen.width
+```
+
+* https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Testing_media_queries
+* https://www.smashingmagazine.com/2016/01/responsive-image-breakpoints-generation/
+* https://cloudfour.com/thinks/how-do-you-pick-responsive-images-breakpoints/
+* https://medium.com/hceverything/applying-srcset-choosing-the-right-sizes-for-responsive-images-at-different-breakpoints-a0433450a4a3
 
 ```html
 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=" />
