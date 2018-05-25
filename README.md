@@ -6,8 +6,6 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 
 ## TODO
 
-* webp needs size, each image in srcset needs size
-* compare with webp
 * tool to generate srcsets
 * `srcset` ([lazy-image](https://meowni.ca/lazy-image/))
 * parse srcset string
@@ -21,8 +19,10 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 * https://github.com/JamieDixon/react-lifecycle-component
 * https://reactpatterns.com/
 * https://github.com/developit/unistore
+* https://github.com/jamiebuilds/unstated
 * https://github.com/acdlite/recompose
 * https://krasimir.gitbooks.io/react-in-patterns/content/
+
 
 ## Ideas
 
