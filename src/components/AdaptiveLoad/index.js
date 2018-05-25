@@ -36,7 +36,6 @@ export default class AdaptiveLoad extends Component {
       userTriggered: false,
       possiblySlowNetwork: false,
       src: props.src,
-      size: props.size,
     }
   }
 
@@ -49,7 +48,7 @@ export default class AdaptiveLoad extends Component {
     /** size of src image in bytes */
     size: PropTypes.number,
     /** size of webp image in bytes */
-    // webpSize: PropTypes.number,
+    webpSize: PropTypes.number,
     /** function which decides if image should be downloaded */
     shouldAutoDownload: PropTypes.func,
 
@@ -87,11 +86,6 @@ export default class AdaptiveLoad extends Component {
   }
 
   componentDidMount() {
-    // if (this.props.webp) {
-    //   supportsWebp().then(x => {
-    //     if (x) this.setState({size: this.props.webpSize})
-    //   })
-    // }
     if (nativeConnection) {
       this.updateConnection = () => {
         if (!navigator.onLine) return
@@ -204,7 +198,7 @@ export default class AdaptiveLoad extends Component {
 
     const {threshold, src, webp} = this.props
     let url = src
-    if (webp && (await supportsWebp())) {
+    if (webp && supportsWebp) {
       if (webp === true) {
         url = src.replace(/\.jpe?g$/i, '.webp')
       } else if (typeof webp === 'function') {
@@ -247,9 +241,18 @@ export default class AdaptiveLoad extends Component {
     }
   }
 
+  shouldAutoDownload() {
+    const {shouldAutoDownload, webp, size, webpSize} = this.props
+    if (webp && supportsWebp) {
+      return shouldAutoDownload({...this.state, size: webpSize})
+    } else {
+      return shouldAutoDownload({...this.state, size})
+    }
+  }
+
   stateToIcon(state) {
     const {loadState, onLine, overThreshold, userTriggered} = state
-    const shouldAutoDownload = this.props.shouldAutoDownload(this.state)
+    const shouldAutoDownload = this.shouldAutoDownload()
     if (ssr) return icons.noicon
     switch (loadState) {
       case loaded:
@@ -272,12 +275,7 @@ export default class AdaptiveLoad extends Component {
   onEnter = async () => {
     if (this.state.inViewport) return
     this.setState({inViewport: true})
-    // const {webp, webpSize} = this.props
-    // if (webp && (await supportsWebp())) {
-    //   if (this.props.shouldAutoDownload({...this.state, size: webpSize}))
-    //     this.load(false)
-    // }
-    if (this.props.shouldAutoDownload(this.state)) this.load(false)
+    if (this.shouldAutoDownload()) this.load(false)
   }
 
   onLeave = () => {
