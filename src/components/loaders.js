@@ -3,7 +3,7 @@
 // `image(src)` has `cancel` function
 // but `image(src).then()` doesn't
 
-// import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
+import {unfetch, AbortController} from './unfetch'
 
 export const image = src => {
   let image = new Image()
@@ -27,7 +27,7 @@ export const timeout = threshold => {
     timerId = setTimeout(resolve, threshold)
   })
   result.cancel = () => {
-    if (!timerId) throw new Error('Already canceled')
+    // if (!timerId) throw new Error('Already canceled')
     clearTimeout(timerId)
     timerId = undefined
   }
@@ -62,33 +62,30 @@ export const cancelSecond = (p1, p2) => {
   return result
 }
 
-// export const fetchCancelable = (url, options) => {
-//   // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
-//   let controller = new AbortController()
-//   const signal = controller.signal
-//   const result = new Promise((resolve, reject) =>
-//     fetch(url, {
-//       ...options,
-//       signal,
-//       method: 'GET',
-//       mode: 'cors',
-//       cache: 'default',
-//     }).then(response => {
-//       if (response.ok) {
-//         options && options.onMeta && options.onMeta(response.headers)
-//         response.blob().then(resolve)
-//       } else {
-//         reject(response.status)
-//       }
-//     }, reject),
-//   )
-//   result.cancel = () => {
-//     if (!controller) throw new Error('Already canceled')
-//     controller.abort()
-//     controller = undefined
-//   }
-//   return result
-// }
+export const unfetchCancelable = (url, options) => {
+  // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
+  let controller = new AbortController()
+  const signal = controller.signal
+  const result = new Promise((resolve, reject) =>
+    unfetch(url, {...options, signal}).then(response => {
+      if (response.ok) {
+        options && options.onMeta && options.onMeta(response.headers)
+        response
+          .blob()
+          .then(() => image(url))
+          .then(resolve)
+      } else {
+        reject(response.status)
+      }
+    }, reject),
+  )
+  result.cancel = () => {
+    if (!controller) throw new Error('Already canceled')
+    controller.abort()
+    controller = undefined
+  }
+  return result
+}
 
 // export const fetchNonCancelable = (url, options) => {
 //   return new Promise((resolve, reject) =>

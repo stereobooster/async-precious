@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Waypoint from 'react-waypoint'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
-import {image, timeout, cancelSecond} from '../loaders'
+import {unfetchCancelable, timeout, cancelSecond} from '../loaders'
 
 const {initial, loading, loaded, error} = loadStates
 
@@ -190,7 +190,7 @@ export default class AdaptiveLoad extends Component {
     this.loadStateChange(loading, userTriggered)
 
     const {threshold, src} = this.props
-    const imageLoader = image(src)
+    const imageLoader = unfetchCancelable(src)
     imageLoader
       .then(() => this.loadStateChange(loaded, false))
       .catch(() => this.loadStateChange(error, false))
