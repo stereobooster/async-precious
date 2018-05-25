@@ -35,6 +35,7 @@ export default class AdaptiveLoad extends Component {
       inViewport: false,
       userTriggered: false,
       possiblySlowNetwork: false,
+      src: props.src,
     }
   }
 
@@ -201,6 +202,7 @@ export default class AdaptiveLoad extends Component {
         url = webp
       }
     }
+    this.setState({src: url})
 
     const imageLoader = xhrLoader(url)
     imageLoader
@@ -276,6 +278,7 @@ export default class AdaptiveLoad extends Component {
           {...this.props}
           onClick={this.onClick}
           icon={this.stateToIcon(this.state)}
+          src={this.state.src}
         />
       </Waypoint>
     )
