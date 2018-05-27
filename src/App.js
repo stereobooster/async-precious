@@ -19,14 +19,17 @@ Al.defaultProps = {
   threshold: 1000,
 }
 
-const src = ({name, ext, digest, width}) => `/images/${name}-${width}.${digest}.${ext}`
+const src = ({name, ext, digest, width}) =>
+  `/images/${name}-${width}.${digest}.${ext}`
 
 const props = obj => ({
   width: obj.width,
   height: obj.height,
-  src: src(obj),
   placeholder: {lqip: obj.lqip},
+  src: src(obj),
+  size: obj.sizes.filter(x => x.format === 'jpeg')[0].size,
   webp: src({...obj, ext: 'webp'}),
+  webpSize: obj.sizes.filter(x => x.format === 'webp')[0].size,
 })
 
 const App = () => (
