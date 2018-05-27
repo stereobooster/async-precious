@@ -16,11 +16,11 @@ Al.defaultProps = {
   ...Responsive.defaultProps,
   icons,
   theme,
-  threshold: 1000,
+  threshold: 2500,
 }
 
 const src = ({name, ext, digest, width}) =>
-  `/images/${name}-${width}.${digest}.${ext}`
+  `./images/${name}-${width}.${digest}.${ext}`
 
 const props = obj => ({
   width: obj.width,

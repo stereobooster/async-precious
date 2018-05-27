@@ -66,44 +66,10 @@ function updateProgress(oEvent) {
 }
 ```
 
-```ts
-type AdaptiveProps = {
-  width: number
-  height: number
-  threshold?: number
-  placeholder: {color: string} | {lqip: string}
-  alt: string
-  src: string
-  size?: number
-  webp?: string | bool | function
-  webpSize?: number
-}
-
-type ResponsiveProps = {
-  width: number
-  height: number
-  threshold?: number
-  placeholder: {color: string} | {lqip: string}
-  alt: string
-  srcset: [
-    {
-      width: number
-      src: string
-      size: number
-      webp?: string | bool
-      webpSize?: number
-    }
-  ]
-}
-```
-
 ```js
 window.addEventListener('orientationchange', function() {
   alert('the orientation of the device is now ' + screen.orientation.angle)
 })
-window.devicePixelRatio
-screen.height
-screen.width
 ```
 
 * https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Testing_media_queries

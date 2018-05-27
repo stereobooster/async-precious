@@ -14,12 +14,22 @@ const ssr =
 const nativeConnection =
   typeof window !== undefined && !!window.navigator.connection
 
+const getScreenWidth = () => {
+  if (typeof window === 'undefined') return 0
+  const devicePixelRatio = window.devicePixelRatio || 1
+  const {screen} = window
+  const angle = (screen.orientation && screen.orientation.angle) || 0
+  const {width, height} = screen
+  const rotated = Math.floor(angle / 90) % 2 !== 0
+  return (rotated ? height : width) * devicePixelRatio
+}
+
+const screenWidth = getScreenWidth()
+
 export default class AdaptiveLoad extends Component {
   constructor(props) {
     super(props)
     const controledOnLine = props.onLine !== undefined
-    const screenWidth =
-      typeof window === 'undefined' ? 0 : this.getScreenWidth()
     const pickedSrc = this.getSrc({srcset: this.props.srcset, screenWidth})
     if (!pickedSrc.src && !this.props.getUrl) {
       throw new Error('src required')
@@ -89,16 +99,6 @@ export default class AdaptiveLoad extends Component {
           return true
       }
     },
-  }
-
-  getScreenWidth() {
-    const devicePixelRatio = window.devicePixelRatio || 1
-    const {screen} = window
-    const angle = (screen.orientation && screen.orientation.angle) || 0
-    const {width, height} = screen
-    return (
-      (Math.floor(angle / 90) % 2 === 0 ? width : height) * devicePixelRatio
-    )
   }
 
   getSrc({srcset, screenWidth}) {
