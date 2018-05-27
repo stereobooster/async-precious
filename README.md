@@ -23,7 +23,6 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 * https://github.com/acdlite/recompose
 * https://krasimir.gitbooks.io/react-in-patterns/content/
 
-
 ## Ideas
 
 * use text together with (or instead of) icons. Examples: download image, download image (1.2mb), error occurred - click to retry, error - 404 image not found etc.
@@ -31,6 +30,17 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 * Use fetch to read http headers (`content-length`, `status`, `date` to detect if response is cached or not), without downloading the content itself.
 * [Webworker](https://aerotwist.com/blog/one-weird-trick/) maybe?
 * check contrast between placeholder and icon
+
+### Get screen resolutions
+
+* https://gist.github.com/PaquitoSoft/4451865
+* https://github.com/guess-js/guess/blob/master/packages/ga/src/client.ts
+* https://ga-dev-tools.appspot.com/query-explorer/
+* https://material.io/tools/devices/
+* https://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions
+* https://stackoverflow.com/questions/6272384/most-popular-screen-sizes-resolutions-on-android-phones
+* http://screensiz.es/
+* https://css-tricks.com/google-analytics-can-show-screen-resolution-%E2%89%A0-browser-window/
 
 ### No script fallback
 
@@ -43,12 +53,12 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 ## Usorted notes
 
 ```js
-var oReq = new XMLHttpRequest();
+var oReq = new XMLHttpRequest()
 
-oReq.addEventListener("progress", updateProgress);
-function updateProgress (oEvent) {
+oReq.addEventListener('progress', updateProgress)
+function updateProgress(oEvent) {
   if (oEvent.lengthComputable) {
-    var percentComplete = oEvent.loaded / oEvent.total * 100;
+    var percentComplete = oEvent.loaded / oEvent.total * 100
     // ...
   } else {
     // Unable to compute progress information since the total size is unknown
