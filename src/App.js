@@ -1,6 +1,6 @@
 import React from 'react'
 // import {AdaptiveLoad} from 'react-precious-image'
-import AdaptiveLoad from './components/AdaptiveLoad'
+import Responsive from './components/Responsive'
 import icons from './components/icons'
 import theme from './components/theme.module.css'
 
@@ -10,10 +10,10 @@ import image3 from './images/vincent-van-zalinge-408523-unsplash.json'
 import image4 from './images/marvin-meyer-188676-unsplash.json'
 import image5 from './images/nidhin-mundackal-281287-unsplash.json'
 
-const Al = props => <AdaptiveLoad {...props} />
+const Al = props => <Responsive {...props} />
 
 Al.defaultProps = {
-  ...AdaptiveLoad.defaultProps,
+  ...Responsive.defaultProps,
   icons,
   theme,
   threshold: 1000,
@@ -26,10 +26,11 @@ const props = obj => ({
   width: obj.width,
   height: obj.height,
   placeholder: {lqip: obj.lqip},
-  src: src(obj),
-  size: obj.sizes.filter(x => x.format === 'jpeg')[0].size,
-  webp: src({...obj, ext: 'webp'}),
-  webpSize: obj.sizes.filter(x => x.format === 'webp')[0].size,
+  getUrl: ({width, format}) => {
+    const ext = format === 'jpeg' ? 'jpg' : 'webp'
+    return src({...obj, ext, width})
+  },
+  srcset: obj.sizes,
 })
 
 const App = () => (
@@ -37,7 +38,7 @@ const App = () => (
     <Al alt="doggo 1" {...props(image1)} />
     <Al alt="doggo 2" {...props(image2)} />
     <Al alt="doggo 3" {...props(image3)} />
-    <Al alt="doggo 4" {...props(image2)} />
+    <Al alt="doggo 4" {...props(image4)} />
     <Al alt="doggo 5" {...props(image5)} />
   </React.Fragment>
 )

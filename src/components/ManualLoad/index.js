@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
-import {image, timeout, cancelSecond} from '../loaders'
+import {image, timeout, combineCancel} from '../loaders'
 
 const {initial, loading, loaded, error} = loadStates
 
@@ -130,7 +130,7 @@ export default class ManualLoad extends Component {
       timeoutLoader.then(() => this.setState({overThreshold: true}))
     }
 
-    this.loader = cancelSecond(imageLoader, timeoutLoader)
+    this.loader = combineCancel(imageLoader, timeoutLoader)
   }
 
   stateToIcon({loadState, onLine, overThreshold}) {

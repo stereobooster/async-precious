@@ -6,28 +6,15 @@
 import {unfetch, UnfetchAbortController} from './unfetch'
 
 /**
- * If first promise resolved, rejected or canceled
- * second promise will be caneled
+ * returns new "promise" with cancel function combined
  *
- * @param {Promise} p1 - first promise with cancel
- * @param {Promise} p2 - second promise with cancel
- * @returns {Promise} - new promise with cancel
+ * @param {Promise} p1 - first "promise" with cancel
+ * @param {Promise} p2 - second "promise" with cancel
+ * @returns {Promise} - new "promise" with cancel
  */
-export const cancelSecond = (p1, p2) => {
+export const combineCancel = (p1, p2) => {
   if (!p2) return p1
-  // const result = p1.then(
-  //   x => {
-  //     p2.cancel()
-  //     return x
-  //   },
-  //   x => {
-  //     p2.cancel()
-  //     return x
-  //   },
-  // )
   const result = p1.then(x => x, x => x)
-  // TODO check if p1 already canceled
-  // then cancel p2 immediately
   result.cancel = () => {
     p1.cancel()
     p2.cancel()

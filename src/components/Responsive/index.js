@@ -18,16 +18,20 @@ export default class AdaptiveLoad extends Component {
   constructor(props) {
     super(props)
     const controledOnLine = props.onLine !== undefined
+    const screenWidth =
+      typeof window === 'undefined' ? 0 : this.getScreenWidth()
+    const pickedSrc = this.getSrc({srcset: this.props.srcset, screenWidth})
+    if (!pickedSrc.src && !this.props.getUrl) {
+      throw new Error('src required')
+    }
     this.state = {
       loadState: initial,
-      downlink: nativeConnection
-        ? navigator.connection.downlink // megabits per second
-        : null,
-      rtt: nativeConnection
-        ? navigator.connection.rtt // ms
-        : null,
       connection: nativeConnection
-        ? navigator.connection.effectiveType // 'slow-2g', '2g', '3g', or '4g'
+        ? {
+            downlink: navigator.connection.downlink, // megabits per second
+            rtt: navigator.connection.rtt, // ms
+            effectiveType: navigator.connection.effectiveType, // 'slow-2g', '2g', '3g', or '4g'
+          }
         : null,
       onLine: controledOnLine ? props.onLine : true,
       controledOnLine,
@@ -35,30 +39,26 @@ export default class AdaptiveLoad extends Component {
       inViewport: false,
       userTriggered: false,
       possiblySlowNetwork: false,
-      src: props.src,
+      pickedSrc,
     }
   }
 
   static propTypes = {
-    // core properties
-    /** URL of the image */
-    src: PropTypes.string.isRequired,
     /** how much to wait in ms until concider download to slow */
     threshold: PropTypes.number,
-    /** size of src image in bytes */
-    size: PropTypes.number,
-    /** size of webp image in bytes */
-    webpSize: PropTypes.number,
     /** function which decides if image should be downloaded */
     shouldAutoDownload: PropTypes.func,
-    /** URL of the image in webp format */
-    webp: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.func,
-      PropTypes.bool,
-    ]),
-
-    // for testing
+    /** function to generate src based on width and format */
+    getUrl: PropTypes.func,
+    /** array of sources */
+    srcset: PropTypes.arrayOf(
+      PropTypes.shape({
+        src: PropTypes.string,
+        width: PropTypes.number.isRequired,
+        size: PropTypes.number.isRequired,
+        format: PropTypes.oneOf(['jpeg', 'webp']).isRequired,
+      }),
+    ).isRequired,
     /** If you will not pass this value, component will detect onLine status based on browser API, otherwise will use passed value */
     onLine: PropTypes.bool,
   }
@@ -69,20 +69,20 @@ export default class AdaptiveLoad extends Component {
      */
     shouldAutoDownload: ({
       connection,
-      downlink,
-      rtt,
       size,
       threshold,
       possiblySlowNetwork,
     }) => {
       if (possiblySlowNetwork) return false
-      if (downlink && size && threshold) {
-        return size * 8 / (downlink * 1000) + rtt < threshold
-      }
-      switch (connection) {
+      const {downlink, rtt, effectiveType} = connection || {}
+      switch (effectiveType) {
         case 'slow-2g':
         case '2g':
+          return false
         case '3g':
+          if (downlink && size && threshold) {
+            return size * 8 / (downlink * 1000) + rtt < threshold
+          }
           return false
         case '4g':
         default:
@@ -91,15 +91,44 @@ export default class AdaptiveLoad extends Component {
     },
   }
 
+  getScreenWidth() {
+    const devicePixelRatio = window.devicePixelRatio || 1
+    const {screen} = window
+    const angle = (screen.orientation && screen.orientation.angle) || 0
+    const {width, height} = screen
+    return (
+      (Math.floor(angle / 90) % 2 === 0 ? width : height) * devicePixelRatio
+    )
+  }
+
+  getSrc({srcset, screenWidth}) {
+    if (srcset.length === 0) throw new Error('Need at least one item in srcset')
+    let supportedFormat
+    if (supportsWebp) {
+      supportedFormat = srcset.filter(x => x.format === 'webp')
+      if (supportedFormat.length === 0) supportedFormat = srcset
+    } else {
+      supportedFormat = srcset.filter(x => x.format !== 'webp')
+      if (supportedFormat.length === 0)
+        throw new Error('Need at least one item in srcset')
+    }
+    let widths = supportedFormat.filter(x => x.width >= screenWidth)
+    if (widths.length === 0) widths = supportedFormat
+    const width = Math.min.apply(null, widths.map(x => x.width))
+    return supportedFormat.filter(x => x.width === width)[0]
+  }
+
   componentDidMount() {
     if (nativeConnection) {
       this.updateConnection = () => {
         if (!navigator.onLine) return
         if (this.state.loadState === initial) {
           this.setState({
-            connection: navigator.connection.effectiveType,
-            downlink: navigator.connection.downlink,
-            rtt: navigator.connection.rtt,
+            connection: {
+              effectiveType: navigator.connection.effectiveType,
+              downlink: navigator.connection.downlink,
+              rtt: navigator.connection.rtt,
+            },
           })
         }
       }
@@ -197,24 +226,23 @@ export default class AdaptiveLoad extends Component {
     })
   }
 
+  getUrl() {
+    const {getUrl} = this.props
+    const {pickedSrc} = this.state
+    if (getUrl) {
+      return getUrl(pickedSrc)
+    } else {
+      return pickedSrc.src
+    }
+  }
+
   load = userTriggered => {
     const {loadState} = this.state
     if (ssr || loaded === loadState || loading === loadState) return
     this.loadStateChange(loading, userTriggered)
 
-    const {threshold, src, webp} = this.props
-    let url = src
-    if (webp && supportsWebp) {
-      if (webp === true) {
-        url = src.replace(/\.jpe?g$/i, '.webp')
-      } else if (typeof webp === 'function') {
-        url = webp(src)
-      } else {
-        url = webp
-      }
-    }
-    this.setState({src: url})
-
+    const {threshold} = this.props
+    const url = this.getUrl()
     const imageLoader = xhrLoader(url)
     imageLoader
       .then(() => {
@@ -248,12 +276,9 @@ export default class AdaptiveLoad extends Component {
   }
 
   shouldAutoDownload() {
-    const {shouldAutoDownload, webp, size, webpSize} = this.props
-    if (webp && supportsWebp) {
-      return shouldAutoDownload({...this.state, size: webpSize})
-    } else {
-      return shouldAutoDownload({...this.state, size})
-    }
+    const shouldAutoDownload = this.props.shouldAutoDownload
+    const {pickedSrc} = this.state
+    return shouldAutoDownload({...this.state, size: pickedSrc.size})
   }
 
   stateToIcon(state) {
@@ -300,7 +325,7 @@ export default class AdaptiveLoad extends Component {
           {...this.props}
           onClick={this.onClick}
           icon={this.stateToIcon(this.state)}
-          src={this.state.src}
+          src={this.getUrl()}
         />
       </Waypoint>
     )
