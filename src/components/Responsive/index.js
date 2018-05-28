@@ -12,7 +12,7 @@ const ssr =
   typeof window === 'undefined' || window.navigator.userAgent === 'ReactSnap'
 
 const nativeConnection =
-  typeof window !== undefined && !!window.navigator.connection
+  typeof window !== 'undefined' && !!window.navigator.connection
 
 const getScreenWidth = () => {
   if (typeof window === 'undefined') return 0
@@ -20,6 +20,7 @@ const getScreenWidth = () => {
   const {screen} = window
   const angle = (screen.orientation && screen.orientation.angle) || 0
   const {width, height} = screen
+  // return Math.max(width, height)
   const rotated = Math.floor(angle / 90) % 2 !== 0
   return (rotated ? height : width) * devicePixelRatio
 }

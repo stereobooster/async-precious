@@ -6,12 +6,13 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 
 ## TODO
 
-* tool to generate srcsets
-* `srcset` ([lazy-image](https://meowni.ca/lazy-image/))
-* parse srcset string
-* measure viewport size
-* algorithm to pickup appropriate size
+* measure actual image size instead of screen
+* measure browser size, compare to screen size, interpolate image size
+* calculate image size based on media query and screen
+* take into account rotation?
 * compare against classic img with srcset and adaptive
+* documentation
+* code clean-up
 
 ## Find a way to compose components
 
@@ -26,7 +27,7 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 ## Ideas
 
 * use text together with (or instead of) icons. Examples: download image, download image (1.2mb), error occurred - click to retry, error - 404 image not found etc.
-* In case of no JS situation we can show palseholder with links to full size images, instead download icon.
+* In case of no JS situation we can show placeholder with links to full size images, instead download icon.
 * Use fetch to read http headers (`content-length`, `status`, `date` to detect if response is cached or not), without downloading the content itself.
 * [Webworker](https://aerotwist.com/blog/one-weird-trick/) maybe?
 * check contrast between placeholder and icon
@@ -70,8 +71,10 @@ function updateProgress(oEvent) {
 window.addEventListener('orientationchange', function() {
   alert('the orientation of the device is now ' + screen.orientation.angle)
 })
+window.addEventListener('resize', resizeThrottler, false)
 ```
 
+* http://underscorejs.org/#debounce
 * https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Testing_media_queries
 * https://www.smashingmagazine.com/2016/01/responsive-image-breakpoints-generation/
 * https://cloudfour.com/thinks/how-do-you-pick-responsive-images-breakpoints/
