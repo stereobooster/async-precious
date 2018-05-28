@@ -36,7 +36,7 @@ export const timeout = threshold => {
   return result
 }
 
-export const image = src => {
+export const imageLoader = src => {
   let img = new Image()
   const result = new Promise((resolve, reject) => {
     img.onload = resolve
@@ -65,7 +65,7 @@ export const xhrLoader = (url, options) => {
       if (response.ok) {
         response
           .blob()
-          .then(() => image(url))
+          .then(() => imageLoader(url))
           .then(resolve)
       } else {
         reject({status: response.status})
@@ -92,7 +92,7 @@ export const xhrLoader = (url, options) => {
 //           .blob()
 //           // we still need image to do actual decoding
 //           // but if images are uncachable this will lead to two requests
-//           .then(() => image(url))
+//           .then(() => imageLoader(url))
 //           .then(resolve)
 //       } else {
 //         reject({status: response.status})

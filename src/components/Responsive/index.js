@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Waypoint from 'react-waypoint'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
-import {xhrLoader, image, timeout, combineCancel} from '../loaders'
+import {xhrLoader, imageLoader, timeout, combineCancel} from '../loaders'
 import supportsWebp from '../webp'
 
 const {initial, loading, loaded, error} = loadStates
@@ -106,14 +106,15 @@ export default class Responsive extends Component {
     /** array of sources */
     srcset: PropTypes.arrayOf(
       PropTypes.shape({
-        src: PropTypes.string,
         width: PropTypes.number.isRequired,
+        src: PropTypes.string,
         size: PropTypes.number,
-        format: PropTypes.oneOf(['jpeg', 'webp']).isRequired,
+        format: PropTypes.oneOf(['jpeg', 'webp']),
       }),
     ).isRequired,
     /** If you will not pass this value, component will detect onLine status based on browser API, otherwise will use passed value */
     onLine: PropTypes.bool,
+    loader: PropTypes.oneOf(['image', 'xhr']),
   }
 
   static defaultProps = {
@@ -142,6 +143,7 @@ export default class Responsive extends Component {
           return true
       }
     },
+    loader: 'xhr',
   }
 
   getSrc({srcset, screenWidth}) {
@@ -288,8 +290,9 @@ export default class Responsive extends Component {
 
     const {threshold} = this.props
     const url = this.getUrl()
-    const imageLoader = xhrLoader(url)
-    imageLoader
+    const loader =
+      this.props.loader === 'xhr' ? xhrLoader(url) : imageLoader(url)
+    loader
       .then(() => {
         this.clear()
         this.loadStateChange(loaded, false)
@@ -315,9 +318,9 @@ export default class Responsive extends Component {
         this.setState({overThreshold: true})
         if (!this.state.userTriggered) this.cancel(true)
       })
-      this.loader = combineCancel(imageLoader, timeoutLoader)
+      this.loader = combineCancel(loader, timeoutLoader)
     } else {
-      this.loader = imageLoader
+      this.loader = loader
     }
   }
 
