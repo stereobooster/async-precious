@@ -4,7 +4,7 @@ import Waypoint from 'react-waypoint'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
 import {xhrLoader, timeout, combineCancel} from '../loaders'
-import supportsWebp from '../webp'
+import {supportsWebp} from '../helpers'
 
 const {initial, loading, loaded, error} = loadStates
 

@@ -4,70 +4,17 @@ import Waypoint from 'react-waypoint'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
 import {xhrLoader, imageLoader, timeout, combineCancel} from '../loaders'
-import supportsWebp from '../webp'
+import {
+  getScreenWidth,
+  guessMaxImageWidth,
+  bytesToSize,
+  supportsWebp,
+  ssr,
+  nativeConnection,
+  screenWidth,
+} from '../helpers'
 
 const {initial, loading, loaded, error} = loadStates
-
-const ssr =
-  typeof window === 'undefined' || window.navigator.userAgent === 'ReactSnap'
-
-const nativeConnection =
-  typeof window !== 'undefined' && !!window.navigator.connection
-
-const getScreenWidth = () => {
-  if (typeof window === 'undefined') return 0
-  const devicePixelRatio = window.devicePixelRatio || 1
-  const {screen} = window
-  const {width} = screen
-  // const angle = (screen.orientation && screen.orientation.angle) || 0
-  // return Math.max(width, height)
-  // const rotated = Math.floor(angle / 90) % 2 !== 0
-  // return (rotated ? height : width) * devicePixelRatio
-  return width * devicePixelRatio
-}
-
-const screenWidth = getScreenWidth()
-
-const guessMaxImageWidth = dimensions => {
-  if (typeof window === 'undefined') return 0
-  const imgWidth = dimensions.width
-
-  const {screen} = window
-  const sWidth = screen.width
-  const sHeight = screen.height
-
-  const {documentElement} = document
-  const windowWidth = window.innerWidth || documentElement.clientWidth
-  const windowHeight = window.innerHeight || documentElement.clientHeight
-
-  const windowResized = sWidth > windowWidth
-
-  let result
-  if (windowResized) {
-    const body = document.getElementsByTagName('body')[0]
-    const scrollWidth = windowWidth - imgWidth
-    const isScroll =
-      body.clientHeight > windowHeight || body.clientHeight > sHeight
-    if (isScroll && scrollWidth <= 15) {
-      result = sWidth - scrollWidth
-    } else {
-      // result = imgWidth / (windowWidth - scrollWidth) * (sWidth - scrollWidth)
-      result = imgWidth / windowWidth * sWidth
-    }
-  } else {
-    result = imgWidth
-  }
-  const devicePixelRatio = window.devicePixelRatio || 1
-  return result * devicePixelRatio
-}
-
-function bytesToSize(bytes) {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-  if (bytes === 0) return 'n/a'
-  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10)
-  if (i === 0) return `${bytes} ${sizes[i]}`
-  return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`
-}
 
 export default class Responsive extends Component {
   constructor(props) {
@@ -324,10 +271,10 @@ export default class Responsive extends Component {
     }
   }
 
-  shouldAutoDownload() {
+  shouldAutoDownload(state) {
     const shouldAutoDownload = this.props.shouldAutoDownload
-    const {pickedSrc} = this.state
-    return shouldAutoDownload({...this.state, size: pickedSrc.size})
+    const {pickedSrc} = state
+    return shouldAutoDownload({...state, size: pickedSrc.size})
   }
 
   iconToMessage(icon, state) {
@@ -369,8 +316,7 @@ export default class Responsive extends Component {
   stateToIcon(state) {
     const i = this.iconToMessage
     const {loadState, onLine, overThreshold, userTriggered} = state
-    // this breaks contract?
-    const shouldAutoDownload = this.shouldAutoDownload()
+    const shouldAutoDownload = this.shouldAutoDownload(state)
     if (ssr) return i(icons.noicon)
     switch (loadState) {
       case loaded:
@@ -400,10 +346,9 @@ export default class Responsive extends Component {
         srcset: this.props.srcset,
         screenWidth: guessMaxImageWidth(this.state.dimensions),
       })
-      // what side effects here?
       this.setState({pickedSrc})
     }
-    if (this.shouldAutoDownload()) this.load(false)
+    if (this.shouldAutoDownload(this.state)) this.load(false)
   }
 
   onLeave = () => {

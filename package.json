@@ -31,7 +31,8 @@
     "styleguide:build": "styleguidist build"
   },
   "reactSnap": {
-    "inlineCss": true
+    "inlineCss": true,
+    "asyncScriptTags": true
   },
   "browserslist": {
     "development": [
@@ -39,11 +40,6 @@
       "last 2 firefox versions",
       "last 2 edge versions"
     ],
-    "production": [
-      ">1%",
-      "last 4 versions",
-      "Firefox ESR",
-      "not ie < 11"
-    ]
+    "production": [">1%", "last 4 versions", "Firefox ESR", "not ie < 11"]
   }
 }
