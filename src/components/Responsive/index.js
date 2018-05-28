@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Waypoint from 'react-waypoint'
 import Media from '../Media'
 import {icons, loadStates} from '../constants'
-import {xhrLoader, timeout, combineCancel} from '../loaders'
+import {xhrLoader, image, timeout, combineCancel} from '../loaders'
 import supportsWebp from '../webp'
 
 const {initial, loading, loaded, error} = loadStates
@@ -18,16 +18,58 @@ const getScreenWidth = () => {
   if (typeof window === 'undefined') return 0
   const devicePixelRatio = window.devicePixelRatio || 1
   const {screen} = window
-  const angle = (screen.orientation && screen.orientation.angle) || 0
-  const {width, height} = screen
+  const {width} = screen
+  // const angle = (screen.orientation && screen.orientation.angle) || 0
   // return Math.max(width, height)
-  const rotated = Math.floor(angle / 90) % 2 !== 0
-  return (rotated ? height : width) * devicePixelRatio
+  // const rotated = Math.floor(angle / 90) % 2 !== 0
+  // return (rotated ? height : width) * devicePixelRatio
+  return width * devicePixelRatio
 }
 
 const screenWidth = getScreenWidth()
 
-export default class AdaptiveLoad extends Component {
+const guessMaxImageWidth = dimensions => {
+  if (typeof window === 'undefined') return 0
+  const imgWidth = dimensions.width
+
+  const {screen} = window
+  const sWidth = screen.width
+  const sHeight = screen.height
+
+  const {documentElement} = document
+  const windowWidth = window.innerWidth || documentElement.clientWidth
+  const windowHeight = window.innerHeight || documentElement.clientHeight
+
+  const windowResized = sWidth > windowWidth
+
+  let result
+  if (windowResized) {
+    const body = document.getElementsByTagName('body')[0]
+    const scrollWidth = windowWidth - imgWidth
+    const isScroll =
+      body.clientHeight > windowHeight || body.clientHeight > sHeight
+    if (isScroll && scrollWidth <= 15) {
+      result = sWidth - scrollWidth
+    } else {
+      // result = imgWidth / (windowWidth - scrollWidth) * (sWidth - scrollWidth)
+      result = imgWidth / windowWidth * sWidth
+    }
+  } else {
+    result = imgWidth
+  }
+  const devicePixelRatio = window.devicePixelRatio || 1
+  return result * devicePixelRatio
+}
+
+function bytesToSize(bytes) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  if (bytes === 0) return 'n/a'
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10)
+  if (i === 0) return `${bytes} ${sizes[i]}`
+  return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`
+}
+
+export default class Responsive extends Component {
   constructor(props) {
     super(props)
     const controledOnLine = props.onLine !== undefined
@@ -66,7 +108,7 @@ export default class AdaptiveLoad extends Component {
       PropTypes.shape({
         src: PropTypes.string,
         width: PropTypes.number.isRequired,
-        size: PropTypes.number.isRequired,
+        size: PropTypes.number,
         format: PropTypes.oneOf(['jpeg', 'webp']).isRequired,
       }),
     ).isRequired,
@@ -184,7 +226,8 @@ export default class AdaptiveLoad extends Component {
         this.setState({onLine: nextProps.onLine})
       }
     }
-    if (nextProps.src !== this.props.src) this.cancel(false)
+    // TODO: check if this works
+    if (nextProps.srcset !== this.props.srcset) this.cancel(false)
   }
 
   onClick = () => {
@@ -219,11 +262,12 @@ export default class AdaptiveLoad extends Component {
     this.loadStateChange(initial, userTriggered)
   }
 
-  loadStateChange(loadState, userTriggered) {
+  loadStateChange(loadState, userTriggered, loadInfo = null) {
     this.setState({
       loadState,
       overThreshold: false,
       userTriggered: !!userTriggered,
+      loadInfo,
     })
   }
 
@@ -250,12 +294,13 @@ export default class AdaptiveLoad extends Component {
         this.clear()
         this.loadStateChange(loaded, false)
       })
-      .catch(() => {
+      .catch(e => {
         this.clear()
-        // if (e.status === 404) {
-        //   this.setState({errorMeassage: 'Image not found'})
-        // }
-        this.loadStateChange(error, false)
+        if (e.status === 404) {
+          this.loadStateChange(error, false, 404)
+        } else {
+          this.loadStateChange(error, false)
+        }
       })
 
     if (threshold) {
@@ -282,25 +327,63 @@ export default class AdaptiveLoad extends Component {
     return shouldAutoDownload({...this.state, size: pickedSrc.size})
   }
 
+  iconToMessage(icon, state) {
+    switch (icon) {
+      case icons.noicon:
+      case icons.loaded:
+        return {icon}
+      case icons.loading:
+        return {icon, message: 'Loading...'}
+      case icons.load:
+        const {pickedSrc} = state
+        const {size} = pickedSrc
+        if (size) {
+          return {
+            icon,
+            message: [
+              'Click to load (',
+              <nobr key="nb">{bytesToSize(size)}</nobr>,
+              ')',
+            ],
+          }
+        } else {
+          return {icon, message: 'Click to load'}
+        }
+      case icons.offline:
+        return {icon, message: 'Your browser is offline. Image not loaded'}
+      case icons.error:
+        const {loadInfo} = state
+        if (loadInfo === 404) {
+          return {icon, message: '404. Image not found'}
+        } else {
+          return {icon, message: 'Error. Click to reload'}
+        }
+      default:
+        throw new Error(`Wrong icon: ${icon}`)
+    }
+  }
+
   stateToIcon(state) {
+    const i = this.iconToMessage
     const {loadState, onLine, overThreshold, userTriggered} = state
+    // this breaks contract?
     const shouldAutoDownload = this.shouldAutoDownload()
-    if (ssr) return icons.noicon
+    if (ssr) return i(icons.noicon)
     switch (loadState) {
       case loaded:
-        return icons.loaded
+        return i(icons.loaded)
       case loading:
-        return overThreshold ? icons.loading : icons.noicon
+        return overThreshold ? i(icons.loading) : i(icons.noicon)
       case initial:
         if (onLine) {
           return userTriggered || !shouldAutoDownload
-            ? icons.load
-            : icons.noicon
+            ? i(icons.load, state)
+            : i(icons.noicon)
         } else {
-          return icons.offline
+          return i(icons.offline)
         }
       case error:
-        return onLine ? icons.error : icons.offline
+        return onLine ? i(icons.error, state) : i(icons.offline)
       default:
         throw new Error(`Wrong state: ${loadState}`)
     }
@@ -309,6 +392,14 @@ export default class AdaptiveLoad extends Component {
   onEnter = () => {
     if (this.state.inViewport) return
     this.setState({inViewport: true})
+    if (this.props.srcset.length > 1) {
+      const pickedSrc = this.getSrc({
+        srcset: this.props.srcset,
+        screenWidth: guessMaxImageWidth(this.state.dimensions),
+      })
+      // what side effects here?
+      this.setState({pickedSrc})
+    }
     if (this.shouldAutoDownload()) this.load(false)
   }
 
@@ -320,13 +411,16 @@ export default class AdaptiveLoad extends Component {
   }
 
   render() {
+    const {icon, message} = this.stateToIcon(this.state)
     return (
       <Waypoint onEnter={this.onEnter} onLeave={this.onLeave}>
         <Media
           {...this.props}
           onClick={this.onClick}
-          icon={this.stateToIcon(this.state)}
+          icon={icon}
           src={this.getUrl()}
+          onDimensions={dimensions => this.setState({dimensions})}
+          message={message}
         />
       </Waypoint>
     )

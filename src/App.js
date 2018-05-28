@@ -31,11 +31,12 @@ const props = obj => ({
     return src({...obj, ext, width})
   },
   srcset: obj.sizes,
+  // srcset: [{width: 100, format: 'jpeg', src: 'http://localhost:8000/404'}],
 })
 
 const App = () => (
   <React.Fragment>
-    <Al alt="doggo 1" {...props(image1)} />
+    <Al alt="doggo 1" {...props(image1)} style={{maxWidth: '50%'}} />
     <Al alt="doggo 2" {...props(image2)} />
     <Al alt="doggo 3" {...props(image3)} />
     <Al alt="doggo 4" {...props(image4)} />

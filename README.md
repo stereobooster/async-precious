@@ -6,12 +6,10 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 
 ## TODO
 
-* measure actual image size instead of screen
-* measure browser size, compare to screen size, interpolate image size
-* calculate image size based on media query and screen
-* take into account rotation?
+* fix noscript
+* ? take into account rotation
 * compare against classic img with srcset and adaptive
-* documentation
+* documentation: fetures - responsive, lazy, adaptive, offline
 * code clean-up
 
 ## Find a way to compose components
@@ -26,7 +24,6 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 
 ## Ideas
 
-* use text together with (or instead of) icons. Examples: download image, download image (1.2mb), error occurred - click to retry, error - 404 image not found etc.
 * In case of no JS situation we can show placeholder with links to full size images, instead download icon.
 * Use fetch to read http headers (`content-length`, `status`, `date` to detect if response is cached or not), without downloading the content itself.
 * [Webworker](https://aerotwist.com/blog/one-weird-trick/) maybe?

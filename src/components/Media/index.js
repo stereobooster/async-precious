@@ -45,8 +45,9 @@ export default class Media extends PureComponent {
     icon: PropTypes.oneOf([load, loading, loaded, error, noicon, offline]),
     /** Map of icons */
     icons: PropTypes.object,
-    innerRef: PropTypes.any,
     theme: PropTypes.object,
+    onDimensions: PropTypes.func,
+    message: PropTypes.node,
   }
 
   static defaultProps = {
@@ -54,20 +55,28 @@ export default class Media extends PureComponent {
     iconSize: 64,
   }
 
+  componentDidMount() {
+    if (this.props.onDimensions && this.dimensionElement)
+      this.props.onDimensions({
+        width: this.dimensionElement.clientWidth,
+        height: this.dimensionElement.clientHeight,
+      })
+  }
+
   renderIcon(props) {
     const {icon, icons, iconColor: fill, iconSize: size, theme} = props
     const iconToRender = icons[icon]
     if (!iconToRender) return null
     const styleOrClass = compose(
-      {width: size, height: size},
+      {width: size + 100, height: size, color: fill},
       theme.icon,
       props.noscript,
     )
-    return React.createElement(
-      'div',
-      styleOrClass,
-      React.createElement(iconToRender, {fill, size}),
-    )
+    return React.createElement('div', styleOrClass, [
+      React.createElement(iconToRender, {fill, size, key: 'icon'}),
+      React.createElement('br', {key: 'br'}),
+      this.props.message,
+    ])
   }
 
   renderImage(props) {
@@ -84,6 +93,7 @@ export default class Media extends PureComponent {
         {...compose(props.theme.img, props.noscript)}
         width={props.width}
         height={props.height}
+        ref={ref => (this.dimensionElement = ref)}
       />
     )
   }
