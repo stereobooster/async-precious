@@ -22,7 +22,8 @@ const defaultShouldAutoDownload = ({
   possiblySlowNetwork,
 }) => {
   if (possiblySlowNetwork) return false
-  const {downlink, rtt, effectiveType} = connection || {}
+  if (!connection) return true
+  const {downlink, rtt, effectiveType} = connection
   switch (effectiveType) {
     case 'slow-2g':
     case '2g':
