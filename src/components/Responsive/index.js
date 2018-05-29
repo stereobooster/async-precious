@@ -10,18 +10,95 @@ import {
   supportsWebp,
   ssr,
   nativeConnection,
+  selectSrc,
 } from '../helpers'
 
 const {initial, loading, loaded, error} = loadStates
 
-const isWebp = x =>
-  x.format === 'webp' || (x.src && x.src.match(/\.webp($|\?.*)/i))
+const defaultShouldAutoDownload = ({
+  connection,
+  size,
+  threshold,
+  possiblySlowNetwork,
+}) => {
+  if (possiblySlowNetwork) return false
+  const {downlink, rtt, effectiveType} = connection || {}
+  switch (effectiveType) {
+    case 'slow-2g':
+    case '2g':
+      return false
+    case '3g':
+      if (downlink && size && threshold) {
+        return size * 8 / (downlink * 1000) + rtt < threshold
+      }
+      return false
+    case '4g':
+    default:
+      return true
+  }
+}
+
+const defaultGetMessage = (icon, state) => {
+  switch (icon) {
+    case icons.noicon:
+    case icons.loaded:
+      return null
+    case icons.loading:
+      return 'Loading...'
+    case icons.load:
+      const {pickedSrc} = state
+      const {size} = pickedSrc
+      if (size) {
+        return [
+          'Click to load (',
+          <nobr key="nb">{bytesToSize(size)}</nobr>,
+          ')',
+        ]
+      } else {
+        return 'Click to load'
+      }
+    case icons.offline:
+      return 'Your browser is offline. Image not loaded'
+    case icons.error:
+      const {loadInfo} = state
+      if (loadInfo === 404) {
+        return '404. Image not found'
+      } else {
+        return 'Error. Click to reload'
+      }
+    default:
+      throw new Error(`Wrong icon: ${icon}`)
+  }
+}
+
+const defaultGetIcon = state => {
+  const {loadState, onLine, overThreshold, userTriggered} = state
+  if (ssr) return icons.noicon
+  switch (loadState) {
+    case loaded:
+      return icons.loaded
+    case loading:
+      return overThreshold ? icons.loading : icons.noicon
+    case initial:
+      if (onLine) {
+        const {shouldAutoDownload} = state
+        if (shouldAutoDownload === undefined) return icons.noicon
+        return userTriggered || !shouldAutoDownload ? icons.load : icons.noicon
+      } else {
+        return icons.offline
+      }
+    case error:
+      return onLine ? icons.error : icons.offline
+    default:
+      throw new Error(`Wrong state: ${loadState}`)
+  }
+}
 
 export default class Responsive extends Component {
   constructor(props) {
     super(props)
     const controledOnLine = props.onLine !== undefined
-    // TODO: check that props.srcset is valid
+    // TODO: validate props.srcset
     this.state = {
       loadState: initial,
       connection: nativeConnection
@@ -65,46 +142,10 @@ export default class Responsive extends Component {
     /**
      * @returns {boolean} - is connection good enough to auto load the image
      */
-    shouldAutoDownload: ({
-      connection,
-      size,
-      threshold,
-      possiblySlowNetwork,
-    }) => {
-      if (possiblySlowNetwork) return false
-      const {downlink, rtt, effectiveType} = connection || {}
-      switch (effectiveType) {
-        case 'slow-2g':
-        case '2g':
-          return false
-        case '3g':
-          if (downlink && size && threshold) {
-            return size * 8 / (downlink * 1000) + rtt < threshold
-          }
-          return false
-        case '4g':
-        default:
-          return true
-      }
-    },
+    shouldAutoDownload: defaultShouldAutoDownload,
+    getMessage: defaultGetMessage,
+    getIcon: defaultGetIcon,
     loader: 'xhr',
-  }
-
-  getSrc({srcset, screenWidth}) {
-    if (srcset.length === 0) throw new Error('Need at least one item in srcset')
-    let supportedFormat
-    if (supportsWebp) {
-      supportedFormat = srcset.filter(isWebp)
-      if (supportedFormat.length === 0) supportedFormat = srcset
-    } else {
-      supportedFormat = srcset.filter(x => !isWebp(x))
-      if (supportedFormat.length === 0)
-        throw new Error('Need at least one item in srcset')
-    }
-    let widths = supportedFormat.filter(x => x.width >= screenWidth)
-    if (widths.length === 0) widths = supportedFormat
-    const width = Math.min.apply(null, widths.map(x => x.width))
-    return supportedFormat.filter(x => x.width === width)[0]
   }
 
   componentDidMount() {
@@ -217,24 +258,12 @@ export default class Responsive extends Component {
     })
   }
 
-  getUrl() {
-    const {getUrl} = this.props
-    const {pickedSrc} = this.state
-    if (!pickedSrc) return ''
-    if (getUrl) {
-      return getUrl(pickedSrc)
-    } else {
-      return pickedSrc.src
-    }
-  }
-
   load = userTriggered => {
-    const {loadState} = this.state
+    const {loadState, url} = this.state
     if (ssr || loaded === loadState || loading === loadState) return
     this.loadStateChange(loading, userTriggered)
 
     const {threshold} = this.props
-    const url = this.getUrl()
     const loader =
       this.props.loader === 'xhr' ? xhrLoader(url) : imageLoader(url)
     loader
@@ -269,88 +298,25 @@ export default class Responsive extends Component {
     }
   }
 
-  shouldAutoDownload(state) {
-    const shouldAutoDownload = this.props.shouldAutoDownload
-    const {pickedSrc} = state
-    return shouldAutoDownload({...state, size: pickedSrc.size})
-  }
-
-  iconToMessage(icon, state) {
-    switch (icon) {
-      case icons.noicon:
-      case icons.loaded:
-        return {icon}
-      case icons.loading:
-        return {icon, message: 'Loading...'}
-      case icons.load:
-        const {pickedSrc} = state
-        const {size} = pickedSrc
-        if (size) {
-          return {
-            icon,
-            message: [
-              'Click to load (',
-              <nobr key="nb">{bytesToSize(size)}</nobr>,
-              ')',
-            ],
-          }
-        } else {
-          return {icon, message: 'Click to load'}
-        }
-      case icons.offline:
-        return {icon, message: 'Your browser is offline. Image not loaded'}
-      case icons.error:
-        const {loadInfo} = state
-        if (loadInfo === 404) {
-          return {icon, message: '404. Image not found'}
-        } else {
-          return {icon, message: 'Error. Click to reload'}
-        }
-      default:
-        throw new Error(`Wrong icon: ${icon}`)
-    }
-  }
-
-  stateToIcon(state) {
-    const i = this.iconToMessage
-    const {loadState, onLine, overThreshold, userTriggered} = state
-    if (ssr) return i(icons.noicon)
-    switch (loadState) {
-      case loaded:
-        return i(icons.loaded)
-      case loading:
-        return overThreshold ? i(icons.loading) : i(icons.noicon)
-      case initial:
-        if (onLine) {
-          if (!state.pickedSrc) return i(icons.noicon)
-          const shouldAutoDownload = this.shouldAutoDownload(state)
-          return userTriggered || !shouldAutoDownload
-            ? i(icons.load, state)
-            : i(icons.noicon)
-        } else {
-          return i(icons.offline)
-        }
-      case error:
-        return onLine ? i(icons.error, state) : i(icons.offline)
-      default:
-        throw new Error(`Wrong state: ${loadState}`)
-    }
-  }
-
   onEnter = () => {
     if (this.state.inViewport) return
     this.setState({inViewport: true})
-    let pickedSrc
-    if (this.props.srcset.length > 1) {
-      pickedSrc = this.getSrc({
-        srcset: this.props.srcset,
-        screenWidth: guessMaxImageWidth(this.state.dimensions),
-      })
-    } else {
-      pickedSrc = this.props.srcset[1]
-    }
-    this.setState({pickedSrc})
-    if (this.shouldAutoDownload(this.state)) this.load(false)
+    const pickedSrc = selectSrc({
+      srcset: this.props.srcset,
+      maxImageWidth:
+        this.props.srcset.length > 1
+          ? guessMaxImageWidth(this.state.dimensions)
+          : 0,
+      supportsWebp,
+    })
+    const {getUrl} = this.props
+    const url = getUrl ? getUrl(pickedSrc) : pickedSrc.src
+    const shouldAutoDownload = this.props.shouldAutoDownload({
+      ...this.state,
+      size: pickedSrc.size,
+    })
+    this.setState({pickedSrc, shouldAutoDownload, url})
+    if (shouldAutoDownload) this.load(false)
   }
 
   onLeave = () => {
@@ -361,14 +327,15 @@ export default class Responsive extends Component {
   }
 
   render() {
-    const {icon, message} = this.stateToIcon(this.state)
+    const icon = this.props.getIcon(this.state)
+    const message = this.props.getMessage(icon, this.state)
     return (
       <Waypoint onEnter={this.onEnter} onLeave={this.onLeave}>
         <Media
           {...this.props}
           onClick={this.onClick}
           icon={icon}
-          src={this.getUrl()}
+          src={this.state.url || ''}
           onDimensions={dimensions => this.setState({dimensions})}
           message={message}
         />

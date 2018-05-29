@@ -81,7 +81,7 @@ export const xhrLoader = (url, options) => {
   return result
 }
 
-// Caveat: AbortController only supported in Chrome 66
+// Caveat: AbortController only supported in Chrome 66+
 // Caveat: we still need imageLoader to do actual decoding,
 // but if images are uncachable this will lead to two requests
 // export const fetchLoader = (url, options) => {

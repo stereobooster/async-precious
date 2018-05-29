@@ -89,3 +89,28 @@ const detectWebpSupport = () => {
 }
 
 export const supportsWebp = detectWebpSupport()
+
+const isWebp = x =>
+  x.format === 'webp' || (x.src && x.src.match(/\.webp($|\?.*)/i))
+
+export const selectSrc = ({srcset, maxImageWidth, supportsWebp}) => {
+  if (srcset.length === 0) throw new Error('Need at least one item in srcset')
+  let supportedFormat
+  if (supportsWebp) {
+    supportedFormat = srcset.filter(isWebp)
+    if (supportedFormat.length === 0) supportedFormat = srcset
+  } else {
+    supportedFormat = srcset.filter(x => !isWebp(x))
+    if (supportedFormat.length === 0)
+      throw new Error('Need at least one item in srcset')
+  }
+  let widths = supportedFormat.filter(x => x.width >= maxImageWidth)
+  let width
+  if (widths.length === 0) {
+    widths = supportedFormat
+    width = Math.max.apply(null, widths.map(x => x.width))
+  } else {
+    width = Math.min.apply(null, widths.map(x => x.width))
+  }
+  return supportedFormat.filter(x => x.width === width)[0]
+}
