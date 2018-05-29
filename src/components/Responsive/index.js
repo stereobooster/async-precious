@@ -98,7 +98,6 @@ const defaultGetIcon = state => {
 export default class Responsive extends Component {
   constructor(props) {
     super(props)
-    const controledOnLine = props.onLine !== undefined
     // TODO: validate props.srcset
     this.state = {
       loadState: initial,
@@ -109,8 +108,7 @@ export default class Responsive extends Component {
             effectiveType: navigator.connection.effectiveType, // 'slow-2g', '2g', '3g', or '4g'
           }
         : null,
-      onLine: controledOnLine ? props.onLine : true,
-      controledOnLine,
+      onLine: true,
       overThreshold: false,
       inViewport: false,
       userTriggered: false,
@@ -140,8 +138,6 @@ export default class Responsive extends Component {
     getIcon: PropTypes.func,
     /** type of loader */
     loader: PropTypes.oneOf(['image', 'xhr']),
-    /** If you will not pass this value, component will detect onLine status based on browser API, otherwise will use passed value */
-    onLine: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -179,12 +175,10 @@ export default class Responsive extends Component {
         this.possiblySlowNetworkListener,
       )
     }
-    if (!this.state.controledOnLine) {
-      this.updateOnlineStatus = () => this.setState({onLine: navigator.onLine})
-      this.updateOnlineStatus()
-      window.addEventListener('online', this.updateOnlineStatus)
-      window.addEventListener('offline', this.updateOnlineStatus)
-    }
+    this.updateOnlineStatus = () => this.setState({onLine: navigator.onLine})
+    this.updateOnlineStatus()
+    window.addEventListener('online', this.updateOnlineStatus)
+    window.addEventListener('offline', this.updateOnlineStatus)
   }
 
   componentWillUnmount() {
@@ -200,24 +194,8 @@ export default class Responsive extends Component {
         this.possiblySlowNetworkListener,
       )
     }
-    if (!this.state.controledOnLine) {
-      window.removeEventListener('online', this.updateOnlineStatus)
-      window.removeEventListener('offline', this.updateOnlineStatus)
-    }
-  }
-
-  // TODO: fix this
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.state.controledOnLine) {
-      if (nextProps.onLine === undefined) {
-        throw new Error('You should pass onLine value to controlled component')
-      } else {
-        this.setState({onLine: nextProps.onLine})
-      }
-    }
-    // can not compare arrays
-    // if (nextProps.srcset !== this.props.srcset) this.cancel(false)
+    window.removeEventListener('online', this.updateOnlineStatus)
+    window.removeEventListener('offline', this.updateOnlineStatus)
   }
 
   onClick = () => {
