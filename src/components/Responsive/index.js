@@ -5,25 +5,23 @@ import Media from '../Media'
 import {icons, loadStates} from '../constants'
 import {xhrLoader, imageLoader, timeout, combineCancel} from '../loaders'
 import {
-  getScreenWidth,
   guessMaxImageWidth,
   bytesToSize,
   supportsWebp,
   ssr,
   nativeConnection,
-  screenWidth,
 } from '../helpers'
 
 const {initial, loading, loaded, error} = loadStates
+
+const isWebp = x =>
+  x.format === 'webp' || (x.src && x.src.match(/\.webp($|\?.*)/i))
 
 export default class Responsive extends Component {
   constructor(props) {
     super(props)
     const controledOnLine = props.onLine !== undefined
-    const pickedSrc = this.getSrc({srcset: this.props.srcset, screenWidth})
-    if (!pickedSrc.src && !this.props.getUrl) {
-      throw new Error('src required')
-    }
+    // TODO: check that props.srcset is valid
     this.state = {
       loadState: initial,
       connection: nativeConnection
@@ -39,7 +37,6 @@ export default class Responsive extends Component {
       inViewport: false,
       userTriggered: false,
       possiblySlowNetwork: false,
-      pickedSrc,
     }
   }
 
@@ -97,10 +94,10 @@ export default class Responsive extends Component {
     if (srcset.length === 0) throw new Error('Need at least one item in srcset')
     let supportedFormat
     if (supportsWebp) {
-      supportedFormat = srcset.filter(x => x.format === 'webp')
+      supportedFormat = srcset.filter(isWebp)
       if (supportedFormat.length === 0) supportedFormat = srcset
     } else {
-      supportedFormat = srcset.filter(x => x.format !== 'webp')
+      supportedFormat = srcset.filter(x => !isWebp(x))
       if (supportedFormat.length === 0)
         throw new Error('Need at least one item in srcset')
     }
@@ -175,8 +172,8 @@ export default class Responsive extends Component {
         this.setState({onLine: nextProps.onLine})
       }
     }
-    // TODO: check if this works
-    if (nextProps.srcset !== this.props.srcset) this.cancel(false)
+    // can not compare arrays
+    // if (nextProps.srcset !== this.props.srcset) this.cancel(false)
   }
 
   onClick = () => {
@@ -223,6 +220,7 @@ export default class Responsive extends Component {
   getUrl() {
     const {getUrl} = this.props
     const {pickedSrc} = this.state
+    if (!pickedSrc) return ''
     if (getUrl) {
       return getUrl(pickedSrc)
     } else {
@@ -316,7 +314,6 @@ export default class Responsive extends Component {
   stateToIcon(state) {
     const i = this.iconToMessage
     const {loadState, onLine, overThreshold, userTriggered} = state
-    const shouldAutoDownload = this.shouldAutoDownload(state)
     if (ssr) return i(icons.noicon)
     switch (loadState) {
       case loaded:
@@ -325,6 +322,8 @@ export default class Responsive extends Component {
         return overThreshold ? i(icons.loading) : i(icons.noicon)
       case initial:
         if (onLine) {
+          if (!state.pickedSrc) return i(icons.noicon)
+          const shouldAutoDownload = this.shouldAutoDownload(state)
           return userTriggered || !shouldAutoDownload
             ? i(icons.load, state)
             : i(icons.noicon)
@@ -341,13 +340,16 @@ export default class Responsive extends Component {
   onEnter = () => {
     if (this.state.inViewport) return
     this.setState({inViewport: true})
+    let pickedSrc
     if (this.props.srcset.length > 1) {
-      const pickedSrc = this.getSrc({
+      pickedSrc = this.getSrc({
         srcset: this.props.srcset,
         screenWidth: guessMaxImageWidth(this.state.dimensions),
       })
-      this.setState({pickedSrc})
+    } else {
+      pickedSrc = this.props.srcset[1]
     }
+    this.setState({pickedSrc})
     if (this.shouldAutoDownload(this.state)) this.load(false)
   }
 
