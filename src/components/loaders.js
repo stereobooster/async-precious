@@ -36,6 +36,7 @@ export const timeout = threshold => {
   return result
 }
 
+// Caveat: image loader can not cancel download in some browsers
 export const imageLoader = src => {
   let img = new Image()
   const result = new Promise((resolve, reject) => {
@@ -55,7 +56,7 @@ export const imageLoader = src => {
 }
 
 // Caveat: XHR loader can cause errors because of 'Access-Control-Allow-Origin'
-// Caveat: we still need image to do actual decoding,
+// Caveat: we still need imageLoader to do actual decoding,
 // but if images are uncachable this will lead to two requests
 export const xhrLoader = (url, options) => {
   let controller = new UnfetchAbortController()
@@ -80,8 +81,10 @@ export const xhrLoader = (url, options) => {
   return result
 }
 
+// Caveat: AbortController only supported in Chrome 66
+// Caveat: we still need imageLoader to do actual decoding,
+// but if images are uncachable this will lead to two requests
 // export const fetchLoader = (url, options) => {
-//   // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
 //   let controller = new AbortController()
 //   const signal = controller.signal
 //   const result = new Promise((resolve, reject) =>
@@ -90,8 +93,6 @@ export const xhrLoader = (url, options) => {
 //         options && options.onMeta && options.onMeta(response.headers)
 //         response
 //           .blob()
-//           // we still need image to do actual decoding
-//           // but if images are uncachable this will lead to two requests
 //           .then(() => imageLoader(url))
 //           .then(resolve)
 //       } else {

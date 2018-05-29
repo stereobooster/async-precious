@@ -3,19 +3,18 @@ export const ssr =
 
 export const nativeConnection = !ssr && !!window.navigator.connection
 
-export const getScreenWidth = () => {
-  if (ssr) return 0
-  const devicePixelRatio = window.devicePixelRatio || 1
-  const {screen} = window
-  const {width} = screen
-  // const angle = (screen.orientation && screen.orientation.angle) || 0
-  // return Math.max(width, height)
-  // const rotated = Math.floor(angle / 90) % 2 !== 0
-  // return (rotated ? height : width) * devicePixelRatio
-  return width * devicePixelRatio
-}
-
-export const screenWidth = getScreenWidth()
+// export const getScreenWidth = () => {
+//   if (ssr) return 0
+//   const devicePixelRatio = window.devicePixelRatio || 1
+//   const {screen} = window
+//   const {width} = screen
+//   // const angle = (screen.orientation && screen.orientation.angle) || 0
+//   // return Math.max(width, height)
+//   // const rotated = Math.floor(angle / 90) % 2 !== 0
+//   // return (rotated ? height : width) * devicePixelRatio
+//   return width * devicePixelRatio
+// }
+// export const screenWidth = getScreenWidth()
 
 export const guessMaxImageWidth = dimensions => {
   if (ssr) return 0
