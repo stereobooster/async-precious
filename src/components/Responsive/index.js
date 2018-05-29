@@ -120,8 +120,6 @@ export default class Responsive extends Component {
   static propTypes = {
     /** how much to wait in ms until concider download to slow */
     threshold: PropTypes.number,
-    /** function which decides if image should be downloaded */
-    shouldAutoDownload: PropTypes.func,
     /** function to generate src based on width and format */
     getUrl: PropTypes.func,
     /** array of sources */
@@ -133,15 +131,19 @@ export default class Responsive extends Component {
         format: PropTypes.oneOf(['jpeg', 'webp']),
       }),
     ).isRequired,
+    /** function which decides if image should be downloaded */
+    shouldAutoDownload: PropTypes.func,
+    /** function which decides what message to show */
+    getMessage: PropTypes.func,
+    /** function which decides what icon to show */
+    getIcon: PropTypes.func,
+    /** type of loader */
+    loader: PropTypes.oneOf(['image', 'xhr']),
     /** If you will not pass this value, component will detect onLine status based on browser API, otherwise will use passed value */
     onLine: PropTypes.bool,
-    loader: PropTypes.oneOf(['image', 'xhr']),
   }
 
   static defaultProps = {
-    /**
-     * @returns {boolean} - is connection good enough to auto load the image
-     */
     shouldAutoDownload: defaultShouldAutoDownload,
     getMessage: defaultGetMessage,
     getIcon: defaultGetIcon,
