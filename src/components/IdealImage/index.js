@@ -11,6 +11,7 @@ import {
   ssr,
   nativeConnection,
   selectSrc,
+  fallbackParams,
 } from '../helpers'
 
 const {initial, loading, loaded, error} = loadStates
@@ -314,6 +315,7 @@ export default class IdealImage extends Component {
       <Waypoint onEnter={this.onEnter} onLeave={this.onLeave}>
         <Media
           {...this.props}
+          {...fallbackParams(this.props)}
           onClick={this.onClick}
           icon={icon}
           src={this.state.url || ''}

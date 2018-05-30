@@ -17,6 +17,7 @@ Image.defaultProps = {
   icons,
   theme,
   threshold: 2500,
+  noscript: 'noscript',
 }
 
 const src = ({name, ext, digest, width}) =>

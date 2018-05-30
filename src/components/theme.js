@@ -18,4 +18,9 @@ export default {
     transform: 'translate(-50%, -50%)',
     textAlign: center,
   },
+  noscript: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
 }

@@ -6,10 +6,7 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 
 ## TODO
 
-* fix noscript
 * ? take into account rotation
-* compare against classic img with srcset and adaptive
-* documentation: fetures - responsive, lazy, adaptive, offline
 * code clean-up
 
 ## Find a way to compose components

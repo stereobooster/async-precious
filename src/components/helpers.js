@@ -114,3 +114,16 @@ export const selectSrc = ({srcset, maxImageWidth, supportsWebp}) => {
   }
   return supportedFormat.filter(x => x.width === width)[0]
 }
+
+export const fallbackParams = ({srcset, getUrl}) => {
+  if (!ssr) return {}
+  const notWebp = srcset.filter(x => !isWebp(x))
+  const first = notWebp[0]
+  return {
+    nsSrcset: notWebp
+      .map(x => `${getUrl ? getUrl(x) : x.src} ${x.width}w`)
+      .join(','),
+    nsSrc: getUrl ? getUrl(first) : first.src,
+    ssr
+  }
+}
