@@ -1,6 +1,6 @@
 import React from 'react'
-// import {AdaptiveLoad} from 'react-precious-image'
-import Responsive from './components/Responsive'
+// import IdealImage from 'react-precious-image'
+import IdealImage from './components/IdealImage'
 import icons from './components/icons'
 import theme from './components/theme.module.css'
 
@@ -10,10 +10,10 @@ import image3 from './images/vincent-van-zalinge-408523-unsplash.json'
 import image4 from './images/marvin-meyer-188676-unsplash.json'
 import image5 from './images/nidhin-mundackal-281287-unsplash.json'
 
-const Al = props => <Responsive {...props} />
+const Image = props => <IdealImage {...props} />
 
-Al.defaultProps = {
-  ...Responsive.defaultProps,
+Image.defaultProps = {
+  ...IdealImage.defaultProps,
   icons,
   theme,
   threshold: 2500,
@@ -36,11 +36,11 @@ const props = obj => ({
 
 const App = () => (
   <React.Fragment>
-    <Al alt="doggo 1" {...props(image1)} style={{maxWidth: '50%'}} />
-    <Al alt="doggo 2" {...props(image2)} />
-    <Al alt="doggo 3" {...props(image3)} />
-    <Al alt="doggo 4" {...props(image4)} />
-    <Al alt="doggo 5" {...props(image5)} />
+    <Image alt="doggo 1" {...props(image1)} style={{maxWidth: '50%'}} />
+    <Image alt="doggo 2" {...props(image2)} />
+    <Image alt="doggo 3" {...props(image3)} />
+    <Image alt="doggo 4" {...props(image4)} />
+    <Image alt="doggo 5" {...props(image5)} />
   </React.Fragment>
 )
 

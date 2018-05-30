@@ -95,7 +95,7 @@ const defaultGetIcon = state => {
   }
 }
 
-export default class Responsive extends Component {
+export default class IdealImage extends Component {
   constructor(props) {
     super(props)
     // TODO: validate props.srcset

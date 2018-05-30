@@ -32,7 +32,7 @@ const getLqip = (sharpInstance, format) =>
 
 const getInfo = sharpInstance =>
   new Promise((resolve, reject) => {
-    sharpInstance.toBuffer(async (err, data, info) => {
+    sharpInstance.toBuffer((err, data, info) => {
       if (err) return reject(err)
       const {width, format, height, size} = info
       const digest = getDigest(data)
