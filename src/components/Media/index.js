@@ -129,7 +129,6 @@ export default class Media extends PureComponent {
     return (
       <div
         {...compose(theme.adaptive, background, props.style, props.className)}
-        title={props.alt}
         onClick={this.props.onClick}
         onKeyPress={this.props.onClick}
         ref={this.props.innerRef}

@@ -48,6 +48,7 @@ const defaultGetMessage = (icon, state) => {
     case icons.loading:
       return 'Loading...'
     case icons.load:
+      // we can show `alt` here
       const {pickedSrc} = state
       const {size} = pickedSrc
       if (size) {
