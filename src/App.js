@@ -34,7 +34,7 @@ const props = obj => ({
 
 const App = () => (
   <React.Fragment>
-    <Image alt="doggo 1" {...props(image1)} style={{maxWidth: '50%'}} />
+    <Image alt="doggo 1" {...props(image1)} />
     <Image alt="doggo 2" {...props(image2)} />
     <Image alt="doggo 3" {...props(image3)} />
     <Image alt="doggo 4" {...props(image4)} />
