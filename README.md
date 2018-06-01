@@ -4,11 +4,6 @@ Experiment to build async component according to [Guide To Async Components](htt
 
 Eventually this will be extracted to [react-precious-image](https://github.com/stereobooster/react-precious-image)
 
-## TODO
-
-* ? take into account rotation
-* code clean-up
-
 ## Find a way to compose components
 
 * https://reactions.github.io/component/
@@ -36,14 +31,6 @@ Eventually this will be extracted to [react-precious-image](https://github.com/s
 * https://stackoverflow.com/questions/6272384/most-popular-screen-sizes-resolutions-on-android-phones
 * http://screensiz.es/
 * https://css-tricks.com/google-analytics-can-show-screen-resolution-%E2%89%A0-browser-window/
-
-### No script fallback
-
-```html
-<noscript>
-  <style>.noscript{display:none}</style>
-</noscript>
-```
 
 ## Usorted notes
 
@@ -99,3 +86,9 @@ window.addEventListener('resize', resizeThrottler, false)
 
 * https://jmperezperez.com/svg-placeholders/
 * https://github.com/gatsbyjs/gatsby/pull/2456
+
+```html
+<noscript>
+  <style>.noscript{display:none}</style>
+</noscript>
+```
