@@ -17,9 +17,10 @@ const sqip =
           width={3500}
           height={2095}
           placeholder={{lqip: lqip}}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{maxWidth: 200}}
-          icon={'load'}
+          src="andre-spieker-238-unsplash-750.rCNJrIfpxu.jpg"
+          style={{maxWidth: 500}}
+          icon="load"
+          message="Click to load (109.8Kb)"
         />
       </td>
       <th align="left" width="100">
@@ -30,9 +31,9 @@ const sqip =
           width={3500}
           height={2095}
           placeholder={{lqip: lqip}}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{maxWidth: 200}}
-          icon={'noicon'}
+          src="andre-spieker-238-unsplash-750.rCNJrIfpxu.jpg"
+          style={{maxWidth: 500}}
+          icon="noicon"
         />
       </td>
     </tr>
@@ -43,9 +44,10 @@ const sqip =
           width={3500}
           height={2095}
           placeholder={{lqip: lqip}}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{maxWidth: 200}}
-          icon={'loading'}
+          src="andre-spieker-238-unsplash-750.rCNJrIfpxu.jpg"
+          style={{maxWidth: 500}}
+          icon="loading"
+          message="Loading..."
         />
       </td>
       <th align="left">offline</th>
@@ -54,9 +56,10 @@ const sqip =
           width={3500}
           height={2095}
           placeholder={{lqip: lqip}}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{maxWidth: 200}}
-          icon={'offline'}
+          src="andre-spieker-238-unsplash-750.rCNJrIfpxu.jpg"
+          style={{maxWidth: 500}}
+          icon="offline"
+          message="Your browser is offline. Image not loaded"
         />
       </td>
     </tr>
@@ -67,9 +70,9 @@ const sqip =
           width={3500}
           height={2095}
           placeholder={{lqip: lqip}}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{maxWidth: 200}}
-          icon={'loaded'}
+          src="andre-spieker-238-unsplash-750.rCNJrIfpxu.jpg"
+          style={{maxWidth: 500}}
+          icon="loaded"
         />
       </td>
       <th align="left">error</th>
@@ -78,9 +81,10 @@ const sqip =
           width={3500}
           height={2095}
           placeholder={{lqip: lqip}}
-          src="andre-spieker-238-unsplash.jpg"
-          style={{maxWidth: 200}}
-          icon={'error'}
+          src="andre-spieker-238-unsplash-750.rCNJrIfpxu.jpg"
+          style={{maxWidth: 500}}
+          icon="error"
+          message="Error. Click to try again"
         />
       </td>
     </tr>

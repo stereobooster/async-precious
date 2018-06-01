@@ -14,7 +14,7 @@ const Image = props => <IdealImage {...props} />
 
 Image.defaultProps = {
   ...IdealImage.defaultProps,
-  threshold: 2500,
+  threshold: 2000,
 }
 
 const src = ({name, ext, digest, width}) =>

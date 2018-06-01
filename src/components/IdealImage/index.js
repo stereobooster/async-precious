@@ -67,7 +67,7 @@ const defaultGetMessage = (icon, state) => {
       if (loadInfo === 404) {
         return '404. Image not found'
       } else {
-        return 'Error. Click to reload'
+        return 'Error. Click to try again'
       }
     default:
       throw new Error(`Wrong icon: ${icon}`)
