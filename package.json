@@ -1,13 +1,13 @@
 {
-  "name": "async-precious",
+  "name": "react-ideal-image-experiments",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://stereobooster.github.io/async-precious",
+  "homepage": "https://stereobooster.github.io/react-ideal-image-experiments",
   "dependencies": {
     "prop-types": "15.6.1",
     "react": "16.3.2",
     "react-dom": "16.3.2",
-    "react-precious-image": "0.0.2",
+    "react-ideal-image": "^0.0.0-semantically-released",
     "react-scripts": "2.0.0-next.b2fd8db8",
     "react-waypoint": "8.0.1",
     "sharp": "^0.20.2"
@@ -40,6 +40,11 @@
       "last 2 firefox versions",
       "last 2 edge versions"
     ],
-    "production": [">1%", "last 4 versions", "Firefox ESR", "not ie < 11"]
+    "production": [
+      ">1%",
+      "last 4 versions",
+      "Firefox ESR",
+      "not ie < 11"
+    ]
   }
 }

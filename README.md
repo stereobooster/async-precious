@@ -1,8 +1,9 @@
-# async-precious
+# react-ideal-image-experiments
 
 Experiment to build async component according to [Guide To Async Components](https://github.com/stereobooster/guide-to-async-components)
 
-Eventually this will be extracted to [react-precious-image](https://github.com/stereobooster/react-precious-image)
+Eventually this will be extracted to [react-ideal-image](https://github.com/stereobooster/
+react-ideal-image)
 
 ## Find a way to compose components
 

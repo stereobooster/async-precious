@@ -1,8 +1,8 @@
 import React from 'react'
-// import IdealImage from 'react-precious-image'
-import IdealImage from './components/IdealImage'
-import icons from './components/icons'
-import theme from './components/theme.module.css'
+import IdealImage from 'react-ideal-image'
+// import IdealImage from './components/IdealImage'
+// import icons from './components/icons'
+// import theme from './components/theme.module.css'
 
 import image1 from './images/andre-spieker-238-unsplash.json'
 import image2 from './images/jairo-alzate-45522-unsplash.json'
@@ -14,10 +14,7 @@ const Image = props => <IdealImage {...props} />
 
 Image.defaultProps = {
   ...IdealImage.defaultProps,
-  icons,
-  theme,
   threshold: 2500,
-  noscript: 'noscript',
 }
 
 const src = ({name, ext, digest, width}) =>
