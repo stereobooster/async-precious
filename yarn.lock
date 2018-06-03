@@ -7995,13 +7995,9 @@ react-icons@^2.2.7:
   dependencies:
     react-icon-base "2.1.0"
 
-react-ideal-image@^0.0.0-semantically-released:
-  version "0.0.0-semantically-released"
-  resolved "https://registry.yarnpkg.com/react-ideal-image/-/react-ideal-image-0.0.0-semantically-released.tgz#d072f224ab6ca585606e677e94f31cc9024d5437"
-
-react-precious-image@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/react-precious-image/-/react-precious-image-0.0.2.tgz#cbc3663cb724fecbeb06458c25d1013d33d0567a"
+react-ideal-image@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-ideal-image/-/react-ideal-image-0.0.3.tgz#2732c116c555f92bc5515907cea41378f5c2dc9d"
 
 react-scripts@2.0.0-next.b2fd8db8:
   version "2.0.0-next.b2fd8db8"

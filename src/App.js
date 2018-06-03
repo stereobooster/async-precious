@@ -25,7 +25,7 @@ const props = obj => ({
     const ext = format === 'jpeg' ? 'jpg' : 'webp'
     return src({...obj, ext, width})
   },
-  srcset: obj.sizes,
+  srcSet: obj.sizes,
 })
 
 const App = () => (
