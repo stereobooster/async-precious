@@ -7962,9 +7962,9 @@ react-docgen@^3.0.0-beta9:
     node-dir "^0.1.10"
     recast "^0.12.6"
 
-react-dom@16.3.2:
-  version "16.3.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.3.2.tgz#cb90f107e09536d683d84ed5d4888e9640e0e4df"
+react-dom@16.4.0:
+  version "16.4.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.0.tgz#099f067dd5827ce36a29eaf9a6cdc7cbf6216b1e"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -7998,10 +7998,6 @@ react-icons@^2.2.7:
 react-ideal-image@^0.0.0-semantically-released:
   version "0.0.0-semantically-released"
   resolved "https://registry.yarnpkg.com/react-ideal-image/-/react-ideal-image-0.0.0-semantically-released.tgz#d072f224ab6ca585606e677e94f31cc9024d5437"
-
-react-precious-image@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/react-precious-image/-/react-precious-image-0.0.2.tgz#cbc3663cb724fecbeb06458c25d1013d33d0567a"
 
 react-scripts@2.0.0-next.b2fd8db8:
   version "2.0.0-next.b2fd8db8"

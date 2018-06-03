@@ -6,7 +6,7 @@
   "dependencies": {
     "prop-types": "15.6.1",
     "react": "16.3.2",
-    "react-dom": "16.3.2",
+    "react-dom": "16.4.0",
     "react-ideal-image": "^0.0.0-semantically-released",
     "react-scripts": "2.0.0-next.b2fd8db8",
     "react-waypoint": "8.0.1",
