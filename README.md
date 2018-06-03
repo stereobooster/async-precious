@@ -60,7 +60,7 @@ window.addEventListener('resize', resizeThrottler, false)
 * https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Testing_media_queries
 * https://www.smashingmagazine.com/2016/01/responsive-image-breakpoints-generation/
 * https://cloudfour.com/thinks/how-do-you-pick-responsive-images-breakpoints/
-* https://medium.com/hceverything/applying-srcset-choosing-the-right-sizes-for-responsive-images-at-different-breakpoints-a0433450a4a3
+* https://medium.com/hceverything/applying-srcSet-choosing-the-right-sizes-for-responsive-images-at-different-breakpoints-a0433450a4a3
 
 ```html
 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=" />

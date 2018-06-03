@@ -48,7 +48,7 @@ export default class Media extends PureComponent {
     /** callback to get dimensions of the placeholder */
     onDimensions: PropTypes.func,
     /** message to show below the icon */
-    message: PropTypes.node,
+    message: PropTypes.func,
   }
 
   static defaultProps = {
@@ -104,7 +104,7 @@ export default class Media extends PureComponent {
         <img
           {...compose(props.theme.img, props.theme.noscript)}
           src={props.nsSrc}
-          srcset={props.nsSrcset}
+          srcSet={props.nsSrcSet}
           alt={props.alt}
           width={props.width}
           height={props.height}

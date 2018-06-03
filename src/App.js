@@ -1,8 +1,8 @@
 import React from 'react'
-import IdealImage from 'react-ideal-image'
-// import IdealImage from './components/IdealImage'
-// import icons from './components/icons'
-// import theme from './components/theme.module.css'
+
+import IdealImage from './components/IdealImage'
+import icons from './components/icons'
+import theme from './components/theme.module.css'
 
 import image1 from './images/andre-spieker-238-unsplash.json'
 import image2 from './images/jairo-alzate-45522-unsplash.json'
@@ -28,8 +28,7 @@ const props = obj => ({
     const ext = format === 'jpeg' ? 'jpg' : 'webp'
     return src({...obj, ext, width})
   },
-  srcset: obj.sizes,
-  // srcset: [{width: 100, format: 'jpeg', src: 'http://localhost:8000/404'}],
+  srcSet: obj.sizes,
 })
 
 const App = () => (

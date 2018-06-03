@@ -93,16 +93,16 @@ export const supportsWebp = detectWebpSupport()
 const isWebp = x =>
   x.format === 'webp' || (x.src && x.src.match(/\.webp($|\?.*)/i))
 
-export const selectSrc = ({srcset, maxImageWidth, supportsWebp}) => {
-  if (srcset.length === 0) throw new Error('Need at least one item in srcset')
+export const selectSrc = ({srcSet, maxImageWidth, supportsWebp}) => {
+  if (srcSet.length === 0) throw new Error('Need at least one item in srcSet')
   let supportedFormat
   if (supportsWebp) {
-    supportedFormat = srcset.filter(isWebp)
-    if (supportedFormat.length === 0) supportedFormat = srcset
+    supportedFormat = srcSet.filter(isWebp)
+    if (supportedFormat.length === 0) supportedFormat = srcSet
   } else {
-    supportedFormat = srcset.filter(x => !isWebp(x))
+    supportedFormat = srcSet.filter(x => !isWebp(x))
     if (supportedFormat.length === 0)
-      throw new Error('Need at least one item in srcset')
+      throw new Error('Need at least one item in srcSet')
   }
   let widths = supportedFormat.filter(x => x.width >= maxImageWidth)
   let width
@@ -115,12 +115,12 @@ export const selectSrc = ({srcset, maxImageWidth, supportsWebp}) => {
   return supportedFormat.filter(x => x.width === width)[0]
 }
 
-export const fallbackParams = ({srcset, getUrl}) => {
+export const fallbackParams = ({srcSet, getUrl}) => {
   if (!ssr) return {}
-  const notWebp = srcset.filter(x => !isWebp(x))
+  const notWebp = srcSet.filter(x => !isWebp(x))
   const first = notWebp[0]
   return {
-    nsSrcset: notWebp
+    nsSrcSet: notWebp
       .map(x => `${getUrl ? getUrl(x) : x.src} ${x.width}w`)
       .join(','),
     nsSrc: getUrl ? getUrl(first) : first.src,
