@@ -8051,9 +8051,9 @@ react-scripts@2.0.0-next.b2fd8db8:
   optionalDependencies:
     fsevents "1.1.3"
 
-react-snap@1.12.2:
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/react-snap/-/react-snap-1.12.2.tgz#a15f74cd2ea591f0b0a144ff5eda62317a372398"
+react-snap@1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/react-snap/-/react-snap-1.13.0.tgz#e6940ca479a0f3350594e89d0084cea6cef5aef4"
   dependencies:
     clean-css "^4.1.9"
     express "^4.16.1"
