@@ -7864,9 +7864,9 @@ react-icons@^2.2.7:
   dependencies:
     react-icon-base "2.1.0"
 
-react-ideal-image@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/react-ideal-image/-/react-ideal-image-0.0.4.tgz#9b6b462834a26f97b73f79e1c2721c15d497a761"
+react-ideal-image@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/react-ideal-image/-/react-ideal-image-0.0.5.tgz#92a1d6e7e6d5a32b2a6a41e82ffb7f122ed9bddf"
 
 react-scripts@2.0.0-next.b2fd8db8:
   version "2.0.0-next.b2fd8db8"
