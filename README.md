@@ -34,6 +34,8 @@ Eventually this will be extracted to [react-ideal-image](https://github.com/ster
 
 ## Usorted notes
 
+* https://github.com/AnthumChris/fetch-progress-indicators/blob/master/fetch-enhanced/supported-browser.js
+
 ```js
 var oReq = new XMLHttpRequest()
 
