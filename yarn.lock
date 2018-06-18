@@ -2629,9 +2629,9 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
 
-consolidated-events@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/consolidated-events/-/consolidated-events-1.1.1.tgz#25395465b35e531395418b7bbecb5ecaf198d179"
+"consolidated-events@^1.1.0 || ^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/consolidated-events/-/consolidated-events-2.0.0.tgz#2af1cd7c357bbf7a4b8f6cdba3c573e770518e1f"
 
 constants-browserify@^1.0.0:
   version "1.0.0"
@@ -7997,11 +7997,11 @@ react-styleguidist@6.5.3:
     webpack-dev-server "^2.9.7"
     webpack-merge "^4.1.2"
 
-react-waypoint@8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/react-waypoint/-/react-waypoint-8.0.1.tgz#00f7694a9d54da5a50be859da5dde96b1795b892"
+react-waypoint@8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/react-waypoint/-/react-waypoint-8.0.2.tgz#4780c9b79189104eaec4cc7968ac60a900e508b1"
   dependencies:
-    consolidated-events "^1.1.0"
+    consolidated-events "^1.1.0 || ^2.0.0"
     prop-types "^15.0.0"
 
 react@16.3.2:
