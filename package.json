@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://stereobooster.github.io/react-ideal-image-experiments",
   "dependencies": {
-    "prop-types": "15.6.1",
+    "prop-types": "15.6.2",
     "react": "16.3.2",
     "react-dom": "16.3.2",
     "react-ideal-image": "0.0.5",
