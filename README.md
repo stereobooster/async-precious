@@ -7,6 +7,9 @@ Eventually this will be extracted to [react-ideal-image](https://github.com/ster
 ## Find a way to compose components
 
 * https://reactions.github.io/component/
+* https://github.com/ianstormtaylor/react-values
+* https://reakit.io/guide/state-containers
+* https://github.com/diegohaz/constate
 * https://github.com/JamieDixon/react-lifecycle-component
 * https://reactpatterns.com/
 * https://github.com/developit/unistore
