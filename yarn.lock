@@ -2378,11 +2378,17 @@ classnames@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
-clean-css@4.1.11, clean-css@4.1.x:
+clean-css@4.1.x:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.1.11.tgz#2ecdf145aba38f54740f26cefd0ff3e03e125d6a"
   dependencies:
     source-map "0.5.x"
+
+clean-css@4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.1.tgz#2d411ef76b8569b6d0c84068dabe85b0aa5e5c17"
+  dependencies:
+    source-map "~0.6.0"
 
 clean-webpack-plugin@^0.1.19:
   version "0.1.19"
@@ -6385,9 +6391,9 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
-minimalcss@0.7.6:
-  version "0.7.6"
-  resolved "https://registry.yarnpkg.com/minimalcss/-/minimalcss-0.7.6.tgz#6372db6f5e9dcedef1f41b64cb475d3c5efd1a3e"
+minimalcss@0.7.8:
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/minimalcss/-/minimalcss-0.7.8.tgz#0b5eec5013a0669a214aec734891eab710a858da"
   dependencies:
     cheerio "1.0.0-rc.2"
     css-tree "1.0.0-alpha.28"
@@ -7943,16 +7949,16 @@ react-scripts@2.0.0-next.b2fd8db8:
   optionalDependencies:
     fsevents "1.1.3"
 
-react-snap@1.17.0:
-  version "1.17.0"
-  resolved "https://registry.yarnpkg.com/react-snap/-/react-snap-1.17.0.tgz#ff7f276c4aad18e9929dcacbaf4e2e43d46189f2"
+react-snap@1.18.0:
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/react-snap/-/react-snap-1.18.0.tgz#51c32ec2bd4dd78ba3e5f4bf5978cf1c1d01b3d4"
   dependencies:
-    clean-css "4.1.11"
+    clean-css "4.2.1"
     express "4.16.3"
     express-history-api-fallback "2.2.1"
     highland "2.13.0"
     html-minifier "3.5.19"
-    minimalcss "0.7.6"
+    minimalcss "0.7.8"
     mkdirp "0.5.1"
     puppeteer "^1.4.0"
     serve-static "1.13.2"
@@ -8858,7 +8864,7 @@ source-map@^0.4.4:
   dependencies:
     amdefine ">=0.0.4"
 
-source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.1:
+source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.0, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
 
